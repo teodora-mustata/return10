@@ -1,0 +1,7 @@
+#pragma once
+enum CellType {
+    FREE,
+    DESTRUCTIBLE_WALL,
+    INDISTRUCTIBLE_WALL,
+    DESTRUCTIBLE_WALL_WITH_BOMB
+};
