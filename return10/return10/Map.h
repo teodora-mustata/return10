@@ -29,8 +29,10 @@ private:
 public:
 	Map(int n, int m); //TO DO: finish implementing constructor
 	//void generateMap();
+	std::vector<std::vector<CellType>> get_board();
 	std::pair<int, int> getRandomSpawnPoint();
 	CellType get_cell_type(int x, int y);
+	void set_cell_type(int x, int y, CellType type);
 	void break_wall(int x, int y);
 
 };

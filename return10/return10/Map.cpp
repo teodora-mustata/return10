@@ -13,6 +13,11 @@ Map::Map(int n, int m) : height(n), width(m)
 	//TO DO: finish implementing constructor
 }
 
+std::vector<std::vector<CellType>> Map::get_board()
+{
+	return this->board;
+}
+
 std::pair<int, int> Map::getRandomSpawnPoint()
 {
 	if (!spawnPoints.empty())
@@ -27,6 +32,11 @@ std::pair<int, int> Map::getRandomSpawnPoint()
 CellType Map::get_cell_type(int x, int y)
 {
 	return board[x][y];
+}
+
+void Map::set_cell_type(int x, int y, CellType type)
+{
+	board[x][y] = type;
 }
 
 void Map::break_wall(int x, int y)

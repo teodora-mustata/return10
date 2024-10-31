@@ -1,7 +1,22 @@
 #include "Bomb.h"
 
 
-Bomb::Bomb(int x, int y) : posX(x), posY(y), is_active(false) {} 
+Bomb::Bomb(int x, int y) : posX(x), posY(y), is_active(false) {}
+
+int Bomb::getX()
+{
+    return posX;
+}
+
+int Bomb::getY()
+{
+    return posY;
+}
+
+bool Bomb::isActive()
+{
+    return is_active;
+}
 
 void Bomb::explode(Map &map)
 {
@@ -32,8 +47,12 @@ void Bomb::apply_damage(Map &map)
         int x = coord.first;
         int y = coord.second;
 
-        //TO DO: apply damage to players and walls
+        //TO DO: apply damage to players
 
+        if (auto* wall = std::get_if<Wall>(&map.get_cell_type(x, y)); wall && wall->is_destructible())
+        {
+            map.set_cell_type(x, y, std::monostate{});
+        }
     }
 }
 
