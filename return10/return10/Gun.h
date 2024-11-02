@@ -7,9 +7,9 @@
 class Gun
 {
 private:
-    const float firing_rate = 0;
-    std::chrono::time_point<std::chrono::steady_clock> last_fired_time;
-    std::vector<Bullet> fired_bullets;
+    std::chrono::duration<float> firingRate = std::chrono::seconds(4);
+    std::chrono::time_point<std::chrono::steady_clock> lastFiredTime;
+    std::vector<Bullet> firedBullets;
 
 public:
     Gun();

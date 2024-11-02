@@ -1,20 +1,20 @@
 #include "Gun.h"
 
-Gun::Gun() : last_fired_time(std::chrono::steady_clock::now()) {}
+Gun::Gun() : lastFiredTime(std::chrono::steady_clock::now()) {}
 
 bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed)
 {
     auto now = std::chrono::steady_clock::now();
-    std::chrono::duration<float> time_since_last_shot = now - last_fired_time;
+    std::chrono::duration<float> timeSinceLastShot = now - lastFiredTime;
 
-    if (time_since_last_shot.count() >= firing_rate)
+    if (timeSinceLastShot.count() >= firingRate.count())
     {
-        Bullet new_bullet(playerX, playerY, playerDirection, bulletSpeed);
-        new_bullet.active = true;
-        new_bullet.fired_at = now;
+        Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
+        newBullet.active = true;
+        newBullet.fired_at = now;
 
-        fired_bullets.push_back(new_bullet);
-        last_fired_time = now;
+        firedBullets.push_back(newBullet);
+        lastFiredTime = now;
 
         return true; //Fired
     }
@@ -23,6 +23,6 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
 
 const std::vector<Bullet>& Gun::getBullets() const
 {
-    return fired_bullets;
+    return firedBullets;
 }
 
