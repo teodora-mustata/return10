@@ -21,8 +21,8 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
     return false; // Not enough time has passed to fire again
 }
 
-const std::vector<Bullet>& Gun::getBullets() const
+std::vector<Bullet> Gun::getBullets() const //I deleted const ref because I need to acces the last bullet in player class
 {
-    return firedBullets;
+    return firedBullets; 
 }
 

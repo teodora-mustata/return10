@@ -1,7 +1,9 @@
 #pragma once
 #include "CellType.h"
 #include "Wall.h"
-class Bomb;
+#include"Bomb.h"
+#include "Player.h";
+#include "Bullet.h"
 #include <utility>
 #include <vector>
 #include <iostream>
@@ -16,9 +18,9 @@ private:
 
 	// game board
 	std::vector<std::vector<CellType>> board;
-	//std::vector<Player*> players; //TO DO: Implement Player class
+	std::vector<Player*> players; 
 	std::vector<Bomb> bombs;
-	//std::vector<Bullet> bullets; //TO DO: Implement Bullet class
+	std::vector<Bullet> bullets;
 	std::list<std::pair<int, int>> spawnPoints;
 
 	// game config

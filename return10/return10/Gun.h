@@ -14,5 +14,5 @@ private:
 public:
     Gun();
     bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
-    const std::vector<Bullet>& getBullets() const;
+    std::vector<Bullet> getBullets() const;
 };
