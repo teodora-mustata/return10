@@ -1,16 +1,16 @@
 #pragma once
-#include "Map.h"
 #include <iostream>
 #include <list>
 #include <variant>
 class Wall;
+class Map;
 
 class Bomb
 {
 private:
 	int posX, posY;
 	bool is_active = false;
-	static const int damage = 3;
+	static const int damage = 1;
 	static const int radius = 1;
 public:
 	Bomb(int x, int y);

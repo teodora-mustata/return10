@@ -2,8 +2,11 @@
 #include "Direction.h"
 #include <chrono>
 #include "DirectionUtils.h"
-#include "Map.h"
-#include "Player.h"
+#include "CellType.h"
+
+class Map;
+class Player;
+
 class Bullet
 {
 public:

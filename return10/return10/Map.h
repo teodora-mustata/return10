@@ -1,7 +1,7 @@
 #pragma once
 #include "CellType.h"
 #include "Wall.h"
-#include"Bomb.h"
+#include "Bomb.h"
 #include "Player.h";
 #include "Bullet.h"
 #include <utility>
@@ -9,6 +9,7 @@
 #include <iostream>
 #include <list>
 #include <random>
+#include <algorithm>
 
 class Map
 {
@@ -25,17 +26,20 @@ private:
 
 	// game config
 	static const int max_players = 4;
-	static const float destructible_wall_chance;
-	static const float indestructible_wall_chance;
+	const float destructible_wall_chance=0.4f;
+	const float indestructible_wall_chance=0.2f;
 	static const int bombs_count = 3;
 public:
-	Map(int n, int m); //TO DO: finish implementing constructor
-	//void generateMap();
+	Map(int n, int m); 
+	void generateSpawnPoints();
+	void generateWalls();
+	void setBombs();
 	std::vector<std::vector<CellType>> get_board();
 	std::pair<int, int> getRandomSpawnPoint();
+	std::list<std::pair<int, int>> getSpawnPoints();
 	CellType get_cell_type(int x, int y);
 	void set_cell_type(int x, int y, CellType type);
 	void break_wall(int x, int y);
-
+	void printMap() const;
 };
 
