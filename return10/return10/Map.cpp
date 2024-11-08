@@ -1,9 +1,7 @@
-
 #include "Map.h"
 
 Map::Map(int n, int m) : height(n), width(m)
 {
-	//random dimensions for map
 	board.resize(height, std::vector<CellType>(width));
 
 	for (int i = 0; i < height; i++)
@@ -11,7 +9,7 @@ Map::Map(int n, int m) : height(n), width(m)
 			set_cell_type(i, j, std::monostate{});
 
 	generateSpawnPoints();
-
+	
 	generateWalls();
 
 	setBombs();
@@ -39,13 +37,13 @@ void Map::generateWalls()
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-	for (int i = 0; i < height; ++i)
+	for (int i = 0; i < height; ++i) 
 	{
-		for (int j = 0; j < width; ++j)
+		for (int j = 0; j < width; ++j) 
 		{
 			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
 				continue;
-			}
+				}
 
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
@@ -54,7 +52,7 @@ void Map::generateWalls()
 			else if (random_value < destructible_wall_chance + indestructible_wall_chance) {
 				board[i][j] = Wall(i, j, false);
 			}
-
+			
 		}
 	}
 }
@@ -118,10 +116,42 @@ void Map::set_cell_type(int x, int y, CellType type)
 
 void Map::break_wall(int x, int y)
 {
-	if (std::holds_alternative<Wall>(board[x][y]))
+	if(std::holds_alternative<Wall>(board[x][y]))
 	{
 		// if it contains a bomb -> explode it
 		board[x][y] = std::monostate{};
 		std::cout << "Wall destroyed at (" << x << ", " << y << ")." << std::endl;
+	}
+}
+
+void Map::printMap() const {
+	for (int i = 0; i < board.size(); ++i) {
+		for (int j = 0; j < board[i].size(); ++j) {
+			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
+				std::cout << "P "; // Spawn point
+			}
+			else {
+				std::visit([&](auto&& arg) {
+					using T = std::decay_t<decltype(arg)>;
+					if constexpr (std::is_same_v<T, std::monostate>) {
+						std::cout << "0 "; // Empty
+					}
+					else if constexpr (std::is_same_v<T, Wall>) {
+						if (arg.is_destructible()) {
+							if (arg.get_containedBomb() != nullptr) {
+								std::cout << "DB "; // Destructible wall with bomb
+							}
+							else {
+								std::cout << "D "; // Destructible wall
+							}
+						}
+						else {
+							std::cout << "I "; // Indestructible wall
+						}
+					}
+					}, board[i][j]);
+			}
+		}
+		std::cout << std::endl;
 	}
 }
