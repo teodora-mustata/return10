@@ -39,7 +39,13 @@
     <ClCompile Include="GameInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoginManager.cpp">
+    <ClCompile Include="Login.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerDAO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Register.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -74,7 +80,13 @@
     <ClInclude Include="GameInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LoginManager.h">
+    <ClInclude Include="Login.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerDAO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Register.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

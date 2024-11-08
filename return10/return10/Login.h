@@ -15,8 +15,6 @@ public:
         m_users["player1"] = d;
     }
 
-    //bool authenticate(const std::string& username, const std::string& password);
-
     bool loginUser(const std::string& username, const std::string& password);
 
     bool isLoggedIn() const;
@@ -24,9 +22,6 @@ public:
     void displayUsers() const;
 private:
     std::string m_loggedInUser;
-    //bool checkCredentials(const std::string& username, const std::string& password);
-
-    //temporar
     std::unordered_map<std::string, PlayerDAO> m_users;
 };
 

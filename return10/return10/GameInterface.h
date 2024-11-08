@@ -5,13 +5,13 @@
 #include "Map.h"
 #include "Player.h"
 #include "Direction.h"
-#include "LoginManager.h"
+#include "Login.h"
 
 class GameInterface {
 private:
     Map m_gameMap;
     std::vector<std::unique_ptr<Player>> m_players;
-    LoginManager m_loginManager;
+    Login m_loginManager;
 
 
 public:
