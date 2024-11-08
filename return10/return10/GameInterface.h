@@ -11,7 +11,7 @@ class GameInterface {
 private:
     Map m_gameMap;
     std::vector<std::unique_ptr<Player>> m_players;
-    LoginManager m_loginManager; 
+    LoginManager m_loginManager;
 
 
 public:

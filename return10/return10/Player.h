@@ -1,8 +1,9 @@
+
 #pragma once
 #include<string>
 #include"Direction.h"
 
-class Gun;
+#include "Gun.h"
 
 class Player
 {
@@ -32,7 +33,7 @@ private:
 	std::pair<int, int> m_position;
 	std::pair<int, int> m_initial_position;
 	Gun m_gun;
-	
+
 
 };
 

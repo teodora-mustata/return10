@@ -1,12 +1,13 @@
+
 #include "Player.h"
 
-Player::Player(std::string name, int startX, int startY):
+Player::Player(std::string name, int startX, int startY) :
 	m_name(name),
 	m_score(0),
 	m_lives(3),
 	m_points(0),
 	m_initial_position(startX, startY),
-	m_position(startX,startY){}
+	m_position(startX, startY) {}
 
 Player::~Player()
 {

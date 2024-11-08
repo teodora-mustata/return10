@@ -10,8 +10,8 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
     if (timeSinceLastShot.count() >= m_firingRate.count())
     {
         Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
-        newBullet.active = true;
-        newBullet.fired_at = now;
+        newBullet.m_active = true;
+        newBullet.m_fired_at = now;
 
         m_firedBullets.push_back(newBullet);
         m_lastFiredTime = now;
@@ -31,7 +31,7 @@ void Gun::updateBullets(Map& map, Player& target)
         currentBullet->checkPlayerCollision(target);
         currentBullet->checkWallCollision(map);
 
-        if (!currentBullet->active) {
+        if (!currentBullet->m_active) {
             // if erased put iterator one place back because erase sets it further
             currentBullet = m_firedBullets.erase(currentBullet);
         }

@@ -1,4 +1,4 @@
-#include "Login.h"
+#include "LoginManager.h"
 //more of a mock implementation to simply place in the GameInterface, obviously needs the whole SQL implementation
 LoginManager::LoginManager() {
     // here would load the database
@@ -6,9 +6,9 @@ LoginManager::LoginManager() {
 
 bool LoginManager::loginUser(const std::string& username)
 {
-    if (userDatabase.find(username) != userDatabase.end()) 
+    if (userDatabase.find(username) != userDatabase.end())
     {
-        std::cout << "Welcome, " << username <<  std::endl;
+        std::cout << "Welcome, " << username << std::endl;
         return false;  // username exists and enter
     }
     else

@@ -1,7 +1,9 @@
+
 #include "Map.h"
 
 Map::Map(int n, int m) : height(n), width(m)
 {
+	//random dimensions for map
 	board.resize(height, std::vector<CellType>(width));
 
 	for (int i = 0; i < height; i++)
@@ -9,7 +11,7 @@ Map::Map(int n, int m) : height(n), width(m)
 			set_cell_type(i, j, std::monostate{});
 
 	generateSpawnPoints();
-	
+
 	generateWalls();
 
 	setBombs();
@@ -37,13 +39,13 @@ void Map::generateWalls()
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-	for (int i = 0; i < height; ++i) 
+	for (int i = 0; i < height; ++i)
 	{
-		for (int j = 0; j < width; ++j) 
+		for (int j = 0; j < width; ++j)
 		{
 			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
 				continue;
-				}
+			}
 
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
@@ -52,7 +54,7 @@ void Map::generateWalls()
 			else if (random_value < destructible_wall_chance + indestructible_wall_chance) {
 				board[i][j] = Wall(i, j, false);
 			}
-			
+
 		}
 	}
 }
@@ -116,7 +118,7 @@ void Map::set_cell_type(int x, int y, CellType type)
 
 void Map::break_wall(int x, int y)
 {
-	if(std::holds_alternative<Wall>(board[x][y]))
+	if (std::holds_alternative<Wall>(board[x][y]))
 	{
 		// if it contains a bomb -> explode it
 		board[x][y] = std::monostate{};

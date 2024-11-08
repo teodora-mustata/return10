@@ -12,7 +12,7 @@ void GameInterface::mainLoop() {
 }
 void GameInterface::startGame() {
     std::cout << "Starting login process..." << std::endl;
-    login(); 
+    login();
     std::cout << "Game started with " << m_players.size() << " players!" << std::endl;
     mainLoop();
 }
@@ -36,29 +36,22 @@ void GameInterface::login() {
     }
 }
 
-    void GameInterface::handlePlayerMove(Player & player) {
-        std::string dir;
-        std::cout << "Enter direction (up, down, left, right): ";
-        std::cin >> dir;
+void GameInterface::handlePlayerMove(Player& player) {
+    std::string dir;
+    std::cout << "Enter direction (up, down, left, right): ";
+    std::cin >> dir;
 
-        Direction direction; //need to get the direction from the directionUtils here
-        player.move(direction);
-    }
+    Direction direction; //need to get the direction from the directionUtils here
+    player.move(direction);
+}
 
-    void GameInterface::handlePlayerShoot(Player & player) {
-        std::string dir;
-        std::cout << "Enter shooting direction (up, down, left, right): ";
-        std::cin >> dir;
+void GameInterface::handlePlayerShoot(Player& player) {
+    std::string dir;
+    std::cout << "Enter shooting direction (up, down, left, right): ";
+    std::cin >> dir;
 
-        Direction direction; //need to get the direction from the directionUtils here
-        player.shoot(direction, 0.25);  
-    }
-
-    
-
-
-
-
-
+    Direction direction; //need to get the direction from the directionUtils here
+    player.shoot(direction, 0.25);
+}
 
 

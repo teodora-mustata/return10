@@ -39,22 +39,22 @@ std::list<std::pair<int, int>> Bomb::calculate_effect_area()
     return area_of_effect;
 }
 
-void Bomb::apply_damage(Map &map)
-{
-    std::list<std::pair<int, int>> area_of_effect = calculate_effect_area();
-    for (auto coord : area_of_effect)
-    {
-        int x = coord.first;
-        int y = coord.second;
-
-        //TO DO: apply damage to players
-
-        if (auto* wall = std::get_if<Wall>(&map.get_cell_type(x, y)); wall && wall->is_destructible())
-        {
-            map.set_cell_type(x, y, std::monostate{});
-        }
-    }
-}
+//void Bomb::apply_damage(Map &map)
+//{
+//    std::list<std::pair<int, int>> area_of_effect = calculate_effect_area();
+//    for (auto coord : area_of_effect)
+//    {
+//        int x = coord.first;
+//        int y = coord.second;
+//
+//        //TO DO: apply damage to players
+//
+//        if (auto* wall = std::get_if<Wall>(&map.get_cell_type(x, y)); wall && wall->is_destructible())
+//        {
+//            map.set_cell_type(x, y, std::monostate{});
+//        }
+//    }
+//}
 
 void Bomb::deactivate()
 {
