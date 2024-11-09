@@ -155,3 +155,8 @@ void Map::printMap() const {
 		std::cout << std::endl;
 	}
 }
+
+void Map::addPlayer(Player player)
+{
+	m_players.emplace_back(player);
+}

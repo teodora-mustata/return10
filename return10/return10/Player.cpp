@@ -18,23 +18,23 @@ void Player::move(Direction direction)
 	switch (direction)
 	{
 	case Direction::UP:
-		m_position.second += 1;
+		m_position.i -= 1;
 		break;
 	case Direction::DOWN:
-		m_position.second -= 1;
+		m_position.i += 1;
 		break;
 	case Direction::LEFT:
-		m_position.first -= 1;
+		m_position.j -= 1;
 		break;
 	case Direction::RIGHT:
-		m_position.first += 1;
+		m_position.j += 1;
 		break;
 	}
 }
 
 void Player::shoot(Direction direction, float bulletSpeed)
 {
-	m_gun.fire(m_position.first, m_position.second, direction, bulletSpeed);
+	m_gun.fire(m_position.i, m_position.j, direction, bulletSpeed);
 	//TO DO: check if the bullet collided with any player, add the points and remove the health points :)
 }
 
@@ -55,7 +55,7 @@ int Player::GetLives() const
 
 std::pair<int, int> Player::GetPosition() const
 {
-	return m_position;
+	return { m_position.i,m_position.j };
 }
 
 void Player::addScore(int acumulated_points)

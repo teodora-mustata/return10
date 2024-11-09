@@ -21,7 +21,7 @@ private:
 	// game board
 	//to do move to game logic
 	std::vector<std::vector<CellType>> board;
-	std::vector<Player*> players;
+	std::vector<Player> m_players;
 	std::vector<Bomb> bombs;
 	std::vector<Bullet> bullets;
 	std::list<std::pair<int, int>> spawnPoints;
@@ -44,7 +44,8 @@ public:
 	void break_wall(int x, int y);
 	void printMap() const;
 
+
 	//
-	void addPlayer(Player* player);
+	void addPlayer(Player player);
 };
 

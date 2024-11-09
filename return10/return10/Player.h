@@ -7,6 +7,14 @@
 
 class Player
 {
+private:
+	struct Coordinate {
+		int i, j;
+		Coordinate(int _i, int _j):
+			i{_i},
+			j{_j}
+		{}
+	};
 public:
 	Player(std::string name, int startX, int startY);
 	~Player();
@@ -18,7 +26,7 @@ public:
 	std::string GetName() const;
 	int GetScore() const;
 	int GetLives() const;
-	std::pair<int, int> GetPosition() const;
+	std::pair<int,int> GetPosition() const;
 
 	//Updates for player
 	void addScore(int acumulated_points);
@@ -27,12 +35,13 @@ public:
 	void loseLife();
 
 private:
+	
 	int m_score;
 	int m_lives;
 	int m_points;
 	std::string m_name;
-	std::pair<int, int> m_position;
-	std::pair<int, int> m_initial_position;
+	Coordinate m_position;
+	Coordinate m_initial_position;
 	Gun m_gun;
 
 
