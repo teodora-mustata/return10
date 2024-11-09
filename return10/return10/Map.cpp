@@ -160,3 +160,16 @@ void Map::addPlayer(Player player)
 {
 	m_players.emplace_back(player);
 }
+
+void Map::removePlayer(Player player)
+{
+	for (auto it = m_players.begin(); it!=m_players.end(); it++)
+	{
+		if (*it == player)
+		{
+			m_players.erase(it);
+		}
+		
+	}
+	
+}

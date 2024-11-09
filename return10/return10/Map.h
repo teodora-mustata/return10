@@ -47,5 +47,6 @@ public:
 
 	//
 	void addPlayer(Player player);
+	void removePlayer(Player player);
 };
 

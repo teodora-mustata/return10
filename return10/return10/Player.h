@@ -19,7 +19,7 @@ public:
 	Player(std::string name, int startX, int startY);
 	~Player();
 	void move(Direction direction);
-
+	bool operator==(const Player& other);
 	void shoot(Direction direction, float bulletSpeed);
 
 	//Getters

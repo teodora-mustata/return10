@@ -32,6 +32,11 @@ void Player::move(Direction direction)
 	}
 }
 
+bool Player::operator==(const Player& other)
+{
+	return m_name==other.m_name;
+}
+
 void Player::shoot(Direction direction, float bulletSpeed)
 {
 	m_gun.fire(m_position.i, m_position.j, direction, bulletSpeed);
