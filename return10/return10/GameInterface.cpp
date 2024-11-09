@@ -18,10 +18,10 @@ void GameInterface::startGame() {
 }
 void GameInterface::displayStatus() {
     for (const auto& player : m_players) {
-        std::cout << player.GetName() << ": Lives=" << player.GetLives()
-            << ", Score=" << player.GetScore()
-            << ", Position=(" << player.GetPosition().first
-            << ", " << player.GetPosition().second << ")\n";
+        std::cout << player->GetName() << ": Lives=" << player->GetLives()
+            << ", Score=" << player->GetScore()
+            << ", Position=(" << player->GetPosition().first
+            << ", " << player->GetPosition().second << ")\n";
     }
 }
 

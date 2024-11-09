@@ -21,6 +21,7 @@ public:
 	std::pair<int, int> GetPosition() const;
 
 	//Updates for player
+	void addScore(int acumulated_points);
 	void addPoints(int acumulated_points);
 	void resetPosition();
 	void loseLife();

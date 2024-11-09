@@ -58,6 +58,11 @@ std::pair<int, int> Player::GetPosition() const
 	return m_position;
 }
 
+void Player::addScore(int acumulated_points)
+{
+	m_score += acumulated_points;
+}
+
 void Player::addPoints(int acumulated_points)
 {
 	m_points += acumulated_points;
