@@ -4,6 +4,11 @@
 #include <memory>
 #include "Map.h"
 #include "Player.h"
+#include <iostream>
+#include <vector>
+#include <memory>
+#include "Map.h"
+#include "Player.h"
 #include "Direction.h"
 #include "Login.h"
 

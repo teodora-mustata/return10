@@ -138,6 +138,7 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameInterface.cpp" />
+    <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="Direction.h" />
     <ClInclude Include="DirectionUtils.h" />
     <ClInclude Include="GameInterface.h" />
+    <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="Login.h" />
     <ClInclude Include="Map.h" />

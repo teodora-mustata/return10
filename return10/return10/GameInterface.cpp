@@ -4,8 +4,6 @@
 GameInterface::GameInterface(int mapWidth, int mapHeight, int numPlayers)
     : m_gameMap(mapWidth, mapHeight) {
     initializePlayers(numPlayers);
-    m_gameMap.GenerateWalls();
-    m_gameMap.GenerateSpawnPoints();
 }
 void GameInterface::mainLoop() {
     m_gameMap.PrintMap(); //more to do here
@@ -25,16 +23,16 @@ void GameInterface::displayStatus() {
     }
 }
 
-void GameInterface::login() {
-    std::string username;
-    bool loginSuccessful = false;
-
-    while (!loginSuccessful) {
-        std::cout << "Enter a username to log in: ";
-        std::cin >> username;
-        loginSuccessful = m_loginManager.loginUser(username);
-    }
-}
+//void GameInterface::login() {
+//    std::string username;
+//    bool loginSuccessful = false;
+//
+//    while (!loginSuccessful) {
+//        std::cout << "Enter a username to log in: ";
+//        std::cin >> username;
+//        loginSuccessful = m_loginManager.loginUser(username);
+//    }
+//}
 
 void GameInterface::handlePlayerMove(Player& player) {
     std::string dir;
@@ -53,5 +51,7 @@ void GameInterface::handlePlayerShoot(Player& player) {
     Direction direction; //need to get the direction from the directionUtils here
     player.shoot(direction, 0.25);
 }
+
+
 
 
