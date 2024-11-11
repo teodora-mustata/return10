@@ -1,29 +1,29 @@
 #include "Bomb.h"
 
 
-Bomb::Bomb(int x, int y) : posX(x), posY(y), is_active(false) {}
+Bomb::Bomb(int x, int y) : m_posX(x), m_posY(y), m_isActive(false) {}
 
-int Bomb::getX()
+int Bomb::GetX()
 {
-    return posX;
+    return m_posX;
 }
 
-int Bomb::getY()
+int Bomb::GetY()
 {
-    return posY;
+    return m_posY;
 }
 
-bool Bomb::isActive()
+bool Bomb::IsActive()
 {
-    return is_active;
+    return m_isActive;
 }
 
-void Bomb::explode(Map &map)
+void Bomb::Explode(Map &map)
 {
-    if (is_active) {
-        std::cout << "Bomb exploded at (" << posX << ", " << posY << ")!" << std::endl;
-        apply_damage(map);
-        deactivate();
+    if (m_isActive) {
+        std::cout << "Bomb exploded at (" << m_posX << ", " << m_posY << ")!" << std::endl;
+        ApplyDamage(map);
+        Deactivate();
     }
     else {
         std::cout << "Bomb is not active and cannot explode." << std::endl;
@@ -33,8 +33,8 @@ void Bomb::explode(Map &map)
 std::list<std::pair<int, int>> Bomb::calculate_effect_area()
 {
     std::list<std::pair<int, int>> area_of_effect;
-    for (int x = posX - radius; x <= posX + radius; ++x)
-        for (int y = posY - radius; y <= posY + radius; ++y)
+    for (int x = m_posX - m_radius; x <= m_posX + m_radius; ++x)
+        for (int y = m_posY - m_radius; y <= m_posY + m_radius; ++y)
             area_of_effect.emplace_back(std::make_pair(x, y));
     return area_of_effect;
 }
@@ -56,14 +56,14 @@ std::list<std::pair<int, int>> Bomb::calculate_effect_area()
 //    }
 //}
 
-void Bomb::deactivate()
+void Bomb::Deactivate()
 {
-	is_active = false;
+	m_isActive = false;
 	std::cout << "Bomb deactivated." << std::endl;
 }
 
-void Bomb::activate()
+void Bomb::Activate()
 {
-	is_active = true;
-	std::cout << "Bomb activated at (" << posX << ", " << posY << ")." << std::endl;
+	m_isActive = true;
+	std::cout << "Bomb activated at (" << m_posX << ", " << m_posY << ")." << std::endl;
 }

@@ -4,11 +4,11 @@
 GameInterface::GameInterface(int mapWidth, int mapHeight, int numPlayers)
     : m_gameMap(mapWidth, mapHeight) {
     initializePlayers(numPlayers);
-    m_gameMap.generateWalls();
-    m_gameMap.generateSpawnPoints();
+    m_gameMap.GenerateWalls();
+    m_gameMap.GenerateSpawnPoints();
 }
 void GameInterface::mainLoop() {
-    m_gameMap.printMap(); //more to do here
+    m_gameMap.PrintMap(); //more to do here
 }
 void GameInterface::startGame() {
     std::cout << "Starting login process..." << std::endl;

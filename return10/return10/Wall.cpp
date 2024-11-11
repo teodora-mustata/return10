@@ -1,35 +1,35 @@
 #include "Wall.h"
 
-Wall::Wall(int x, int y, bool destructible) : posX(x), posY(y), destructible(destructible)
+Wall::Wall(int x, int y, bool destructible) : m_posX(x), m_posY(y), m_destructible(destructible)
 {
 }
 
 Wall::~Wall()
 {
-	delete containedBomb;
+	delete m_containedBomb;
 }
 
-int Wall::getX()
+int Wall::GetX()
 {
-	return posX;
+	return m_posX;
 }
 
-int Wall::getY()
+int Wall::GetY()
 {
-	return posY;
+	return m_posY;
 }
 
-void Wall::set_containedBomb(Bomb* bomb)
+void Wall::SetContainedBomb(Bomb* bomb)
 {
-	this->containedBomb = bomb;
+	this->m_containedBomb = bomb;
 }
 
-Bomb* Wall::get_containedBomb() const
+Bomb* Wall::GetContainedBomb() const
 {
-	return containedBomb;
+	return m_containedBomb;
 }
 
-bool Wall::is_destructible() const
+bool Wall::IsDestructible() const
 {
-	return destructible;
+	return m_destructible;
 }

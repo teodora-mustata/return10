@@ -24,10 +24,10 @@ bool Bullet::checkPlayerCollision(Player& target) {
 }
 
 bool Bullet::checkWallCollision(Map& map) {
-    CellType cell = map.get_cell_type(m_x, m_y);
+    CellType cell = map.GetCellType(m_x, m_y);
     if (auto* wall = std::get_if<Wall>(&cell)) {
-        if (wall->is_destructible()) {
-            map.set_cell_type(m_x, m_y, std::monostate{});
+        if (wall->IsDestructible()) {
+            map.SetCellType(m_x, m_y, std::monostate{});
             deactivate();
             return true;
         }

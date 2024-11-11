@@ -5,16 +5,16 @@ class Bomb;
 class Wall
 {
 private:
-	int posX, posY;
-	bool destructible;
-	Bomb* containedBomb=nullptr;
+	int m_posX, m_posY;
+	bool m_destructible;
+	Bomb* m_containedBomb=nullptr;
 public:
 	Wall(int x, int y, bool destructible);
 	~Wall();
-	int getX();
-	int getY();
-	bool is_destructible() const;
-	void set_containedBomb(Bomb* bomb);
-	Bomb* get_containedBomb() const;
+	int GetX();
+	int GetY();
+	bool IsDestructible() const;
+	void SetContainedBomb(Bomb* bomb);
+	Bomb* GetContainedBomb() const;
 };
 

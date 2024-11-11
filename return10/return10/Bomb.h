@@ -8,19 +8,20 @@ class Map;
 class Bomb
 {
 private:
-	int posX, posY;
-	bool is_active = false;
-	static const int damage = 1;
-	static const int radius = 1;
+	int m_posX, m_posY;
+	bool m_isActive;
+	static const int m_damage = 1;
+	static const int m_radius = 1;
 public:
 	Bomb(int x, int y);
-	int getX();
-	int getY();
-	bool isActive();
-	void explode(Map &map); //TO DO: move to map class
+	~Bomb() = default;
+	int GetX();
+	int GetY();
+	bool IsActive();
+	void Explode(Map &map); //TO DO: move to map class
 	std::list<std::pair<int,int>> calculate_effect_area();
-	void apply_damage(Map &map); //TO DO: move to map class
-	void deactivate();
-	void activate();
+	void ApplyDamage(Map &map); //TO DO: move to map class
+	void Deactivate();
+	void Activate();
 };
 

@@ -1,69 +1,69 @@
 #include "Map.h"
 
-Map::Map(int n, int m) : height(n), width(m)
+Map::Map(int n, int m) : m_height(n), m_width(m)
 {
-	board.resize(height, std::vector<CellType>(width));
+	m_board.resize(m_height, std::vector<CellType>(m_width));
 
-	for (int i = 0; i < height; i++)
-		for (int j = 0; j < width; j++)
-			set_cell_type(i, j, std::monostate{});
+	for (int i = 0; i < m_height; i++)
+		for (int j = 0; j < m_width; j++)
+			SetCellType(i, j, std::monostate{});
 
-	generateSpawnPoints();
+	GenerateSpawnPoints();
 	
-	generateWalls();
+	GenerateWalls();
 
-	setBombs();
+	SetBombs();
 }
 
-std::vector<std::vector<CellType>> Map::get_board()
+std::vector<std::vector<CellType>> Map::GetBoard()
 {
-	return this->board;
+	return this->m_board;
 }
 
-void Map::generateSpawnPoints()
+void Map::GenerateSpawnPoints()
 {
-	std::vector<std::pair<int, int>> temp = { {0, 0}, {0, width - 1}, {height - 1, 0}, {height - 1, width - 1} };
+	std::vector<std::pair<int, int>> temp = { {0, 0}, {0, m_width - 1}, {m_height - 1, 0}, {m_height - 1, m_width - 1} };
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::shuffle(temp.begin(), temp.end(), gen);
 
 	for (const auto& point : temp) {
-		spawnPoints.push_back(point);
+		m_spawnPoints.push_back(point);
 	}
 }
 
-void Map::generateWalls()
+void Map::GenerateWalls()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-	for (int i = 0; i < height; ++i) 
+	for (int i = 0; i < m_height; ++i) 
 	{
-		for (int j = 0; j < width; ++j) 
+		for (int j = 0; j < m_width; ++j) 
 		{
-			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
+			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
 				continue;
 				}
 
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
-				board[i][j] = Wall(i, j, true);
+				m_board[i][j] = Wall(i, j, true);
 			}
 			else if (random_value < destructible_wall_chance + indestructible_wall_chance) {
-				board[i][j] = Wall(i, j, false);
+				m_board[i][j] = Wall(i, j, false);
 			}
 			
 		}
 	}
 }
 
-void Map::setBombs()
+void Map::SetBombs()
 {
 	std::vector<std::pair<int, int>> destructibleWalls;
 
-	for (int i = 0; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			if (auto* wall = std::get_if<Wall>(&board[i][j]); wall && wall->is_destructible()) {
+	for (int i = 0; i < m_height; ++i) {
+		for (int j = 0; j < m_width; ++j) {
+			if (auto* wall = std::get_if<Wall>(&m_board[i][j]); wall && wall->IsDestructible()) {
 				destructibleWalls.emplace_back(i, j);
 			}
 		}
@@ -79,55 +79,55 @@ void Map::setBombs()
 	for (int k = 0; k < bombsToPlace; ++k) {
 		int x = destructibleWalls[k].first;
 		int y = destructibleWalls[k].second;
-		if (auto wallPtr = std::get_if<Wall>(&board[x][y]))
+		if (auto wallPtr = std::get_if<Wall>(&m_board[x][y]))
 		{
 			Bomb* bomb = new Bomb(x, y);
-			wallPtr->set_containedBomb(bomb);
-			bombs.emplace_back(x, y);
+			wallPtr->SetContainedBomb(bomb);
+			m_bombs.emplace_back(x, y);
 		}
 	}
 }
 
-std::pair<int, int> Map::getRandomSpawnPoint()
+std::pair<int, int> Map::GetRandomSpawnPoint()
 {
-	if (!spawnPoints.empty())
+	if (!m_spawnPoints.empty())
 	{
-		std::pair<int, int> spawnPoint = spawnPoints.back();
-		spawnPoints.pop_back();
+		std::pair<int, int> spawnPoint = m_spawnPoints.back();
+		m_spawnPoints.pop_back();
 		return spawnPoint;
 	}
 	throw std::runtime_error("No more spawn points available!");
 }
 
-std::list<std::pair<int, int>> Map::getSpawnPoints()
+std::list<std::pair<int, int>> Map::GetSpawnPoints()
 {
-	return spawnPoints;
+	return m_spawnPoints;
 }
 
-CellType Map::get_cell_type(int x, int y)
+CellType Map::GetCellType(int x, int y)
 {
-	return board[x][y];
+	return m_board[x][y];
 }
 
-void Map::set_cell_type(int x, int y, CellType type)
+void Map::SetCellType(int x, int y, CellType type)
 {
-	board[x][y] = type;
+	m_board[x][y] = type;
 }
 
-void Map::break_wall(int x, int y)
+void Map::BreakWall(int x, int y)
 {
-	if(std::holds_alternative<Wall>(board[x][y]))
+	if(std::holds_alternative<Wall>(m_board[x][y]))
 	{
 		// if it contains a bomb -> explode it
-		board[x][y] = std::monostate{};
+		m_board[x][y] = std::monostate{};
 		std::cout << "Wall destroyed at (" << x << ", " << y << ")." << std::endl;
 	}
 }
 
-void Map::printMap() const {
-	for (int i = 0; i < board.size(); ++i) {
-		for (int j = 0; j < board[i].size(); ++j) {
-			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
+void Map::PrintMap() const {
+	for (int i = 0; i < m_board.size(); ++i) {
+		for (int j = 0; j < m_board[i].size(); ++j) {
+			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
 				std::cout << "P "; // Spawn point
 			}
 			else {
@@ -137,8 +137,8 @@ void Map::printMap() const {
 						std::cout << "0 "; // Empty
 					}
 					else if constexpr (std::is_same_v<T, Wall>) {
-						if (arg.is_destructible()) {
-							if (arg.get_containedBomb() != nullptr) {
+						if (arg.IsDestructible()) {
+							if (arg.GetContainedBomb() != nullptr) {
 								std::cout << "DB "; // Destructible wall with bomb
 							}
 							else {
@@ -149,7 +149,7 @@ void Map::printMap() const {
 							std::cout << "I "; // Indestructible wall
 						}
 					}
-					}, board[i][j]);
+					}, m_board[i][j]);
 			}
 		}
 		std::cout << std::endl;
@@ -158,7 +158,7 @@ void Map::printMap() const {
 
 void Map::addPlayer(Player player)
 {
-	m_players.emplace_back(player);
+	m_players.push_back(player);
 }
 
 void Map::removePlayer(Player player)

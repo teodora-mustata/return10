@@ -16,15 +16,15 @@ class Map
 {
 private:
 	// dimensions
-	int height, width;
+	int m_height, m_width;
 
 	// game board
 	//to do move to game logic
-	std::vector<std::vector<CellType>> board;
+	std::vector<std::vector<CellType>> m_board;
 	std::vector<Player> m_players;
-	std::vector<Bomb> bombs;
-	std::vector<Bullet> bullets;
-	std::list<std::pair<int, int>> spawnPoints;
+	std::vector<Bomb> m_bombs;
+	std::vector<Bullet> m_bullets;
+	std::list<std::pair<int, int>> m_spawnPoints;
 
 	// game config
 	static const int max_players = 4;
@@ -33,16 +33,17 @@ private:
 	static const int bombs_count = 3;
 public:
 	Map(int n, int m);
-	void generateSpawnPoints();
-	void generateWalls();
-	void setBombs();
-	std::vector<std::vector<CellType>> get_board();
-	std::pair<int, int> getRandomSpawnPoint();
-	std::list<std::pair<int, int>> getSpawnPoints();
-	CellType get_cell_type(int x, int y);
-	void set_cell_type(int x, int y, CellType type);
-	void break_wall(int x, int y);
-	void printMap() const;
+	~Map() = default;
+	void GenerateSpawnPoints();
+	void GenerateWalls();
+	void SetBombs();
+	std::vector<std::vector<CellType>> GetBoard();
+	std::pair<int, int> GetRandomSpawnPoint();
+	std::list<std::pair<int, int>> GetSpawnPoints();
+	CellType GetCellType(int x, int y);
+	void SetCellType(int x, int y, CellType type);
+	void BreakWall(int x, int y);
+	void PrintMap() const;
 
 
 	//
