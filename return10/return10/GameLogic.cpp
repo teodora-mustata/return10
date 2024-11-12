@@ -22,8 +22,10 @@ void GameLogic::placePlayer()
 
 void GameLogic::initializeScores()
 {
-    score = 0;
-    std::cout << "Scores initialized. Starting score: " << score << std::endl;
+    for (Player player : map.GetPlayers())
+    {
+        player.setInitialScore(); 
+    }
 }
 
 void GameLogic::startTimer()

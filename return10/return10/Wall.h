@@ -1,6 +1,5 @@
 #pragma once
-
-class Bomb;
+#include "Bomb.h"
 
 class Wall
 {

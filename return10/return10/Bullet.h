@@ -3,8 +3,7 @@
 #include <chrono>
 #include "DirectionUtils.h"
 #include "CellType.h"
-#include "Player.h"
-#include "Map.h"
+
 class Bullet
 {
 public:

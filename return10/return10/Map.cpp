@@ -2,6 +2,8 @@
 
 Map::Map(int n, int m) : m_height(n), m_width(m)
 {
+	//TO DO: Make Map generate with random height and width
+
 	m_board.resize(m_height, std::vector<CellType>(m_width));
 
 	for (int i = 0; i < m_height; i++)
@@ -166,15 +168,17 @@ void Map::addPlayer(Player player)
 	m_players.push_back(player);
 }
 
-void Map::removePlayer(Player player)
+void Map::removePlayer(const Player& player)
 {
-	for (auto it = m_players.begin(); it!=m_players.end(); it++)
+	for (auto it = m_players.begin(); it != m_players.end();)
 	{
 		if (*it == player)
 		{
-			m_players.erase(it);
+			it = m_players.erase(it);
 		}
-		
+		else
+		{
+			++it;
+		}
 	}
-	
 }

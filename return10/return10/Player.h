@@ -1,8 +1,6 @@
-
 #pragma once
 #include<string>
 #include"Direction.h"
-
 #include "Gun.h"
 
 class Player
@@ -27,18 +25,21 @@ public:
 	int GetScore() const;
 	int GetLives() const;
 	std::pair<int,int> GetPosition() const;
-
+	
 	//Updates for player
 	void addScore(int acumulated_points);
-	void addPoints(int acumulated_points);
+	void addCrowns(int acumulated_points);
+	void setInitialScore();
+	void setInitialCrowns();
 	void resetPosition();
 	void loseLife();
+	bool operator==(const Player& other) const;
 
 private:
 	
 	int m_score;
 	int m_lives;
-	int m_points;
+	int m_crowns;
 	std::string m_name;
 	Coordinate m_position;
 	Coordinate m_initial_position;

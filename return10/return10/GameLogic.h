@@ -3,6 +3,7 @@
 #include <chrono>
 #include <thread>
 #include "Player.h"
+#include "Map.h"
 
 class GameLogic {
 public:

@@ -2,9 +2,7 @@
 #pragma once
 #include "CellType.h"
 #include "Wall.h"
-#include "Bomb.h"
-#include "Player.h";
-#include "Bullet.h"
+#include "Player.h"
 #include <utility>
 #include <vector>
 #include <iostream>
@@ -49,6 +47,6 @@ public:
 
 	//
 	void addPlayer(Player player);
-	void removePlayer(Player player);
+	void removePlayer(const Player& player);
 };
 

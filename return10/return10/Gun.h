@@ -4,8 +4,6 @@
 #include <chrono>
 #include <vector>
 #include <algorithm>
-#include "Bullet.h"
-#include "Map.h"
 
 class Gun
 {
@@ -16,6 +14,6 @@ private:
 public:
     Gun();
     bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
-    void updateBullets(Map& map, Player& target);
+    void updateBullets(Map& map, Player& target); // TO DO: Move to GameLogic?
     std::vector<Bullet> getBullets() const;
 };

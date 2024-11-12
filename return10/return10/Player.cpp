@@ -5,7 +5,7 @@ Player::Player(std::string name, int startX, int startY) :
 	m_name(name),
 	m_score(0),
 	m_lives(3),
-	m_points(0),
+	m_crowns(0),
 	m_initial_position(startX, startY),
 	m_position(startX, startY) {}
 
@@ -68,9 +68,19 @@ void Player::addScore(int acumulated_points)
 	m_score += acumulated_points;
 }
 
-void Player::addPoints(int acumulated_points)
+void Player::addCrowns(int acumulated_points)
 {
-	m_points += acumulated_points;
+	m_crowns += acumulated_points;
+}
+
+void Player::setInitialScore()
+{
+	this->m_score = 0;
+}
+
+void Player::setInitialCrowns()
+{
+	this->m_crowns = 0;
 }
 
 void Player::resetPosition()
@@ -85,4 +95,10 @@ void Player::loseLife()
 		m_lives -= 1;
 		resetPosition();
 	}
+}
+
+bool Player::operator==(const Player& other) const
+{
+	if (this->m_name == other.GetName()) return true;
+	return false;
 }
