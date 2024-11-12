@@ -40,6 +40,7 @@ public:
 	std::vector<std::vector<CellType>> GetBoard();
 	std::pair<int, int> GetRandomSpawnPoint();
 	std::list<std::pair<int, int>> GetSpawnPoints();
+	std::vector<Player> GetPlayers();
 	CellType GetCellType(int x, int y);
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);

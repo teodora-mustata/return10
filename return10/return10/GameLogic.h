@@ -23,6 +23,10 @@ private:
 
     void showStartMenu();
 
+    void ApplyDamage(Bomb bomb);
+
+    void ExplodeBomb(Bomb bomb);
+
     //void gameLoop() {
     //    while (gameRunning) {
     //        std::this_thread::sleep_for(std::chrono::seconds(1));

@@ -104,6 +104,11 @@ std::list<std::pair<int, int>> Map::GetSpawnPoints()
 	return m_spawnPoints;
 }
 
+std::vector<Player> Map::GetPlayers()
+{
+	return m_players;
+}
+
 CellType Map::GetCellType(int x, int y)
 {
 	return m_board[x][y];

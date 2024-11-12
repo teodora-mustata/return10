@@ -38,3 +38,41 @@ void GameLogic::showStartMenu()
     std::cout << "The game is starting..." << std::endl;
 }
 
+void GameLogic::ApplyDamage(Bomb bomb)
+{
+    std::list<std::pair<int, int>> area_of_effect = bomb.CalculateEffectArea();
+    for (auto coord : area_of_effect)
+    {
+        int x = coord.first;
+        int y = coord.second;
+
+        for (int i = 0; i < map.GetPlayers().size(); ++i)
+        {
+            Player player = map.GetPlayers()[i];
+            int playerXCoord = player.GetPosition().first;
+            int playerYCoord = player.GetPosition().second;
+            if (playerXCoord == x && playerYCoord == y)
+            {
+                //player is in bomb range -> they take damage
+                player.loseLife();
+            }
+        }
+ 
+        if (auto* wall = std::get_if<Wall>(&map.GetCellType(x, y)); wall && wall->IsDestructible())
+        {
+            map.SetCellType(x, y, std::monostate{});
+        }
+    }
+}
+
+void GameLogic::ExplodeBomb(Bomb bomb)
+{
+    if (bomb.IsActive()) {
+        std::cout << "Bomb exploded at (" << bomb.GetX() << ", " << bomb.GetY() << ")!" << std::endl;
+        ApplyDamage(bomb);
+        bomb.Deactivate();
+    }
+    else {
+        std::cout << "Bomb is not active and cannot explode." << std::endl;
+    }
+}

@@ -18,9 +18,7 @@ public:
 	int GetX();
 	int GetY();
 	bool IsActive();
-	void Explode(Map &map); //TO DO: move to map class
-	std::list<std::pair<int,int>> calculate_effect_area();
-	void ApplyDamage(Map &map); //TO DO: move to map class
+	std::list<std::pair<int,int>> CalculateEffectArea();
 	void Deactivate();
 	void Activate();
 };

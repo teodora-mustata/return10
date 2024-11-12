@@ -18,43 +18,14 @@ bool Bomb::IsActive()
     return m_isActive;
 }
 
-void Bomb::Explode(Map &map)
-{
-    if (m_isActive) {
-        std::cout << "Bomb exploded at (" << m_posX << ", " << m_posY << ")!" << std::endl;
-        ApplyDamage(map);
-        Deactivate();
-    }
-    else {
-        std::cout << "Bomb is not active and cannot explode." << std::endl;
-    }
-}
-
-std::list<std::pair<int, int>> Bomb::calculate_effect_area()
+std::list<std::pair<int, int>> Bomb::CalculateEffectArea()
 {
     std::list<std::pair<int, int>> area_of_effect;
     for (int x = m_posX - m_radius; x <= m_posX + m_radius; ++x)
         for (int y = m_posY - m_radius; y <= m_posY + m_radius; ++y)
-            area_of_effect.emplace_back(std::make_pair(x, y));
+            if(x>=0 && y>=0) area_of_effect.emplace_back(std::make_pair(x, y)); // TO DO: x < map.height; y < map.width
     return area_of_effect;
 }
-
-//void Bomb::apply_damage(Map &map)
-//{
-//    std::list<std::pair<int, int>> area_of_effect = calculate_effect_area();
-//    for (auto coord : area_of_effect)
-//    {
-//        int x = coord.first;
-//        int y = coord.second;
-//
-//        //TO DO: apply damage to players
-//
-//        if (auto* wall = std::get_if<Wall>(&map.get_cell_type(x, y)); wall && wall->is_destructible())
-//        {
-//            map.set_cell_type(x, y, std::monostate{});
-//        }
-//    }
-//}
 
 void Bomb::Deactivate()
 {
