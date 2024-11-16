@@ -6,7 +6,7 @@
 int main()
 {
 	//Testing out Map functionality
-	Map map(10, 10);
+
 
 
 }

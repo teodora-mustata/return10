@@ -78,3 +78,36 @@ void GameLogic::ExplodeBomb(Bomb bomb)
         std::cout << "Bomb is not active and cannot explode." << std::endl;
     }
 }
+
+//Bullet
+
+bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
+    int targetX = target.GetPosition().first;
+    int targetY = target.GetPosition().second;
+
+    if (bullet.getX() == targetX && bullet.getY() == targetY && target.GetLives() > 1) {
+        target.resetPosition();
+        bullet.deactivate();
+        target.loseLife();
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
+    CellType cell = map.GetCellType(bullet.getX(),bullet.getY());
+    if (auto* wall = std::get_if<Wall>(&cell)) {
+        if (wall->IsDestructible()) {
+            map.SetCellType(bullet.getX(), bullet.getY(), std::monostate{});
+            bullet.deactivate();
+            return true;
+        }
+        else {
+            bullet.deactivate();
+            return true;
+        }
+    }
+    return false;
+}

@@ -21,7 +21,6 @@ private:
 	std::vector<std::vector<CellType>> m_board;
 	std::vector<Player> m_players;
 	std::vector<Bomb> m_bombs;
-	std::vector<Bullet> m_bullets;
 	std::list<std::pair<int, int>> m_spawnPoints;
 
 	// game config

@@ -28,6 +28,10 @@ private:
 
     void ExplodeBomb(Bomb bomb);
 
+    //Bullet
+    bool checkPlayerCollision(Player& target,Bullet& bullet);
+    bool checkWallCollision(Map& map,Bullet& bullet);
+
     //void gameLoop() {
     //    while (gameRunning) {
     //        std::this_thread::sleep_for(std::chrono::seconds(1));
