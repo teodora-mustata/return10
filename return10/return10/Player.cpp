@@ -63,6 +63,11 @@ std::pair<int, int> Player::GetPosition() const
 	return { m_position.i,m_position.j };
 }
 
+Gun& Player::getGun() 
+{
+	return m_gun;
+}
+
 void Player::addScore(int acumulated_points)
 {
 	m_score += acumulated_points;

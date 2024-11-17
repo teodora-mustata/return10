@@ -9,7 +9,7 @@ public:
 
     
     void buySpeedUpgrade(Player& player);
-
+    void buyReloadUpgrade(Player& player);
 };
 
 

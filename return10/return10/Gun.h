@@ -15,4 +15,8 @@ public:
     Gun();
     bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
     std::vector<Bullet> getBullets() const;
+
+    std::chrono::duration<float> getFiringRate() const;
+
+    void setFiringRate(std::chrono::duration<float> newRate);
 };

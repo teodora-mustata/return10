@@ -28,3 +28,13 @@ std::vector<Bullet> Gun::getBullets() const //I deleted const ref because I need
     return m_firedBullets; 
 }
 
+std::chrono::duration<float> Gun::getFiringRate() const
+{
+    return m_firingRate;
+}
+
+void Gun::setFiringRate(std::chrono::duration<float> newRate)
+{
+    m_firingRate = newRate;
+}
+
