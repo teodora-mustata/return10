@@ -19,7 +19,6 @@ private:
 	// game board
 	//to do move to game logic
 	std::vector<std::vector<CellType>> m_board;
-	std::vector<Player> m_players;
 	std::vector<Bomb> m_bombs;
 	std::list<std::pair<int, int>> m_spawnPoints;
 
@@ -45,7 +44,7 @@ public:
 
 
 	//
-	void addPlayer(const std::string& playerName);
+	//void addPlayer(const std::string& playerName);
 	void removePlayer(const Player& player);
 	void movePlayer(const std::string& playerName, Direction direction);
 };

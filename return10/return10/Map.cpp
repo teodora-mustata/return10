@@ -163,12 +163,7 @@ void Map::PrintMap() const {
 	}
 }
 
-void Map::addPlayer(const std::string& playerName)
-{
-	std::pair<int, int> spawnPoint = GetRandomSpawnPoint();
-	Player player(playerName, spawnPoint.first, spawnPoint.second);
-	m_players.push_back(player);
-}
+
 
 void Map::removePlayer(const Player& player)
 {

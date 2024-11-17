@@ -79,6 +79,11 @@ void GameLogic::ExplodeBomb(Bomb bomb)
     }
 }
 
+void GameLogic::addPlayer(Player player)
+{
+    m_players.push_back(player);
+}
+
 //Bullet
 
 bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {

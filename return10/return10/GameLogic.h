@@ -11,6 +11,7 @@ public:
 
 private:
     Map map{ 10,10 };
+    std::vector<Player> m_players;
     int score = 0;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
@@ -27,6 +28,9 @@ private:
     void ApplyDamage(Bomb bomb);
 
     void ExplodeBomb(Bomb bomb);
+    
+    void addPlayer(Player player);
+
 
     //Bullet
     bool checkPlayerCollision(Player& target,Bullet& bullet);
