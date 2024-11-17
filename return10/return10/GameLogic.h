@@ -34,6 +34,8 @@ private:
     
     void addPlayer(Player player);
 
+    void updateBullets(Map& map, Player& target, Gun& bullets);
+
 
     //Bullet
     bool checkPlayerCollision(Player& target,Bullet& bullet);

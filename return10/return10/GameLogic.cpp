@@ -116,3 +116,24 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
     }
     return false;
 }
+
+//checks to see status of bullets and removes any inactive bullets that have collided from the m_firedBullets vector
+//method called 
+void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
+{   //needs to stay with iterator not range base because by removing from the vector it messes up the range base type for
+    //need to choose where to call this and where if continous or maybe change it to once we see bullet collided somewhere else sent the message to 
+    //simply erase not sure yet
+    for (auto currentBullet = bullets.getBullets().begin(); currentBullet != bullets.getBullets().end(); ) {
+        checkPlayerCollision(target, *currentBullet);
+        checkWallCollision(map, *currentBullet);
+
+        if (!currentBullet->isActive()) {
+            // if erased put iterator one place back because erase sets it further
+            currentBullet = bullets.getBullets().erase(currentBullet);
+        }
+        else {
+            ++currentBullet; // only increment if we didnt erase
+        }
+    }
+
+}

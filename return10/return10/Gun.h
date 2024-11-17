@@ -14,6 +14,5 @@ private:
 public:
     Gun();
     bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
-    void updateBullets(Map& map, Player& target); // TO DO: Move to GameLogic?
     std::vector<Bullet> getBullets() const;
 };
