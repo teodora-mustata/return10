@@ -5,13 +5,14 @@
 #include "Map.h"
 #include "Player.h"
 #include "Direction.h"
-#include "LoginManager.h"
+#include "Login.h"
+#include "Shop.h"
 
 class GameInterface {
 private:
     Map m_gameMap;
     std::vector<Player> m_players;
-    LoginManager m_loginManager; 
+    Login m_loginManager; 
 
 
 public:
