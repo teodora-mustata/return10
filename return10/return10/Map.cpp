@@ -106,10 +106,10 @@ std::list<std::pair<int, int>> Map::GetSpawnPoints()
 	return m_spawnPoints;
 }
 
-std::vector<Player> Map::GetPlayers()
-{
-	return m_players;
-}
+//std::vector<Player> Map::GetPlayers()
+//{
+//	return m_players;
+//}
 
 CellType Map::GetCellType(int x, int y)
 {
@@ -165,13 +165,13 @@ void Map::PrintMap() const {
 
 
 
-void Map::removePlayer(const Player& player)
+void Map::removePlayer(const Player& player,std::vector<Player>& players)
 {
-	for (auto it = m_players.begin(); it != m_players.end();)
+	for (auto it = players.begin(); it != players.end();)
 	{
 		if (*it == player)
 		{
-			it = m_players.erase(it);
+			it = players.erase(it);
 		}
 		else
 		{
@@ -179,10 +179,10 @@ void Map::removePlayer(const Player& player)
 		}
 	}
 }
-
-void Map::movePlayer(const std::string& playerName, Direction direction)
+//should this be moved to game logic?
+void Map::movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players)
 {
-	auto it = std::find_if(m_players.begin(), m_players.end(), [&](const Player& player) {
+	auto it = std::find_if(players.begin(), players.end(), [&](const Player& player) {
 		return player.GetName() == playerName;
 		});
 

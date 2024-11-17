@@ -15,7 +15,7 @@ void GameLogic::placePlayer()
     for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
         auto spawnPoint = map.GetRandomSpawnPoint();
         Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
-        map.addPlayer(newPlayer);
+        /*map.*/addPlayer(newPlayer);
         std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
     }
 }

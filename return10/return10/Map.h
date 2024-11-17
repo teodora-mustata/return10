@@ -45,7 +45,7 @@ public:
 
 	//
 	//void addPlayer(const std::string& playerName);
-	void removePlayer(const Player& player);
-	void movePlayer(const std::string& playerName, Direction direction);
+	void removePlayer(const Player& player, std::vector<Player>& players);
+	void movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players);
 };
 

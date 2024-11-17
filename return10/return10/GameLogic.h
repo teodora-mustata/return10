@@ -8,7 +8,10 @@
 class GameLogic {
 public:
     void gameStart();
-
+    // Getter to provide access to players from Map
+    const std::vector<Player>& getPlayers() const {
+        return m_players;
+    }
 private:
     Map map{ 10,10 };
     std::vector<Player> m_players;
