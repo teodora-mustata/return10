@@ -10,8 +10,8 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
     if (timeSinceLastShot.count() >= m_firingRate.count())
     {
         Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
-        newBullet.m_active = true;
-        newBullet.m_fired_at = now;
+        newBullet.setActive(true);
+        //newBullet.m_fired_at = now;
 
         m_firedBullets.push_back(newBullet);
         m_lastFiredTime = now;

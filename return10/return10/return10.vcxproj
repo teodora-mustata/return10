@@ -134,11 +134,11 @@
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="Login.cpp" />
-    <ClCompile Include="LoginManager.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerDAO.cpp" />
     <ClCompile Include="Register.cpp" />
+    <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -152,11 +152,11 @@
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="Login.h" />
-    <ClInclude Include="LoginManager.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerDAO.h" />
     <ClInclude Include="Register.h" />
+    <ClInclude Include="Shop.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
