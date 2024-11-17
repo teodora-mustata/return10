@@ -163,8 +163,10 @@ void Map::PrintMap() const {
 	}
 }
 
-void Map::addPlayer(Player player)
+void Map::addPlayer(const std::string& playerName)
 {
+	std::pair<int, int> spawnPoint = GetRandomSpawnPoint();
+	Player player(playerName, spawnPoint.first, spawnPoint.second);
 	m_players.push_back(player);
 }
 
@@ -181,4 +183,35 @@ void Map::removePlayer(const Player& player)
 			++it;
 		}
 	}
+}
+
+void Map::movePlayer(const std::string& playerName, Direction direction)
+{
+	auto it = std::find_if(m_players.begin(), m_players.end(), [&](const Player& player) {
+		return player.GetName() == playerName;
+		});
+
+	Player& player = *it;
+
+	auto [currentX, currentY] = player.GetPosition();
+	// Calculate the new position based on direction
+	int newX = currentX;
+	int newY = currentY;
+
+	switch (direction) {
+	case Direction::UP:    newX--; break;
+	case Direction::DOWN:  newX++; break;
+	case Direction::LEFT:  newY--; break;
+	case Direction::RIGHT: newY++; break;
+	}
+
+	// Validate new position
+	if (newX < 0 || newX >= m_height || newY < 0 || newY >= m_width) {
+		return;
+	}
+
+	if (!std::holds_alternative<std::monostate>(m_board[newX][newY])) {
+		return;
+	}
+	player.move(direction);// Update player position
 }
