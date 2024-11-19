@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -7,23 +6,21 @@
 #include "Direction.h"
 #include "Login.h"
 #include "Shop.h"
+#include "GameLogic.h"
 
 class GameInterface {
 private:
     Map m_gameMap;
     std::vector<Player> m_players;
     Login m_loginManager; 
-
-
 public:
-    GameInterface(int mapWidth, int mapHeight, int numPlayers);
+    GameInterface();
     void startGame();
-    void initializePlayers(int numPlayers);
+    //void initializePlayers(int numPlayers);
     void mainLoop();
     void handlePlayerMove(Player& player);
     void handlePlayerShoot(Player& player);
     void displayStatus();
-
-
     void login();
+    Map GetMap() const;
 };

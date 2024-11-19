@@ -9,6 +9,7 @@ Player::Player(std::string name, int startX, int startY) :
 	m_initial_position(startX, startY),
 	m_position(startX, startY) {}
 
+
 Player::~Player()
 {
 }

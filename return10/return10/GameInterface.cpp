@@ -1,19 +1,43 @@
 #include "GameInterface.h"
 
 
-GameInterface::GameInterface(int mapWidth, int mapHeight, int numPlayers)
-    : m_gameMap(mapWidth, mapHeight) {
-    initializePlayers(numPlayers);
-}
+//GameInterface::GameInterface(int numPlayers)
+//{
+//    initializePlayers(numPlayers);
+//}
+
 void GameInterface::mainLoop() {
     m_gameMap.PrintMap(); //more to do here
 }
+
+GameInterface::GameInterface()
+{
+    /*m_gameMap = new Map();*/
+}
+
 void GameInterface::startGame() {
     std::cout << "Starting login process..." << std::endl;
     login();
     std::cout << "Game started with " << m_players.size() << " players!" << std::endl;
     mainLoop();
 }
+
+//void GameInterface::initializePlayers(int numPlayers)
+//{
+//    std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
+//    for (int i = 0; i < numPlayers; ++i) {
+//        auto spawnPoint = m_gameMap.GetRandomSpawnPoint();
+//
+//        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+//        name[0]++;
+//
+//        m_players.push_back(newPlayer);
+//
+//        std::cout << "Player " << i << " initialized at ("
+//            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
+//    }
+//}
+
 void GameInterface::displayStatus() {
     for (const auto& player : m_players) {
         std::cout << player.GetName() << ": Lives=" << player.GetLives()
@@ -23,16 +47,22 @@ void GameInterface::displayStatus() {
     }
 }
 
-//void GameInterface::login() {
-//    std::string username;
-//    bool loginSuccessful = false;
-//
-//    while (!loginSuccessful) {
-//        std::cout << "Enter a username to log in: ";
-//        std::cin >> username;
-//        loginSuccessful = m_loginManager.loginUser(username);
-//    }
-//}
+
+void GameInterface::login() {
+    std::string username;
+    bool loginSuccessful = false;
+
+    while (!loginSuccessful) {
+        std::cout << "Enter a username to log in: ";
+        std::cin >> username;
+        //loginSuccessful = m_loginManager.loginUser(username);
+    }
+}
+
+Map GameInterface::GetMap() const
+{
+    return m_gameMap;
+}
 
 void GameInterface::handlePlayerMove(Player& player) {
     std::string dir;

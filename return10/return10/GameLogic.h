@@ -7,35 +7,29 @@
 
 class GameLogic {
 public:
-    void gameStart();
+    /*void gameStart();*/
     // Getter to provide access to players from Map
     const std::vector<Player>& getPlayers() const {
         return m_players;
     }
 private:
-    Map map{ 10,10 };
+    Map map;
     std::vector<Player> m_players;
     int score = 0;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
 
-
-    void placePlayer();
-
+    void initializePlayers(int numPlayers);
     void initializeScores();
-
     void startTimer();
-
     void showStartMenu();
-
     void ApplyDamage(Bomb bomb);
-
     void ExplodeBomb(Bomb bomb);
-    
     void addPlayer(Player player);
-
     void updateBullets(Map& map, Player& target, Gun& bullets);
-
+    std::vector<Player> GetPlayers();
+    void removePlayer(Player player);
+    //void movePlayer(Player player, Direction direction);
 
     //Bullet
     bool checkPlayerCollision(Player& target,Bullet& bullet);

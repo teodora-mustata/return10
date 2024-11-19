@@ -1,28 +1,39 @@
-﻿
-#include "GameLogic.h"
+﻿#include "GameLogic.h"
 
-void GameLogic::gameStart()
-{
-    showStartMenu();
-    startTimer();
-    initializeScores();
-    placePlayer();
-}
+//void GameLogic::gameStart()
+//{
+//    showStartMenu();
+//    startTimer();
+//    initializeScores();
+//    initializePlayers();
+//}
 
-void GameLogic::placePlayer()
+void GameLogic::initializePlayers(int numPlayers)
 {
-    std::cout << "Placing players..." << std::endl;
-    for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
+    //std::cout << "Placing players..." << std::endl;
+    //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
+    //    auto spawnPoint = map.GetRandomSpawnPoint();
+    //    Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
+    //    /*map.*/addPlayer(newPlayer);
+    //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
+    //}
+    std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
+    for (int i = 0; i < numPlayers; ++i) {
         auto spawnPoint = map.GetRandomSpawnPoint();
-        Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
-        /*map.*/addPlayer(newPlayer);
-        std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
+
+        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+        name[0]++;
+
+        m_players.push_back(newPlayer);
+
+        std::cout << "Player " << i << " initialized at ("
+            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
 }
 
 void GameLogic::initializeScores()
 {
-    for (Player player : map.GetPlayers())
+    for (Player player : GetPlayers())
     {
         player.setInitialScore(); 
     }
@@ -48,9 +59,8 @@ void GameLogic::ApplyDamage(Bomb bomb)
         int x = coord.first;
         int y = coord.second;
 
-        for (int i = 0; i < map.GetPlayers().size(); ++i)
+        for (Player player : GetPlayers())
         {
-            Player player = map.GetPlayers()[i];
             int playerXCoord = player.GetPosition().first;
             int playerYCoord = player.GetPosition().second;
             if (playerXCoord == x && playerYCoord == y)
@@ -138,3 +148,55 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
     }
 
 }
+
+std::vector<Player> GameLogic::GetPlayers()
+{
+    return m_players;
+}
+
+void GameLogic::removePlayer(Player player)
+{
+    for (auto it = m_players.begin(); it != m_players.end();)
+    {
+        if (*it == player)
+        {
+            it = m_players.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+//void GameLogic::movePlayer(Player player, Direction direction)
+//{
+//    auto it = std::find_if(mplayers.begin(), players.end(), [&](const Player& player) {
+//        return player.GetName() == playerName;
+//        });
+//
+//    Player& player = *it;
+//
+//    auto [currentX, currentY] = player.GetPosition();
+//    // Calculate the new position based on direction
+//    int newX = currentX;
+//    int newY = currentY;
+//
+//    switch (direction) {
+//    case Direction::UP:    newX--; break;
+//    case Direction::DOWN:  newX++; break;
+//    case Direction::LEFT:  newY--; break;
+//    case Direction::RIGHT: newY++; break;
+//    }
+//
+//    // Validate new position
+//    if (newX < 0 || newX >= m_height || newY < 0 || newY >= m_width) {
+//        return;
+//    }
+//
+//    if (!std::holds_alternative<std::monostate>(m_board[newX][newY])) {
+//        return;
+//    }
+//
+//    player.move(direction);// Update player position
+//}

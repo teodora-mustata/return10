@@ -5,7 +5,7 @@ class PlayerDAO
 {
 public:
 	PlayerDAO(std::string name, std::string password);
-	PlayerDAO();
+	PlayerDAO() = default;
 	std::string GetName() const;
 	int GetScore() const;
 	int GetPoints()const;

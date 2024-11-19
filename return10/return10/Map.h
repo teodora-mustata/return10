@@ -1,4 +1,3 @@
-
 #pragma once
 #include "CellType.h"
 #include "Wall.h"
@@ -17,7 +16,6 @@ private:
 	int m_height, m_width;
 
 	// game board
-	//to do move to game logic
 	std::vector<std::vector<CellType>> m_board;
 	std::vector<Bomb> m_bombs;
 	std::list<std::pair<int, int>> m_spawnPoints;
@@ -25,10 +23,10 @@ private:
 	// game config
 	static const int max_players = 4;
 	const float destructible_wall_chance = 0.4f;
-	const float indestructible_wall_chance = 0.2f;
+	const float indestructible_wall_chance = 0.1f;
 	static const int bombs_count = 3;
 public:
-	Map(int n, int m);
+	Map();
 	~Map() = default;
 	void ResizeMap();
 	void GenerateSpawnPoints();
@@ -37,7 +35,6 @@ public:
 	std::vector<std::vector<CellType>> GetBoard();
 	std::pair<int, int> GetRandomSpawnPoint();
 	std::list<std::pair<int, int>> GetSpawnPoints();
-	std::vector<Player> GetPlayers();
 	CellType& GetCellType(int x, int y); // pentru a modifica celula
 	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
@@ -45,9 +42,8 @@ public:
 	void PrintMap() const;
 
 
-	//
 	//void addPlayer(const std::string& playerName);
-	void removePlayer(const Player& player, std::vector<Player>& players);
-	void movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players);
+	/*void removePlayer(const Player& player, std::vector<Player>& players);
+	void movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players);*/
 };
 

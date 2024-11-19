@@ -15,6 +15,7 @@ private:
 	};
 public:
 	Player(std::string name, int startX, int startY);
+	//Player();
 	~Player();
 	void move(Direction direction);
 	bool operator==(const Player& other);

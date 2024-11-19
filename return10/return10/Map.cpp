@@ -1,13 +1,10 @@
 #include "Map.h"
 
-Map::Map(int n, int m) : m_height(n), m_width(m)
+Map::Map() : m_height(40), m_width(40) //default dimensions
 {
 	ResizeMap();
-
 	GenerateSpawnPoints();
-	
 	GenerateWalls();
-
 	SetBombs();
 }
 
@@ -152,7 +149,7 @@ void Map::PrintMap() const {
 	for (int i = 0; i < m_board.size(); ++i) {
 		for (int j = 0; j < m_board[i].size(); ++j) {
 			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
-				std::cout << "P "; // Spawn point
+				std::cout << "\033[32mS \033[0m"; // Spawn point = green
 			}
 			else {
 				std::visit([&](auto&& arg) {
@@ -163,14 +160,14 @@ void Map::PrintMap() const {
 					else if constexpr (std::is_same_v<T, Wall>) {
 						if (arg.IsDestructible()) {
 							if (arg.GetContainedBomb() != nullptr) {
-								std::cout << "DB "; // Destructible wall with bomb
+								std::cout << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
 							}
 							else {
-								std::cout << "D "; // Destructible wall
+								std::cout << "\033[36mD \033[0m"; // Destructible wall = cyan
 							}
 						}
 						else {
-							std::cout << "I "; // Indestructible wall
+							std::cout << "\033[34mI \033[0m"; // Indestructible wall = blue
 						}
 					}
 					}, m_board[i][j]);
@@ -178,52 +175,4 @@ void Map::PrintMap() const {
 		}
 		std::cout << std::endl;
 	}
-}
-
-
-
-void Map::removePlayer(const Player& player,std::vector<Player>& players)
-{
-	for (auto it = players.begin(); it != players.end();)
-	{
-		if (*it == player)
-		{
-			it = players.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-}
-//should this be moved to game logic?
-void Map::movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players)
-{
-	auto it = std::find_if(players.begin(), players.end(), [&](const Player& player) {
-		return player.GetName() == playerName;
-		});
-
-	Player& player = *it;
-
-	auto [currentX, currentY] = player.GetPosition();
-	// Calculate the new position based on direction
-	int newX = currentX;
-	int newY = currentY;
-
-	switch (direction) {
-	case Direction::UP:    newX--; break;
-	case Direction::DOWN:  newX++; break;
-	case Direction::LEFT:  newY--; break;
-	case Direction::RIGHT: newY++; break;
-	}
-
-	// Validate new position
-	if (newX < 0 || newX >= m_height || newY < 0 || newY >= m_width) {
-		return;
-	}
-
-	if (!std::holds_alternative<std::monostate>(m_board[newX][newY])) {
-		return;
-	}
-	player.move(direction);// Update player position
 }
