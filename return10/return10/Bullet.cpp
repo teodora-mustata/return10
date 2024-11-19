@@ -1,11 +1,9 @@
-
 #include "Bullet.h"
 
-Bullet::Bullet(int startX, int startY, Direction dir, float speed)
-    : m_x(startX), m_y(startY), m_direction(dir), m_speed(speed), m_active(true)
+Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
+    : m_x(startX), m_y(startY), m_direction(dir), m_speed(bulletSpeed), m_active(true)
 {
 }
-
 
 void Bullet::move() {
     auto offset = DirectionUtils::toOffset(m_direction);
@@ -17,11 +15,10 @@ void Bullet::deactivate() {
     m_active = false;
 }
 
-void Bullet::duplicateBulletSpeed()
-{
-    this->m_speed = m_speed * 2;
-}
-
+//void Bullet::duplicateBulletSpeed()
+//{
+//    this->m_speed = m_speed * 2;
+//}
 
 //void Bullet::givePoints(Player& player)
 //{
@@ -44,7 +41,7 @@ int Bullet::getY() const
     return m_y; 
 }
 Direction Bullet::getDirection() const { return m_direction; }
-float Bullet::getSpeed() const { return m_speed; }
+//float Bullet::getSpeed() const { return m_speed; }
 bool Bullet::isActive() const { return m_active; }
 void Bullet::setX(int x)
 {

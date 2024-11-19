@@ -39,7 +39,23 @@ void GameInterface::handlePlayerMove(Player& player) {
     std::cout << "Enter direction (up, down, left, right): ";
     std::cin >> dir;
 
-    Direction direction; //need to get the direction from the directionUtils here
+    Direction direction;
+    if (dir == "up") {
+        direction = Direction::UP;
+    }
+    else if (dir == "down") {
+        direction = Direction::DOWN;
+    }
+    else if (dir == "left") {
+        direction = Direction::LEFT;
+    }
+    else if (dir == "right") {
+        direction = Direction::RIGHT;
+    }
+    else {
+        std::cout << "Not a valid direction." << std::endl;
+        return;
+    }
     player.move(direction);
 }
 
@@ -48,7 +64,23 @@ void GameInterface::handlePlayerShoot(Player& player) {
     std::cout << "Enter shooting direction (up, down, left, right): ";
     std::cin >> dir;
 
-    Direction direction; //need to get the direction from the directionUtils here
+    Direction direction;
+    if (dir == "up") {
+        direction = Direction::UP;
+    }
+    else if (dir == "down") {
+        direction = Direction::DOWN;
+    }
+    else if (dir == "left") {
+        direction = Direction::LEFT;
+    }
+    else if (dir == "right") {
+        direction = Direction::RIGHT;
+    }
+    else {
+        std::cout << "Not a valid direction." << std::endl;
+        return;
+    }
     player.shoot(direction, 0.25);
 }
 

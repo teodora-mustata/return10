@@ -6,10 +6,8 @@
 class Shop {
 public:
     Shop();
-
-    
-    void buySpeedUpgrade(Player& player);
-    void buyReloadUpgrade(Player& player);
+    void buySpeedUpgrade(Player player);
+    void buyReloadUpgrade(Player player);
 };
 
 

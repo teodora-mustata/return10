@@ -23,7 +23,7 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
 
 
 
-std::vector<Bullet> Gun::getBullets() const //I deleted const ref because I need to acces the last bullet in player class
+std::vector<Bullet> Gun::getFiredBullets() const //I deleted const ref because I need to acces the last bullet in player class
 {
     return m_firedBullets; 
 }
@@ -36,5 +36,15 @@ std::chrono::duration<float> Gun::getFiringRate() const
 void Gun::setFiringRate(std::chrono::duration<float> newRate)
 {
     m_firingRate = newRate;
+}
+
+float Gun::GetBulletSpeed() const
+{
+    return m_bulletSpeed;
+}
+
+void Gun::SetBulletSpeed(float newBulletSpeed)
+{
+    m_bulletSpeed = newBulletSpeed;
 }
 

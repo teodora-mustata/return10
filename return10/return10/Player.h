@@ -23,9 +23,10 @@ public:
 	//Getters
 	std::string GetName() const;
 	int GetScore() const;
+	int GetCrowns() const;
 	int GetLives()const;
 	std::pair<int,int> GetPosition() const;
-	Gun& getGun();
+	Gun getGun();
 	//Updates for player
 	void addScore(int acumulated_points);
 	void addCrowns(int acumulated_points);

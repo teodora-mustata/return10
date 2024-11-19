@@ -1,4 +1,4 @@
-
+﻿
 #include "GameLogic.h"
 
 void GameLogic::gameStart()
@@ -59,8 +59,9 @@ void GameLogic::ApplyDamage(Bomb bomb)
                 player.loseLife();
             }
         }
- 
-        if (auto* wall = std::get_if<Wall>(&map.GetCellType(x, y)); wall && wall->IsDestructible())
+    
+        auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
+        if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
             map.SetCellType(x, y, std::monostate{});
         }
@@ -123,13 +124,13 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
 {   //needs to stay with iterator not range base because by removing from the vector it messes up the range base type for
     //need to choose where to call this and where if continous or maybe change it to once we see bullet collided somewhere else sent the message to 
     //simply erase not sure yet
-    for (auto currentBullet = bullets.getBullets().begin(); currentBullet != bullets.getBullets().end(); ) {
+    for (auto currentBullet = bullets.getFiredBullets().begin(); currentBullet != bullets.getFiredBullets().end(); ) {
         checkPlayerCollision(target, *currentBullet);
         checkWallCollision(map, *currentBullet);
 
         if (!currentBullet->isActive()) {
             // if erased put iterator one place back because erase sets it further
-            currentBullet = bullets.getBullets().erase(currentBullet);
+            currentBullet = bullets.getFiredBullets().erase(currentBullet);
         }
         else {
             ++currentBullet; // only increment if we didnt erase

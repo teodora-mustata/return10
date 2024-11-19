@@ -2,13 +2,7 @@
 
 Map::Map(int n, int m) : m_height(n), m_width(m)
 {
-	//TO DO: Make Map generate with random height and width
-
-	m_board.resize(m_height, std::vector<CellType>(m_width));
-
-	for (int i = 0; i < m_height; i++)
-		for (int j = 0; j < m_width; j++)
-			SetCellType(i, j, std::monostate{});
+	ResizeMap();
 
 	GenerateSpawnPoints();
 	
@@ -20,6 +14,24 @@ Map::Map(int n, int m) : m_height(n), m_width(m)
 std::vector<std::vector<CellType>> Map::GetBoard()
 {
 	return this->m_board;
+}
+
+void Map::ResizeMap()
+{
+	std::random_device rd; 
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<> dist(40, 60); // map dimensions will be between 40 and 60
+
+	m_height = dist(gen);
+	m_width = dist(gen);
+
+	m_board.resize(m_height, std::vector<CellType>(m_width));
+
+	for (int i = 0; i < m_height; i++) {
+		for (int j = 0; j < m_width; j++) {
+			SetCellType(i, j, std::monostate{});
+		}
+	}
 }
 
 void Map::GenerateSpawnPoints()
@@ -111,7 +123,12 @@ std::list<std::pair<int, int>> Map::GetSpawnPoints()
 //	return m_players;
 //}
 
-CellType Map::GetCellType(int x, int y)
+CellType& Map::GetCellType(int x, int y)
+{
+	return m_board[x][y];
+}
+
+const CellType& Map::GetCellType(int x, int y) const
 {
 	return m_board[x][y];
 }

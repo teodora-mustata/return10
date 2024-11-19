@@ -30,6 +30,7 @@ private:
 public:
 	Map(int n, int m);
 	~Map() = default;
+	void ResizeMap();
 	void GenerateSpawnPoints();
 	void GenerateWalls();
 	void SetBombs();
@@ -37,7 +38,8 @@ public:
 	std::pair<int, int> GetRandomSpawnPoint();
 	std::list<std::pair<int, int>> GetSpawnPoints();
 	std::vector<Player> GetPlayers();
-	CellType GetCellType(int x, int y);
+	CellType& GetCellType(int x, int y); // pentru a modifica celula
+	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);
 	void PrintMap() const;

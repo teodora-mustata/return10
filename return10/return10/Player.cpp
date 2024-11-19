@@ -53,6 +53,11 @@ int Player::GetScore() const
 	return m_score;
 }
 
+int Player::GetCrowns() const
+{
+	return m_crowns;
+}
+
 int Player::GetLives() const
 {
 	return m_lives;
@@ -63,7 +68,7 @@ std::pair<int, int> Player::GetPosition() const
 	return { m_position.i,m_position.j };
 }
 
-Gun& Player::getGun() 
+Gun Player::getGun() 
 {
 	return m_gun;
 }
