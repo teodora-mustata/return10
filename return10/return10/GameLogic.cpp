@@ -19,7 +19,7 @@ void GameLogic::initializePlayers(int numPlayers)
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
     for (int i = 0; i < numPlayers; ++i) {
-        auto spawnPoint = map.GetRandomSpawnPoint();
+        auto spawnPoint = map.GetSpawnPoints()[i];
 
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
@@ -167,6 +167,11 @@ void GameLogic::removePlayer(Player player)
             ++it;
         }
     }
+}
+
+const Map& GameLogic::GetMap() const
+{
+    return map;
 }
 
 //void GameLogic::movePlayer(Player player, Direction direction)

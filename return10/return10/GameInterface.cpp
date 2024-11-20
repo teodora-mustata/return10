@@ -7,12 +7,11 @@
 //}
 
 void GameInterface::mainLoop() {
-    m_gameMap.PrintMap(); //more to do here
+    //m_gameMap.PrintMap(); //more to do here
 }
 
-GameInterface::GameInterface()
+GameInterface::GameInterface(GameLogic gl):gameLogic(gl)
 {
-    /*m_gameMap = new Map();*/
 }
 
 void GameInterface::startGame() {
@@ -59,27 +58,32 @@ void GameInterface::login() {
     }
 }
 
-Map GameInterface::GetMap() const
+GameLogic GameInterface::GetGameLogic()
 {
-    return m_gameMap;
+    return gameLogic;
 }
 
+//const Map& GameInterface::GetMap() const
+//{
+//    return m_gameMap;
+//}
+
 void GameInterface::handlePlayerMove(Player& player) {
-    std::string dir;
-    std::cout << "Enter direction (up, down, left, right): ";
+    char dir;
+    std::cout << "Enter direction (W / A / S / D): "<<std::endl;
     std::cin >> dir;
 
     Direction direction;
-    if (dir == "up") {
+    if (dir == 'w' || dir == 'W') {
         direction = Direction::UP;
     }
-    else if (dir == "down") {
+    else if (dir == 's' || dir == 'S') {
         direction = Direction::DOWN;
     }
-    else if (dir == "left") {
+    else if (dir == 'a' || dir == 'A') {
         direction = Direction::LEFT;
     }
-    else if (dir == "right") {
+    else if (dir == 'd' || dir == 'D') {
         direction = Direction::RIGHT;
     }
     else {

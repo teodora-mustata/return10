@@ -7,11 +7,36 @@
 
 int main()
 {
-	//Testing out Map functionality
+	////Testing out Map functionality
 	Map map;
 	map.PrintMap();
-	//std::cout << "Map height: " << map.GetBoard().size() << std::endl;
-	//std::cout << "Map width: " << map.GetBoard()[0].size() << std::endl;
 	for (auto sp : map.GetSpawnPoints())
 		std::cout << "Spawnpoint: (" << sp.first << "," << sp.second << ")" << std::endl;
+	std::cout << "Map dimensions: height: " << map.GetDimensions().first << ", width: " << map.GetDimensions().second << std::endl;
+
+	std::cout << "------------------------------------------------------------------------------------------------" << std::endl;
+
+	////Testing out GameLogic functionality
+	GameLogic newGame;
+
+	newGame.initializePlayers(4);
+	for (auto player : newGame.GetPlayers())
+	{
+		std::cout << "Player Info:" << std::endl;
+		std::cout << "Name: " << player.GetName() << std::endl;
+		std::cout << "Score: " << player.GetScore() << std::endl;
+		std::cout << "Lives: " << player.GetLives() << std::endl;
+		std::cout << "Crowns: " << player.GetCrowns() << std::endl;
+		std::cout << "Position: (" << player.GetPosition().first << ", " << player.GetPosition().second << ")" << std::endl;
+	}
+
+	std::cout << "------------------------------------------------------------------------------------------------" << std::endl;
+
+	//Testing out GameInterface functionality
+	GameLogic logic;
+	GameInterface game(logic);
+	game.GetGameLogic().initializePlayers(1);
+	Player player = game.GetGameLogic().GetPlayers()[0];
+	game.handlePlayerMove(player);
+
 }

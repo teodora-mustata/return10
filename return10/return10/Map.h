@@ -18,7 +18,7 @@ private:
 	// game board
 	std::vector<std::vector<CellType>> m_board;
 	std::vector<Bomb> m_bombs;
-	std::list<std::pair<int, int>> m_spawnPoints;
+	std::vector<std::pair<int, int>> m_spawnPoints;
 
 	// game config
 	static const int max_players = 4;
@@ -33,13 +33,14 @@ public:
 	void GenerateWalls();
 	void SetBombs();
 	std::vector<std::vector<CellType>> GetBoard();
-	std::pair<int, int> GetRandomSpawnPoint();
-	std::list<std::pair<int, int>> GetSpawnPoints();
+	//std::pair<int, int> GetRandomSpawnPoint();
+	std::vector<std::pair<int, int>> GetSpawnPoints();
 	CellType& GetCellType(int x, int y); // pentru a modifica celula
 	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);
 	void PrintMap() const;
+	std::pair<int, int> GetDimensions();
 
 
 	//void addPlayer(const std::string& playerName);

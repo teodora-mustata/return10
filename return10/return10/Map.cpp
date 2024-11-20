@@ -22,6 +22,7 @@ void Map::ResizeMap()
 	m_height = dist(gen);
 	m_width = dist(gen);
 
+	// Resize m_board
 	m_board.resize(m_height, std::vector<CellType>(m_width));
 
 	for (int i = 0; i < m_height; i++) {
@@ -99,18 +100,18 @@ void Map::SetBombs()
 	}
 }
 
-std::pair<int, int> Map::GetRandomSpawnPoint()
-{
-	if (!m_spawnPoints.empty())
-	{
-		std::pair<int, int> spawnPoint = m_spawnPoints.back();
-		m_spawnPoints.pop_back();
-		return spawnPoint;
-	}
-	throw std::runtime_error("No more spawn points available!");
-}
+//std::pair<int, int> Map::GetRandomSpawnPoint()
+//{
+//	if (!m_spawnPoints.empty())
+//	{
+//		std::pair<int, int> spawnPoint = m_spawnPoints.back();
+//		m_spawnPoints.pop_back();
+//		return spawnPoint;
+//	}
+//	throw std::runtime_error("No more spawn points available!");
+//}
 
-std::list<std::pair<int, int>> Map::GetSpawnPoints()
+std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {
 	return m_spawnPoints;
 }
@@ -175,4 +176,10 @@ void Map::PrintMap() const {
 		}
 		std::cout << std::endl;
 	}
+}
+
+std::pair<int, int> Map::GetDimensions()
+{
+	std::pair<int, int> dim(m_height, m_width);
+	return dim;
 }

@@ -15,10 +15,10 @@ public:
 private:
     Map map;
     std::vector<Player> m_players;
-    int score = 0;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
 
+public:
     void initializePlayers(int numPlayers);
     void initializeScores();
     void startTimer();
@@ -30,6 +30,7 @@ private:
     std::vector<Player> GetPlayers();
     void removePlayer(Player player);
     //void movePlayer(Player player, Direction direction);
+    const Map& GetMap() const;
 
     //Bullet
     bool checkPlayerCollision(Player& target,Bullet& bullet);

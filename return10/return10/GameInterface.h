@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <vector>
 #include <memory>
 #include "Map.h"
@@ -10,17 +10,18 @@
 
 class GameInterface {
 private:
-    Map m_gameMap;
+    //Map m_gameMap;
     std::vector<Player> m_players;
     Login m_loginManager; 
+    GameLogic& gameLogic; // referință la GameLogic pentru a interacționa cu jocul
 public:
-    GameInterface();
+    GameInterface(GameLogic gl);
     void startGame();
-    //void initializePlayers(int numPlayers);
     void mainLoop();
     void handlePlayerMove(Player& player);
     void handlePlayerShoot(Player& player);
     void displayStatus();
     void login();
-    Map GetMap() const;
+    //const Map& GetMap() const;
+    GameLogic GetGameLogic();
 };
