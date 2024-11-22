@@ -17,7 +17,7 @@ int main()
 	std::cout << "------------------------------------------------------------------------------------------------" << std::endl;
 
 	////Testing out GameLogic functionality
-	GameLogic newGame;
+	GameLogic newGame(&map);
 
 	newGame.initializePlayers(4);
 	for (auto player : newGame.GetPlayers())
@@ -33,7 +33,7 @@ int main()
 	std::cout << "------------------------------------------------------------------------------------------------" << std::endl;
 
 	//Testing out GameInterface functionality
-	GameLogic logic;
+	GameLogic logic(&map);
 	GameInterface game(logic);
 	game.GetGameLogic().initializePlayers(1);
 	Player player = game.GetGameLogic().GetPlayers()[0];

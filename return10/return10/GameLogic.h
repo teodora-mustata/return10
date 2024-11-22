@@ -13,12 +13,13 @@ public:
         return m_players;
     }
 private:
-    Map map;
+    Map* map;
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
 
 public:
+    GameLogic(Map* map);
     void initializePlayers(int numPlayers);
     void initializeScores();
     void startTimer();

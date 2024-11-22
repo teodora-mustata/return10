@@ -41,6 +41,7 @@ void Map::GenerateSpawnPoints()
 
 	for (const auto& point : temp) {
 		m_spawnPoints.push_back(point);
+		std::cout << point.first << " " << point.second<<"\n";
 	}
 }
 

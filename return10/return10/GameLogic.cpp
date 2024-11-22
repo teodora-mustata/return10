@@ -8,6 +8,11 @@
 //    initializePlayers();
 //}
 
+GameLogic::GameLogic(Map* map)
+{
+    this->map = map;
+}
+
 void GameLogic::initializePlayers(int numPlayers)
 {
     //std::cout << "Placing players..." << std::endl;
@@ -18,15 +23,15 @@ void GameLogic::initializePlayers(int numPlayers)
     //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
-    for (int i = 0; i < numPlayers; ++i) {
-        auto spawnPoint = map.GetSpawnPoints()[i];
-
+    auto spawnPoints = map->GetSpawnPoints();
+    for (const auto& spawnPoint:spawnPoints) {
+     
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
-
+        
         m_players.push_back(newPlayer);
 
-        std::cout << "Player " << i << " initialized at ("
+        std::cout << "Player " << 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
 }
@@ -70,10 +75,10 @@ void GameLogic::ApplyDamage(Bomb bomb)
             }
         }
     
-        auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
+        auto& celltype = map->GetCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
-            map.SetCellType(x, y, std::monostate{});
+            map->SetCellType(x, y, std::monostate{});
         }
     }
 }
@@ -171,7 +176,7 @@ void GameLogic::removePlayer(Player player)
 
 const Map& GameLogic::GetMap() const
 {
-    return map;
+    return *map;
 }
 
 //void GameLogic::movePlayer(Player player, Direction direction)
