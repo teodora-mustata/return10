@@ -15,7 +15,7 @@ private:
     Login m_loginManager; 
     GameLogic& gameLogic; // referință la GameLogic pentru a interacționa cu jocul
 public:
-    GameInterface(GameLogic gl);
+    GameInterface(GameLogic& gl); // jerry added ref here for debug assertion error 
     void startGame();
     void mainLoop();
     void handlePlayerMove(Player& player);
@@ -23,5 +23,5 @@ public:
     void displayStatus();
     void login();
     //const Map& GetMap() const;
-    GameLogic GetGameLogic();
+    GameLogic& GetGameLogic(); //put reference here to solve the debug assertion failure error
 };

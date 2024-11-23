@@ -36,7 +36,12 @@ int main()
 	GameLogic logic(&map);
 	GameInterface game(logic);
 	game.GetGameLogic().initializePlayers(1);
+	if (game.GetGameLogic().GetPlayers().empty()) {
+		std::cerr << "No players available in the game!" << std::endl;
+		return 1;
+	}
 	Player player = game.GetGameLogic().GetPlayers()[0];
 	game.handlePlayerMove(player);
+	map.PrintMap();
 
 }

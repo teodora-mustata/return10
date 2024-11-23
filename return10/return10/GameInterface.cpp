@@ -10,7 +10,7 @@ void GameInterface::mainLoop() {
     //m_gameMap.PrintMap(); //more to do here
 }
 
-GameInterface::GameInterface(GameLogic gl):gameLogic(gl)
+GameInterface::GameInterface(GameLogic& gl):gameLogic(gl)
 {
 }
 
@@ -58,7 +58,7 @@ void GameInterface::login() {
     }
 }
 
-GameLogic GameInterface::GetGameLogic()
+GameLogic& GameInterface::GetGameLogic()
 {
     return gameLogic;
 }

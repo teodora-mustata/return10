@@ -24,7 +24,13 @@ void GameLogic::initializePlayers(int numPlayers)
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
     auto spawnPoints = map->GetSpawnPoints();
-    for (const auto& spawnPoint:spawnPoints) {
+    if (!map) {
+        throw std::runtime_error("Map is not initialized.");
+    }
+    if (numPlayers > spawnPoints.size()) {
+        throw std::runtime_error("Not enough spawn points");
+    }
+    /*for (const auto& spawnPoint:spawnPoints) {
      
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
@@ -33,7 +39,19 @@ void GameLogic::initializePlayers(int numPlayers)
 
         std::cout << "Player " << 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
+    }*/
+    for (int i = 0; i < numPlayers; ++i) {
+        const auto& spawnPoint = spawnPoints[i];
+        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+        name[0]++;
+        m_players.push_back(newPlayer);
+
+        std::cout << "Player " << i + 1 << " initialized at ("
+            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
+    std::cout << "Number of players initialized: " << m_players.size() << std::endl;
+    std::cout << "Number of players initialized: " << GetPlayers().size() << std::endl;
+
 }
 
 void GameLogic::initializeScores()
