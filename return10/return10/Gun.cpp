@@ -48,3 +48,8 @@ void Gun::SetBulletSpeed(float newBulletSpeed)
     m_bulletSpeed = newBulletSpeed;
 }
 
+float Gun::GetFiringRate() const
+{
+    return m_firingRate.count();  // Returneaz numarul de secunde ca float
+}
+

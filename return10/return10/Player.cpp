@@ -69,7 +69,7 @@ std::pair<int, int> Player::GetPosition() const
 	return { m_position.i,m_position.j };
 }
 
-Gun Player::getGun() 
+Gun Player::getGun() const
 {
 	return m_gun;
 }

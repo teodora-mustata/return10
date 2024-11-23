@@ -1,12 +1,26 @@
-﻿#include <iostream>
+﻿#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
+#include <iostream>
 #include <algorithm>
 #include "Map.h"
 #include "CellType.h"
 #include "GameInterface.h"
 #include "GameLogic.h"
 
+#include <sqlite_orm/sqlite_orm.h>
+
+#include "BattleCityDatabase.h"
+
 int main()
 {
+
+	GameStorage storage;
+	if (!storage.Initialize())
+	{
+		std::cout << "Faild to initialize the database!";
+		return -1;
+	}
+
 	////Testing out Map functionality
 	Map map;
 	std::cout << map;
@@ -35,7 +49,10 @@ int main()
 	//Testing out GameInterface functionality
 	GameLogic logic(&map);
 	GameInterface game(logic);
-	game.GetGameLogic().initializePlayers(1);
+	//game.GetGameLogic().initializePlayers(1);
+
+	std::vector<Player> players = game.GetGameLogic().initializePlayers(1);
+	storage.AddPlayers(players);
 	if (game.GetGameLogic().GetPlayers().empty()) {
 		std::cerr << "No players available in the game!" << std::endl;
 		return 1;

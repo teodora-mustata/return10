@@ -34,3 +34,27 @@ inline auto CreateStorage(const std::string& filename)
 		)
 	);
 }
+
+using Storage = decltype(CreateStorage(""));
+
+//proceseaza datele, interactioneaza cu DB
+//BattleCityStorage
+class GameStorage
+{
+public:
+	bool Initialize();
+
+	/*std::vector<Product> GetProducts();
+	void AddProductToShoppingBasket(int productId, int quantity);
+	std::vector<std::tuple<std::string, float, int>> GetBasket();*/
+	void AddPlayers(const std::vector<Player>& players);
+
+private:
+	const std::string kDbFile{ "BattleCity.sqlite" };
+
+private:
+	Storage m_db = CreateStorage(kDbFile);
+};
+
+
+

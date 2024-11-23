@@ -12,8 +12,8 @@ GameLogic::GameLogic(Map* map)
 {
     this->map = map;
 }
-
-void GameLogic::initializePlayers(int numPlayers)
+//
+std::vector<Player> GameLogic::initializePlayers(int numPlayers)
 {
     //std::cout << "Placing players..." << std::endl;
     //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
@@ -31,10 +31,10 @@ void GameLogic::initializePlayers(int numPlayers)
         throw std::runtime_error("Not enough spawn points");
     }
     /*for (const auto& spawnPoint:spawnPoints) {
-     
+
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
-        
+
         m_players.push_back(newPlayer);
 
         std::cout << "Player " << 1 << " initialized at ("
@@ -51,14 +51,14 @@ void GameLogic::initializePlayers(int numPlayers)
     }
     std::cout << "Number of players initialized: " << m_players.size() << std::endl;
     std::cout << "Number of players initialized: " << GetPlayers().size() << std::endl;
-
+    return m_players;
 }
 
 void GameLogic::initializeScores()
 {
     for (Player player : GetPlayers())
     {
-        player.setInitialScore(); 
+        player.setInitialScore();
     }
 }
 
@@ -92,7 +92,7 @@ void GameLogic::ApplyDamage(Bomb bomb)
                 player.loseLife();
             }
         }
-    
+
         auto& celltype = map->GetCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
@@ -120,7 +120,7 @@ void GameLogic::addPlayer(Player player)
 
 //Bullet
 
-bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
+bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().first;
     int targetY = target.GetPosition().second;
 
@@ -136,7 +136,7 @@ bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
 }
 
 bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
-    CellType cell = map.GetCellType(bullet.GetX(),bullet.GetY());
+    CellType cell = map.GetCellType(bullet.GetX(), bullet.GetY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         if (wall->IsDestructible()) {
             map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});

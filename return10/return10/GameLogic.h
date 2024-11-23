@@ -13,14 +13,14 @@ public:
         return m_players;
     }
 private:
-
-    Map map;
+    Map* map;
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
 
 public:
-    void initializePlayers(int numPlayers);
+    GameLogic(Map* map);
+    std::vector<Player> initializePlayers(int numPlayers);
     void initializeScores();
     void startTimer();
     void showStartMenu();
@@ -34,8 +34,8 @@ public:
     const Map& GetMap() const;
 
     //Bullet
-    bool checkPlayerCollision(Player& target,Bullet& bullet);
-    bool checkWallCollision(Map& map,Bullet& bullet);
+    bool checkPlayerCollision(Player& target, Bullet& bullet);
+    bool checkWallCollision(Map& map, Bullet& bullet);
 
     //void gameLoop() {
     //    while (gameRunning) {
@@ -49,5 +49,4 @@ public:
     //    }
     //}
 };
-
 
