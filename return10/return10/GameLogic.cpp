@@ -124,9 +124,9 @@ bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
     int targetX = target.GetPosition().first;
     int targetY = target.GetPosition().second;
 
-    if (bullet.getX() == targetX && bullet.getY() == targetY && target.GetLives() > 1) {
+    if (bullet.GetX() == targetX && bullet.GetY() == targetY && target.GetLives() > 1) {
         target.resetPosition();
-        bullet.deactivate();
+        bullet.Deactivate();
         target.loseLife();
         return true;
     }
@@ -136,15 +136,15 @@ bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
 }
 
 bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
-    CellType cell = map.GetCellType(bullet.getX(),bullet.getY());
+    CellType cell = map.GetCellType(bullet.GetX(),bullet.GetY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         if (wall->IsDestructible()) {
-            map.SetCellType(bullet.getX(), bullet.getY(), std::monostate{});
-            bullet.deactivate();
+            map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});
+            bullet.Deactivate();
             return true;
         }
         else {
-            bullet.deactivate();
+            bullet.Deactivate();
             return true;
         }
     }
@@ -161,7 +161,7 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
         checkPlayerCollision(target, *currentBullet);
         checkWallCollision(map, *currentBullet);
 
-        if (!currentBullet->isActive()) {
+        if (!currentBullet->IsActive()) {
             // if erased put iterator one place back because erase sets it further
             currentBullet = bullets.getFiredBullets().erase(currentBullet);
         }

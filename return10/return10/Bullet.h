@@ -12,27 +12,21 @@ private:
     Direction m_direction;
     bool m_active;
     float m_speed;
-    //std::chrono::time_point<std::chrono::steady_clock> m_fired_at;
-    //std::chrono::time_point<std::chrono::steady_clock> m_fired_at;
 public:
     Bullet(int startX, int startY, Direction dir, float bulletSpeed);
-    void move();
-    void deactivate();
-    //void duplicateBulletSpeed();
-    /*void givePoints(Player& player);
-    void removePlayer(Player& player);*/
-    int getX() const;
-    int getY() const;
-    Direction getDirection() const;
-    //float getSpeed() const;
-    bool isActive() const;
+    void Move();
+    void Deactivate();
+    int GetX() const;
+    int GetY() const;
+    Direction GetDirection() const;
+    bool IsActive() const;
 
     // Setters
-    void setX(int x);
-    void setY(int y);
-    void setDirection(Direction direction);
-    void setSpeed(float speed);
-    void setActive(bool active);
+    void SetX(int x);
+    void SetY(int y);
+    void SetDirection(Direction direction);
+    void SetSpeed(float speed);
+    void SetActive(bool active);
 };
 
 

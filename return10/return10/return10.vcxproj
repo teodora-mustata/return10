@@ -128,11 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BattleCityDatabase.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="GameInterface.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Gun.cpp" />
+    <ClCompile Include="GunDAO.cpp" />
     <ClCompile Include="Login.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -143,6 +145,7 @@
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BattleCityDatabase.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CellType.h" />
@@ -151,6 +154,7 @@
     <ClInclude Include="GameInterface.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Gun.h" />
+    <ClInclude Include="GunDAO.h" />
     <ClInclude Include="Login.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />

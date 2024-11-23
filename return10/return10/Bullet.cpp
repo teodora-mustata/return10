@@ -5,13 +5,13 @@ Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
 {
 }
 
-void Bullet::move() {
+void Bullet::Move() {
     auto offset = DirectionUtils::toOffset(m_direction);
     m_x += static_cast<int>(offset.first * m_speed);
     m_y += static_cast<int>(offset.second * m_speed);
 }
 
-void Bullet::deactivate() {
+void Bullet::Deactivate() {
     m_active = false;
 }
 
@@ -32,22 +32,34 @@ void Bullet::deactivate() {
 //}
 
 
-int Bullet::getX() const
+int Bullet::GetX() const
 {
     return m_x;
 }
-int Bullet::getY() const
+int Bullet::GetY() const
 { 
     return m_y; 
 }
-Direction Bullet::getDirection() const { return m_direction; }
+Direction Bullet::GetDirection() const {
+    return m_direction;
+}
 //float Bullet::getSpeed() const { return m_speed; }
-bool Bullet::isActive() const { return m_active; }
-void Bullet::setX(int x)
+bool Bullet::IsActive() const { 
+    return m_active; 
+}
+void Bullet::SetX(int x)
 {
     m_x = x;
 }
-void Bullet::setY(int y) { m_y = y; }
-void Bullet::setDirection(Direction direction) { m_direction = direction; }
-void Bullet::setSpeed(float speed) { m_speed = speed; }
-void Bullet::setActive(bool active) { m_active = active; }
+void Bullet::SetY(int y) { 
+    m_y = y; 
+}
+void Bullet::SetDirection(Direction direction) { 
+    m_direction = direction; 
+}
+void Bullet::SetSpeed(float speed) { 
+    m_speed = speed; 
+}
+void Bullet::SetActive(bool active) { 
+    m_active = active; 
+}
