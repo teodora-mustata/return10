@@ -43,7 +43,6 @@ public:
 	//void PrintMap() const; commented out because i overloaded the << operator
 	std::pair<int, int> GetDimensions();
 
-
 	//void addPlayer(const std::string& playerName);
 	/*void removePlayer(const Player& player, std::vector<Player>& players);
 	void movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players);*/

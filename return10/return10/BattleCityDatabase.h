@@ -48,7 +48,7 @@ public:
 	void AddProductToShoppingBasket(int productId, int quantity);
 	std::vector<std::tuple<std::string, float, int>> GetBasket();*/
 	void AddPlayers(const std::vector<Player>& players);
-
+	Map getMap()const;
 private:
 	const std::string kDbFile{ "BattleCity.sqlite" };
 

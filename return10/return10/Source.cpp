@@ -10,16 +10,18 @@
 #include <sqlite_orm/sqlite_orm.h>
 
 #include "BattleCityDatabase.h"
-
+#include "routing.h"
 int main()
 {
-
+	std::cout << "Server";
 	GameStorage storage;
 	if (!storage.Initialize())
 	{
 		std::cout << "Faild to initialize the database!";
 		return -1;
 	}
+	/*Routing r;
+	r.Run();*/
 
 	////Testing out Map functionality
 	Map map;

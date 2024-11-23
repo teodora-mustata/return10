@@ -36,7 +36,6 @@ void GameStorage::AddPlayers(const std::vector<Player>& players)
 }
 
 
-
 //void GameStorage::PopulateStorage()
 //{
 //	/*std::vector<Product> products{
