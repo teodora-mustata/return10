@@ -147,40 +147,79 @@ void Map::BreakWall(int x, int y)
 	}
 }
 
-void Map::PrintMap() const {
-	for (int i = 0; i < m_board.size(); ++i) {
-		for (int j = 0; j < m_board[i].size(); ++j) {
-			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
-				std::cout << "\033[32mS \033[0m"; // Spawn point = green
-			}
-			else {
-				std::visit([&](auto&& arg) {
-					using T = std::decay_t<decltype(arg)>;
-					if constexpr (std::is_same_v<T, std::monostate>) {
-						std::cout << "0 "; // Empty
-					}
-					else if constexpr (std::is_same_v<T, Wall>) {
-						if (arg.IsDestructible()) {
-							if (arg.GetContainedBomb() != nullptr) {
-								std::cout << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
-							}
-							else {
-								std::cout << "\033[36mD \033[0m"; // Destructible wall = cyan
-							}
-						}
-						else {
-							std::cout << "\033[34mI \033[0m"; // Indestructible wall = blue
-						}
-					}
-					}, m_board[i][j]);
-			}
-		}
-		std::cout << std::endl;
-	}
-}
+//commented out because i overloaded the << operator
+
+//void Map::PrintMap() const {
+//	for (int i = 0; i < m_board.size(); ++i) {
+//		for (int j = 0; j < m_board[i].size(); ++j) {
+//			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
+//				std::cout << "\033[32mS \033[0m"; // Spawn point = green
+//			}
+//			else {
+//				std::visit([&](auto&& arg) {
+//					using T = std::decay_t<decltype(arg)>;
+//					if constexpr (std::is_same_v<T, std::monostate>) {
+//						std::cout << "0 "; // Empty
+//					}
+//					else if constexpr (std::is_same_v<T, Wall>) {
+//						if (arg.IsDestructible()) {
+//							if (arg.GetContainedBomb() != nullptr) {
+//								std::cout << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
+//							}
+//							else {
+//								std::cout << "\033[36mD \033[0m"; // Destructible wall = cyan
+//							}
+//						}
+//						else {
+//							std::cout << "\033[34mI \033[0m"; // Indestructible wall = blue
+//						}
+//					}
+//					}, m_board[i][j]);
+//			}
+//		}
+//		std::cout << std::endl;
+//	}
+//}
 
 std::pair<int, int> Map::GetDimensions()
 {
 	std::pair<int, int> dim(m_height, m_width);
 	return dim;
+}
+
+std::ostream& operator<<(std::ostream& os, const Map& map) {
+	const auto& board = map.m_board;
+	const auto& spawnPoints = map.m_spawnPoints;
+
+	for (int i = 0; i < board.size(); ++i) {
+		for (int j = 0; j < board[i].size(); ++j) {
+			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
+				os << "\033[32mS \033[0m"; // Spawn point = green
+			}
+			else {
+				std::visit([&](auto&& arg) {
+					using T = std::decay_t<decltype(arg)>;
+					if constexpr (std::is_same_v<T, std::monostate>) {
+						os << "0 "; // Empty
+					}
+					else if constexpr (std::is_same_v<T, Wall>) {
+						if (arg.IsDestructible()) {
+							if (arg.GetContainedBomb() != nullptr) {
+								os << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
+							}
+							else {
+								os << "\033[36mD \033[0m"; // Destructible wall = cyan
+							}
+						}
+						else {
+							os << "\033[34mI \033[0m"; // Indestructible wall = blue
+						}
+					}
+					}, board[i][j]);
+			}
+		}
+		os << '\n';
+	}
+
+	return os;
 }

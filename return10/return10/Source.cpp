@@ -9,7 +9,7 @@ int main()
 {
 	////Testing out Map functionality
 	Map map;
-	map.PrintMap();
+	std::cout << map;
 	for (auto sp : map.GetSpawnPoints())
 		std::cout << "Spawnpoint: (" << sp.first << "," << sp.second << ")" << std::endl;
 	std::cout << "Map dimensions: height: " << map.GetDimensions().first << ", width: " << map.GetDimensions().second << std::endl;
@@ -42,6 +42,6 @@ int main()
 	}
 	Player player = game.GetGameLogic().GetPlayers()[0];
 	game.handlePlayerMove(player);
-	map.PrintMap();
+	std::cout << map;
 
 }
