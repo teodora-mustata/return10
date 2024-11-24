@@ -13,15 +13,16 @@
 #include "routing.h"
 int main()
 {
-	std::cout << "Server";
+	std::cout << "Server" << std::endl;
 	GameStorage storage;
 	if (!storage.Initialize())
 	{
 		std::cout << "Faild to initialize the database!";
 		return -1;
 	}
-	/*Routing r;
-	r.Run();*/
+
+	Routing r;
+	r.Run();
 
 	////Testing out Map functionality
 	//Map map;
@@ -63,9 +64,9 @@ int main()
 	//game.handlePlayerMove(player);
 	//std::cout << map;
 
-	Map map;
-	GameLogic logic(map);
-	GameInterface game(logic);
-	game.startGame();
+	//Map map;
+	//GameLogic logic(map);
+	//GameInterface game(logic);
+	//game.startGame();
 
 }

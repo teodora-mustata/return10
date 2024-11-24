@@ -26,6 +26,7 @@ void GameInterface::mainLoop() {
         // Render the game map
         //std::cout << gameLogic.GetMap()<<"\n";
 
+
         // Debugging player position (can be toggled)
        
         //auto playerPos = gameLogic.GetPlayers()[0].GetPosition();
