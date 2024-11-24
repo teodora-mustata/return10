@@ -8,10 +8,7 @@
 //    initializePlayers();
 //}
 
-GameLogic::GameLogic(Map* map)
-{
-    this->map = map;
-}
+GameLogic::GameLogic(Map& map) : map{map} {}
 //
 std::vector<Player> GameLogic::initializePlayers(int numPlayers)
 {
@@ -23,13 +20,13 @@ std::vector<Player> GameLogic::initializePlayers(int numPlayers)
     //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
-    auto spawnPoints = map->GetSpawnPoints();
-    if (!map) {
+    auto spawnPoints = map.GetSpawnPoints();
+    /*if (!map) {
         throw std::runtime_error("Map is not initialized.");
     }
     if (numPlayers > spawnPoints.size()) {
         throw std::runtime_error("Not enough spawn points");
-    }
+    }*/
     /*for (const auto& spawnPoint:spawnPoints) {
 
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
@@ -84,8 +81,8 @@ void GameLogic::ApplyDamage(Bomb bomb)
 
         for (Player player : GetPlayers())
         {
-            int playerXCoord = player.GetPosition().first;
-            int playerYCoord = player.GetPosition().second;
+            int playerXCoord = player.GetPosition().i;
+            int playerYCoord = player.GetPosition().j;
             if (playerXCoord == x && playerYCoord == y)
             {
                 //player is in bomb range -> they take damage
@@ -93,10 +90,10 @@ void GameLogic::ApplyDamage(Bomb bomb)
             }
         }
 
-        auto& celltype = map->GetCellType(x, y); // Observă folosirea lui `auto&`!
+        auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
-            map->SetCellType(x, y, std::monostate{});
+            map.SetCellType(x, y, std::monostate{});
         }
     }
 }
@@ -121,8 +118,8 @@ void GameLogic::addPlayer(Player player)
 //Bullet
 
 bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
-    int targetX = target.GetPosition().first;
-    int targetY = target.GetPosition().second;
+    int targetX = target.GetPosition().i;
+    int targetY = target.GetPosition().j;
 
     if (bullet.GetX() == targetX && bullet.GetY() == targetY && target.GetLives() > 1) {
         target.resetPosition();
@@ -172,7 +169,7 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
 
 }
 
-std::vector<Player> GameLogic::GetPlayers()
+std::vector<Player>& GameLogic::GetPlayers()
 {
     return m_players;
 }
@@ -194,7 +191,12 @@ void GameLogic::removePlayer(Player player)
 
 const Map& GameLogic::GetMap() const
 {
-    return *map;
+    return map;
+}
+
+bool GameLogic::isRunning() const
+{
+    return gameRunning;
 }
 
 //void GameLogic::movePlayer(Player player, Direction direction)

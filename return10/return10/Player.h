@@ -2,22 +2,18 @@
 #include<string>
 #include"Direction.h"
 #include "Gun.h"
+#include "Coordinate.h"
 
 class Player
 {
 private:
-	struct Coordinate {
-		int i, j;
-		Coordinate(int _i, int _j):
-			i{_i},
-			j{_j}
-		{}
-	};
 public:
 	Player(std::string name, int startX, int startY);
 	//Player();
 	~Player();
 	void move(Direction direction);
+	void printPosition();
+
 	bool operator==(const Player& other);
 	void shoot(Direction direction, float bulletSpeed);
 
@@ -26,7 +22,7 @@ public:
 	int GetScore() const;
 	int GetCrowns() const;
 	int GetLives()const;
-	std::pair<int,int> GetPosition() const;
+	Coordinate GetPosition() const;
 	Gun getGun() const;
 	//Updates for player
 	void addScore(int acumulated_points);

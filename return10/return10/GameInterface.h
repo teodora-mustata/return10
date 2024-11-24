@@ -1,12 +1,14 @@
 ﻿#include <iostream>
 #include <vector>
 #include <memory>
+
 #include "Map.h"
 #include "Player.h"
 #include "Direction.h"
 #include "Login.h"
 #include "Shop.h"
 #include "GameLogic.h"
+#include "Coordinate.h"
 
 class GameInterface {
 private:
@@ -18,6 +20,7 @@ public:
     GameInterface(GameLogic& gl); // jerry added ref here for debug assertion error 
     void startGame();
     void mainLoop();
+    void handleInput();
     void handlePlayerMove(Player& player);
     void handlePlayerShoot(Player& player);
     void displayStatus();

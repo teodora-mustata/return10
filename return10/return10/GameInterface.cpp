@@ -1,22 +1,66 @@
 #include "GameInterface.h"
-
+#include "Windows.h"
 
 //GameInterface::GameInterface(int numPlayers)
 //{
 //    initializePlayers(numPlayers);
 //}
 
+#include <iostream>
+#include <chrono>
+#include <thread>
+
 void GameInterface::mainLoop() {
-    //m_gameMap.PrintMap(); //more to do here
+    auto lastTime = std::chrono::steady_clock::now();
+
+    while (gameLogic.isRunning()) {
+        // Capture the current time
+        auto currentTime = std::chrono::steady_clock::now();
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+        lastTime = currentTime;
+
+        // Handle inputs
+        handleInput();
+
+
+        // Render the game map
+        //std::cout << gameLogic.GetMap()<<"\n";
+
+        // Debugging player position (can be toggled)
+       
+        //auto playerPos = gameLogic.GetPlayers()[0].GetPosition();
+        //std::cout << "Player Position: (" << playerPos.i << ", " << playerPos.j << ")\n";
+        gameLogic.GetPlayers()[0].printPosition();
+
+        // Throttle loop to prevent excessive CPU usage
+        std::this_thread::sleep_for(std::chrono::milliseconds(80)); // ~60 FPS
+    }
 }
+
+void GameInterface::handleInput() {
+    if (GetKeyState('A') & 0x8000) {
+        gameLogic.GetPlayers()[0].move(Direction::LEFT);
+    }
+    if (GetKeyState('D') & 0x8000) {
+        gameLogic.GetPlayers()[0].move(Direction::RIGHT);
+    }
+    if (GetKeyState('W') & 0x8000) {
+        gameLogic.GetPlayers()[0].move(Direction::UP);
+    }
+    if (GetKeyState('S') & 0x8000) {
+        gameLogic.GetPlayers()[0].move(Direction::DOWN);
+    }
+}
+
 
 GameInterface::GameInterface(GameLogic& gl):gameLogic(gl)
 {
 }
 
 void GameInterface::startGame() {
+    gameLogic.initializePlayers(4);
     std::cout << "Starting login process..." << std::endl;
-    login();
+    //login();
     std::cout << "Game started with " << m_players.size() << " players!" << std::endl;
     mainLoop();
 }
@@ -41,8 +85,8 @@ void GameInterface::displayStatus() {
     for (const auto& player : m_players) {
         std::cout << player.GetName() << ": Lives=" << player.GetLives()
             << ", Score=" << player.GetScore()
-            << ", Position=(" << player.GetPosition().first
-            << ", " << player.GetPosition().second << ")\n";
+            << ", Position=(" << player.GetPosition().i
+            << ", " << player.GetPosition().j << ")\n";
     }
 }
 

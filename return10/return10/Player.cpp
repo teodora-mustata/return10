@@ -6,8 +6,8 @@ Player::Player(std::string name, int startX, int startY) :
 	m_score(0),
 	m_lives(3),
 	m_crowns(0),
-	m_initial_position(startX, startY),
-	m_position(startX, startY) {}
+	m_initial_position{startX, startY},
+	m_position{ startX, startY } {}
 
 
 Player::~Player()
@@ -31,6 +31,10 @@ void Player::move(Direction direction)
 		m_position.j += 1;
 		break;
 	}
+}
+
+void Player::printPosition() {
+	std::cout << m_position.i << " " << m_position.j << "\n";
 }
 
 bool Player::operator==(const Player& other)
@@ -64,9 +68,9 @@ int Player::GetLives() const
 	return m_lives;
 }
 
-std::pair<int, int> Player::GetPosition() const
+Coordinate Player::GetPosition() const
 {
-	return { m_position.i,m_position.j };
+	return m_position;
 }
 
 Gun Player::getGun() const
