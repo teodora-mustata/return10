@@ -2,7 +2,9 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <Windows.h>
 #include "Player.h"
+#include "Direction.h"
 #include "Map.h"
 
 class GameLogic {
@@ -20,6 +22,7 @@ private:
 
 public:
     GameLogic(Map* map);
+    void run();
     void initializePlayers(int numPlayers);
     void initializeScores();
     void startTimer();

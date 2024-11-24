@@ -13,6 +13,27 @@ GameLogic::GameLogic(Map* map)
     this->map = map;
 }
 
+void GameLogic::run() {
+    initializePlayers(4); //initializing 4 players
+    while (gameRunning) { //while the game is running
+        map->PrintMap();  //printing the map
+        if (GetKeyState('A') & 0x8000) { //checking if key a is pressed
+            m_players[0].move(Direction::LEFT); //moving first player to the left 
+        }
+        if (GetKeyState('W') & 0x8000) { //checking if key w is pressed
+            m_players[0].move(Direction::UP); //moving first player up
+        }
+        if (GetKeyState('S') & 0x8000) { //checking if key s is pressed
+            m_players[0].move(Direction::DOWN); //moving first player down
+        }
+        if (GetKeyState('D') & 0x8000) { //checking if key d is pressed
+            m_players[0].move(Direction::RIGHT); //moving first player to the right
+        }
+        std::cout << m_players[0].GetPosition().first<<" "<< m_players[0].GetPosition().second<<'\n';
+        std::this_thread::sleep_for(std::chrono::seconds(2)); //sleeping for 2 seconds 
+    }
+}
+
 void GameLogic::initializePlayers(int numPlayers)
 {
     //std::cout << "Placing players..." << std::endl;
@@ -23,35 +44,21 @@ void GameLogic::initializePlayers(int numPlayers)
     //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
-    auto spawnPoints = map->GetSpawnPoints();
-    if (!map) {
-        throw std::runtime_error("Map is not initialized.");
-    }
-    if (numPlayers > spawnPoints.size()) {
-        throw std::runtime_error("Not enough spawn points");
-    }
-    /*for (const auto& spawnPoint:spawnPoints) {
+    decltype(auto) spawnPoints = map->GetSpawnPoints(); //decltype recognizes const and reference for auto
+    
+    short i = 1;
+
+    for (const auto& spawnPoint:spawnPoints) {
      
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
         
         m_players.push_back(newPlayer);
 
-        std::cout << "Player " << 1 << " initialized at ("
+        std::cout << "Player " << i<< " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
-    }*/
-    for (int i = 0; i < numPlayers; ++i) {
-        const auto& spawnPoint = spawnPoints[i];
-        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
-        name[0]++;
-        m_players.push_back(newPlayer);
-
-        std::cout << "Player " << i + 1 << " initialized at ("
-            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
+        i++;
     }
-    std::cout << "Number of players initialized: " << m_players.size() << std::endl;
-    std::cout << "Number of players initialized: " << GetPlayers().size() << std::endl;
-
 }
 
 void GameLogic::initializeScores()

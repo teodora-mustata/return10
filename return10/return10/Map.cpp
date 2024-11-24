@@ -150,6 +150,7 @@ void Map::BreakWall(int x, int y)
 void Map::PrintMap() const {
 	for (int i = 0; i < m_board.size(); ++i) {
 		for (int j = 0; j < m_board[i].size(); ++j) {
+
 			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
 				std::cout << "\033[32mS \033[0m"; // Spawn point = green
 			}
