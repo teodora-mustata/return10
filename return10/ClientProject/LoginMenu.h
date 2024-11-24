@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <string>
 #include <iostream>
+#include <cpr/cpr.h>
+#include <crow.h>
 
 class LoginMenu
 {

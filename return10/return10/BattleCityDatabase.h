@@ -47,9 +47,12 @@ public:
 	/*std::vector<Product> GetProducts();
 	void AddProductToShoppingBasket(int productId, int quantity);
 	std::vector<std::tuple<std::string, float, int>> GetBasket();*/
-	void AddPlayer(const Player& player);
+	void AddPlayer(const Player& player); // to remove (?)
+	void AddPlayerDAO(const PlayerDAO& playerDAO);
+	int AddGunDAO(const GunDAO& gun);
 	std::vector<PlayerDAO> GetPlayersDAO();
-	Map getMap()const;
+	void DisplayDatabaseContents();
+	//Map getMap()const;
 private:
 	const std::string kDbFile{ "BattleCity.sqlite" };
 

@@ -46,19 +46,54 @@ void LoginMenu::display()
 }
 
 bool LoginMenu::handleLogin(const std::string& username, const std::string& password) {
-    // Trimit datele către server pentru validare
-    // to do 
-    if (username == "user123" && password == "password123")  //placeholder
-    {
+    // Trimite un POST request către server
+    auto response = cpr::Post(
+        cpr::Url{ "http://localhost:18080/login" },
+        cpr::Payload{
+            {"username", username},
+            {"password", password}
+        }
+    );
+
+    // Verifică răspunsul serverului
+    if (response.status_code == 200) {
         return true;  // Login reușit
     }
+    else if (response.status_code == 400) {
+        showErrorMessage("Invalid username or password!");
+    }
+    else {
+        showErrorMessage("Server error. Please try again later.");
+    }
+
     return false;  // Login eșuat
 }
 
 bool LoginMenu::handleSignUp(const std::string& username, const std::string& password) {
-    // Trimite datele pentru crearea unui cont pe server
-    // to do
-    return true; // Returnează true sau false în funcție de răspunsul serverului
+    // Crează un obiect JSON manual, folosind Crow
+    crow::json::wvalue jsonData;
+    jsonData["username"] = username;
+    jsonData["password"] = password;
+
+    // Trimite un POST request către server
+    auto response = cpr::Post(
+        cpr::Url{ "http://localhost:18080/signup" },
+        cpr::Header{ {"Content-Type", "application/json"} },  // Setează tipul de conținut ca JSON
+        cpr::Body{ jsonData.dump() }  // Corpul cererii ca JSON (folosind `dump()` pentru a obține un string JSON)
+    );
+
+    // Verifică răspunsul serverului
+    if (response.status_code == 201) {
+        return true;  // Înregistrare reușită
+    }
+    else if (response.status_code == 409) {
+        showErrorMessage("Username already exists. Please choose another.");
+    }
+    else {
+        showErrorMessage("Server error. Please try again later.");
+    }
+
+    return false;  // Înregistrare eșuată
 }
 
 void LoginMenu::showErrorMessage(const std::string& message) {

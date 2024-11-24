@@ -6,11 +6,10 @@
 #include "CellType.h"
 #include "GameInterface.h"
 #include "GameLogic.h"
-
 #include <sqlite_orm/sqlite_orm.h>
-
 #include "BattleCityDatabase.h"
 #include "routing.h"
+
 int main()
 {
 	std::cout << "Server" << std::endl;
@@ -20,9 +19,14 @@ int main()
 		std::cout << "Faild to initialize the database!";
 		return -1;
 	}
+	crow::SimpleApp app;
 
-	Routing r;
-	r.Run();
+	storage.DisplayDatabaseContents();
+
+	Routing routing(app, storage);
+	routing.Run();
+
+	//storage.DisplayDatabaseContents();
 
 	////Testing out Map functionality
 	//Map map;
