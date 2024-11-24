@@ -14,6 +14,7 @@ private:
     float m_bulletSpeed = 0.25;
 public:
     Gun();
+    bool canFire() const;
     bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
     std::vector<Bullet> getFiredBullets() const;
     std::chrono::duration<float> getFiringRate() const;

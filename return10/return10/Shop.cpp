@@ -2,16 +2,19 @@
 #include <iostream>
 
 
+const int SPEED_UPGRADE_COST = 10;
+const int RELOAD_UPGRADE_COST = 500;
+
 Shop::Shop() {}
 
 void Shop::buySpeedUpgrade(Player player) {
     Gun gun = player.getGun();
-    if (player.GetCrowns() >= 10) 
+    if (player.GetCrowns() >= SPEED_UPGRADE_COST)
     {
         // Double the speed of the bullet
         float currentSpeed = gun.GetBulletSpeed();
         gun.SetBulletSpeed(currentSpeed * 2.0f);
-        player.addCrowns(-10);
+        player.addCrowns(-SPEED_UPGRADE_COST);
         std::cout << "Bullet speed has been doubled! New speed: " << gun.GetBulletSpeed() << std::endl;
     }
 }
@@ -22,7 +25,7 @@ void Shop::buyReloadUpgrade(Player player)
     Gun gun = player.getGun();//am nevoie de getGun in player
 
     // Verificam daca jucatorul are suficient scor
-    if (player.GetScore() < 500) {
+    if (player.GetScore() < RELOAD_UPGRADE_COST) {
         std::cout << "Insufficient score to buy upgrade!" << std::endl;
         return;
     }
@@ -38,7 +41,7 @@ void Shop::buyReloadUpgrade(Player player)
     gun.setFiringRate(currentFiringRate / 2);//am nevoie de setFiringRate in Gun
 
     // Scadem 500 din scorul jucatorului
-    player.addScore(-500);
+    player.addScore(-RELOAD_UPGRADE_COST);
 
     std::cout << "Gun upgraded! New firing rate: " << currentFiringRate.count() / 2 << " seconds" << std::endl;
 }

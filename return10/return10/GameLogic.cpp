@@ -46,8 +46,6 @@ std::vector<Player> GameLogic::initializePlayers(int numPlayers)
         std::cout << "Player " << i + 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
-    std::cout << "Number of players initialized: " << m_players.size() << std::endl;
-    std::cout << "Number of players initialized: " << GetPlayers().size() << std::endl;
     return m_players;
 }
 
