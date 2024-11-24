@@ -20,4 +20,5 @@ public:
     void setFiringRate(std::chrono::duration<float> newRate);
     float GetBulletSpeed() const;
     void SetBulletSpeed(float newBulletSpeed);
+    float GetFiringRate()const;
 };

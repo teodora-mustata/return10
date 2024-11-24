@@ -2,9 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include <Windows.h>
 #include "Player.h"
-#include "Direction.h"
 #include "Map.h"
 
 class GameLogic {
@@ -22,8 +20,7 @@ private:
 
 public:
     GameLogic(Map* map);
-    void run();
-    void initializePlayers(int numPlayers);
+    std::vector<Player> initializePlayers(int numPlayers);
     void initializeScores();
     void startTimer();
     void showStartMenu();
@@ -37,8 +34,8 @@ public:
     const Map& GetMap() const;
 
     //Bullet
-    bool checkPlayerCollision(Player& target,Bullet& bullet);
-    bool checkWallCollision(Map& map,Bullet& bullet);
+    bool checkPlayerCollision(Player& target, Bullet& bullet);
+    bool checkWallCollision(Map& map, Bullet& bullet);
 
     //void gameLoop() {
     //    while (gameRunning) {
@@ -52,5 +49,4 @@ public:
     //    }
     //}
 };
-
 

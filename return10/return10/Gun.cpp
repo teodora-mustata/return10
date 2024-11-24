@@ -10,7 +10,7 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
     if (timeSinceLastShot.count() >= m_firingRate.count())
     {
         Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
-        newBullet.setActive(true);
+        newBullet.SetActive(true);
         //newBullet.m_fired_at = now;
 
         m_firedBullets.push_back(newBullet);
@@ -46,5 +46,10 @@ float Gun::GetBulletSpeed() const
 void Gun::SetBulletSpeed(float newBulletSpeed)
 {
     m_bulletSpeed = newBulletSpeed;
+}
+
+float Gun::GetFiringRate() const
+{
+    return m_firingRate.count();  // Returneaz numarul de secunde ca float
 }
 

@@ -28,6 +28,7 @@ private:
 public:
 	Map();
 	~Map() = default;
+	friend std::ostream& operator<<(std::ostream& os, const Map& map);
 	void ResizeMap();
 	void GenerateSpawnPoints();
 	void GenerateWalls();
@@ -39,9 +40,8 @@ public:
 	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);
-	void PrintMap() const;
+	//void PrintMap() const; commented out because i overloaded the << operator
 	std::pair<int, int> GetDimensions();
-
 
 	//void addPlayer(const std::string& playerName);
 	/*void removePlayer(const Player& player, std::vector<Player>& players);

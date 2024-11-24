@@ -12,29 +12,8 @@ GameLogic::GameLogic(Map* map)
 {
     this->map = map;
 }
-
-void GameLogic::run() {
-    initializePlayers(4); //initializing 4 players
-    while (gameRunning) { //while the game is running
-        map->PrintMap();  //printing the map
-        if (GetKeyState('A') & 0x8000) { //checking if key a is pressed
-            m_players[0].move(Direction::LEFT); //moving first player to the left 
-        }
-        if (GetKeyState('W') & 0x8000) { //checking if key w is pressed
-            m_players[0].move(Direction::UP); //moving first player up
-        }
-        if (GetKeyState('S') & 0x8000) { //checking if key s is pressed
-            m_players[0].move(Direction::DOWN); //moving first player down
-        }
-        if (GetKeyState('D') & 0x8000) { //checking if key d is pressed
-            m_players[0].move(Direction::RIGHT); //moving first player to the right
-        }
-        std::cout << m_players[0].GetPosition().first<<" "<< m_players[0].GetPosition().second<<'\n';
-        std::this_thread::sleep_for(std::chrono::seconds(2)); //sleeping for 2 seconds 
-    }
-}
-
-void GameLogic::initializePlayers(int numPlayers)
+//
+std::vector<Player> GameLogic::initializePlayers(int numPlayers)
 {
     //std::cout << "Placing players..." << std::endl;
     //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
@@ -44,28 +23,42 @@ void GameLogic::initializePlayers(int numPlayers)
     //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
     //}
     std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
-    decltype(auto) spawnPoints = map->GetSpawnPoints(); //decltype recognizes const and reference for auto
-    
-    short i = 1;
+    auto spawnPoints = map->GetSpawnPoints();
+    if (!map) {
+        throw std::runtime_error("Map is not initialized.");
+    }
+    if (numPlayers > spawnPoints.size()) {
+        throw std::runtime_error("Not enough spawn points");
+    }
+    /*for (const auto& spawnPoint:spawnPoints) {
 
-    for (const auto& spawnPoint:spawnPoints) {
-     
         Player newPlayer(name, spawnPoint.first, spawnPoint.second);
         name[0]++;
-        
+
         m_players.push_back(newPlayer);
 
-        std::cout << "Player " << i<< " initialized at ("
+        std::cout << "Player " << 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
-        i++;
+    }*/
+    for (int i = 0; i < numPlayers; ++i) {
+        const auto& spawnPoint = spawnPoints[i];
+        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+        name[0]++;
+        m_players.push_back(newPlayer);
+
+        std::cout << "Player " << i + 1 << " initialized at ("
+            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
+    std::cout << "Number of players initialized: " << m_players.size() << std::endl;
+    std::cout << "Number of players initialized: " << GetPlayers().size() << std::endl;
+    return m_players;
 }
 
 void GameLogic::initializeScores()
 {
     for (Player player : GetPlayers())
     {
-        player.setInitialScore(); 
+        player.setInitialScore();
     }
 }
 
@@ -99,7 +92,7 @@ void GameLogic::ApplyDamage(Bomb bomb)
                 player.loseLife();
             }
         }
-    
+
         auto& celltype = map->GetCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
@@ -127,13 +120,13 @@ void GameLogic::addPlayer(Player player)
 
 //Bullet
 
-bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
+bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().first;
     int targetY = target.GetPosition().second;
 
-    if (bullet.getX() == targetX && bullet.getY() == targetY && target.GetLives() > 1) {
+    if (bullet.GetX() == targetX && bullet.GetY() == targetY && target.GetLives() > 1) {
         target.resetPosition();
-        bullet.deactivate();
+        bullet.Deactivate();
         target.loseLife();
         return true;
     }
@@ -143,15 +136,15 @@ bool GameLogic::checkPlayerCollision(Player& target,Bullet& bullet) {
 }
 
 bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
-    CellType cell = map.GetCellType(bullet.getX(),bullet.getY());
+    CellType cell = map.GetCellType(bullet.GetX(), bullet.GetY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         if (wall->IsDestructible()) {
-            map.SetCellType(bullet.getX(), bullet.getY(), std::monostate{});
-            bullet.deactivate();
+            map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});
+            bullet.Deactivate();
             return true;
         }
         else {
-            bullet.deactivate();
+            bullet.Deactivate();
             return true;
         }
     }
@@ -168,7 +161,7 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
         checkPlayerCollision(target, *currentBullet);
         checkWallCollision(map, *currentBullet);
 
-        if (!currentBullet->isActive()) {
+        if (!currentBullet->IsActive()) {
             // if erased put iterator one place back because erase sets it further
             currentBullet = bullets.getFiredBullets().erase(currentBullet);
         }
