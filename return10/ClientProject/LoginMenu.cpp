@@ -2,64 +2,98 @@
 
 void LoginMenu::display()
 {
-    std::cout << "==== Login Menu ====\n";
-    std::cout << "1. Login\n";
-    std::cout << "2. Sign Up\n";
-    std::cout << "Please select an option: ";
-
     int choice;
-    std::cin >> choice;
+    while (true) {
+        std::cout << "==== Login Menu ====\n";
+        std::cout << "1. Login\n";
+        std::cout << "2. Sign Up\n";
+        std::cout << "Please select an option: ";
+        std::cin >> choice;
 
-    if (choice == 1) {
-        std::string username, password;
-        std::cout << "Enter your username: ";
-        std::cin >> username;
-        std::cout << "Enter your password: ";
-        std::cin >> password;
+        if (choice == 1) {
+            std::string username, password;
+            std::cout << "Enter your username: ";
+            std::cin >> username;
+            std::cout << "Enter your password: ";
+            std::cin >> password;
 
-        if (handleLogin(username, password)) {
-            std::cout << "Login successful! Redirecting to main menu...\n";
-            // Redirect to Main Menu
+            if (handleLogin(username, password)) {
+                std::cout << "Login successful! Redirecting to main menu...\n";
+                break;
+            }
+            else {
+                showErrorMessage("The username and password don't match. Please try again.");
+            }
+        }
+        else if (choice == 2) {
+            std::string username, password, passwordVerify;
+            std::cout << "Choose a username: ";
+            std::cin >> username;
+            std::cout << "Choose a password: ";
+            std::cin >> password;
+            std::cout << "Reenter your password: ";
+            std::cin >> passwordVerify;
+
+            if (password == passwordVerify && handleSignUp(username, password)) {
+                std::cout << "Account created successfully! Proceeding to log in...\n";
+                handleLogin(username, password);
+                break;
+            }
+            else if (password != passwordVerify) {
+                showErrorMessage("The passwords don't match! Please try again.\n");
+            }
+            else {
+                showErrorMessage("Sign Up failed. Please try again.\n");
+            }
         }
         else {
-            showErrorMessage("The username and password don't match. Please try again.");
+            std::cout << "Not a valid option! Please try again.\n";
         }
-    }
-    else if (choice == 2) {
-        std::string username, password, passwordVerify;
-        std::cout << "Choose a username: ";
-        std::cin >> username;
-        std::cout << "Choose a password: ";
-        std::cin >> password;
-        std::cout << "Reenter your password: ";
-        std::cin >> passwordVerify;
-
-        if (password == passwordVerify && handleSignUp(username, password)) {
-            std::cout << "Account created successfully! Please log in.\n";
-        }
-        else if (password != passwordVerify)
-        {
-            showErrorMessage("The passwords don't match! Please try again.");
-        }
-        else showErrorMessage("Sign Up failed. Please try again.");
     }
 }
 
 bool LoginMenu::handleLogin(const std::string& username, const std::string& password) {
+    // Creează un obiect JSON cu datele utilizatorului
+    crow::json::wvalue jsonData;
+    jsonData["username"] = username;
+    jsonData["password"] = password;
+
     // Trimite un POST request către server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/login" },
-        cpr::Payload{
-            {"username", username},
-            {"password", password}
-        }
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
     );
 
     // Verifică răspunsul serverului
     if (response.status_code == 200) {
+        auto responseJson = crow::json::load(response.text);
+
+        // Verificăm existența cheii "message"
+        if (responseJson.has("message")) {
+            std::string welcomeMessage = responseJson["message"].s();
+            std::cout << welcomeMessage << std::endl;
+        }
+
+        // Verificăm existența cheii "points" și "score"
+        if (responseJson.has("points") && responseJson.has("score")) {
+            int points = responseJson["points"].i();
+            int score = responseJson["score"].i();
+            std::cout << "Points: " << points << ", Score: " << score << std::endl;
+        }
+
+        // Verificăm existența cheii "gunDetails"
+        if (responseJson.has("gunDetails")) {
+            auto gunDetailsJson = responseJson["gunDetails"];
+            if (gunDetailsJson.has("fireRate") && gunDetailsJson.has("bulletSpeed")) {
+                float fireRate = static_cast<float>(gunDetailsJson["fireRate"].d());
+                float bulletSpeed = static_cast<float>(gunDetailsJson["bulletSpeed"].d());
+                std::cout << "Gun - Fire Rate: " << fireRate << ", Bullet Speed: " << bulletSpeed << std::endl;
+            }
+        }
         return true;  // Login reușit
     }
-    else if (response.status_code == 400) {
+    else if (response.status_code == 401) {
         showErrorMessage("Invalid username or password!");
     }
     else {
@@ -70,7 +104,6 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
 }
 
 bool LoginMenu::handleSignUp(const std::string& username, const std::string& password) {
-    // Crează un obiect JSON manual, folosind Crow
     crow::json::wvalue jsonData;
     jsonData["username"] = username;
     jsonData["password"] = password;

@@ -47,6 +47,15 @@ std::vector<PlayerDAO> GameStorage::GetPlayersDAO()
     return m_db.get_all<PlayerDAO>();
 }
 
+std::vector<GunDAO> GameStorage::GetGunsDAO()
+{
+    return m_db.get_all<GunDAO>();
+}
+
+GunDAO GameStorage::GetGunById(int gunId) {
+    return m_db.get<GunDAO>(gunId);  // Aruncă excepție dacă nu există
+}
+
 void GameStorage::DisplayDatabaseContents()
 {
     // Afișează toate armele

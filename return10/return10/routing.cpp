@@ -63,25 +63,55 @@ void Routing::Run() {
 
 void Routing::SetupLoginRoutes(crow::SimpleApp& app)
 {
-    // Route pentru login - TO DO
-    // 
-    //CROW_ROUTE(app, "/login").methods("POST"_method)([](const crow::request& req) {
-    //    auto body = crow::json::load(req.body);
-    //    if (!body) {
-    //        return crow::response(400, "Invalid JSON format");
-    //    }
+    // Route pentru login
+    CROW_ROUTE(app, "/login").methods("POST"_method)([this](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body) {
+            return crow::response(400, "Invalid JSON format");
+        }
 
-    //    std::string username = body["username"].s();
-    //    std::string password = body["password"].s();
+        std::string username = body["username"].s();
+        std::string password = body["password"].s();
 
-    //    // Exemplu de validare (înlocuiește cu logica ta pentru baza de date)
-    //    if (username == "user123" && password == "password123") {
-    //        return crow::response(200, "Login successful");
-    //    }
-    //    else {
-    //        return crow::response(400, "Invalid username or password");
-    //    }
-    //    });
+        try {
+            auto players = m_storage.GetPlayersDAO();
+
+            // Caută utilizatorul în lista de jucători
+            auto it = std::find_if(players.begin(), players.end(), [&](const PlayerDAO& player) {
+                return player.GetName() == username && player.GetPassword() == password;
+                });
+
+            if (it == players.end()) {
+                // Utilizatorul nu a fost găsit
+                return crow::response(401, "Invalid username or password!");
+            }
+
+            const auto& user = *it;
+
+            crow::json::wvalue gunDetails;
+            if (user.GetGunId() != -1) {
+                // Obține arma utilizatorului din baza de date
+                auto gun = m_storage.GetGunById(user.GetGunId());
+                gunDetails["fireRate"] = gun.GetFireRate();
+                gunDetails["bulletSpeed"] = gun.GetBulletSpeed();
+            }
+            else {
+                gunDetails = crow::json::wvalue(); // obiect gol
+            }
+
+            // Construiește răspunsul JSON
+            crow::json::wvalue res;
+            res["message"] = "Welcome " + user.GetName() + "!";
+            res["points"] = user.GetPoints();
+            res["score"] = user.GetScore();
+            res["gunDetails"] = std::move(gunDetails);
+            //CROW_LOG_INFO << "Response JSON: " << res.dump();
+            return crow::response(200, res);
+        }
+        catch (const std::exception& e) {
+            return crow::response(500, std::string("Database error: ") + e.what());
+        }
+        });
 
     // Route pentru signup
     CROW_ROUTE(app, "/signup").methods("POST"_method)([this](const crow::request& req) {
@@ -121,6 +151,6 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         // Adăugăm player-ul în baza de date
         m_storage.AddPlayerDAO(newPlayer);
 
-        return crow::response(201, "Account created successfully");
+        return crow::response(201, "Account created successfully!");
         });
 }
