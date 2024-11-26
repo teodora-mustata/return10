@@ -39,7 +39,7 @@ void GameStorage::AddPlayerDAO(const PlayerDAO& playerDAO)
 
 int GameStorage::AddGunDAO(const GunDAO& gun)
 {
-    return m_db.insert(gun);  // Inserăm obiectul GunDAO în baza de date și returnăm ID-ul
+    return m_db.insert(gun);  // Inserăm obiectul GunDAO în baza de date și returnm ID-ul
 }
 
 std::vector<PlayerDAO> GameStorage::GetPlayersDAO()
@@ -79,17 +79,4 @@ void GameStorage::DisplayDatabaseContents()
             << ", Gun ID: " << player.GetGunId() << std::endl;
     }
 }
-
-//void GameStorage::PopulateStorage()
-//{
-//	/*std::vector<Product> products{
-//			Product{ -1, "Milk",  5.f },
-//			Product{ -1, "Egg",   0.2f },
-//			Product{ -1, "Flour", 2.f },
-//			Product{ -1, "Butter", 8.f },
-//			Product{ -1, "Salt",  2.f },
-//			Product{ -1, "Jam",   5.f }
-//	};*/
-//	m_db.insert_range(products.begin(), products.end());
-//}
 

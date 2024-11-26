@@ -2,6 +2,7 @@
 #include <cpr/cpr.h>
 #include <crow.h>
 #include "LoginMenu.h"
+#include "MainMenu.h"
 
 int main() {
     //// 1. Obtin harta de la server
@@ -44,6 +45,9 @@ int main() {
         // Instanțiază meniul de login
         LoginMenu loginMenu;
         loginMenu.display();
+
+        MainMenu mainMenu;
+        mainMenu.display();  
 
         // MainMenu mainMenu;
         // mainMenu.display();

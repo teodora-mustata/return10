@@ -11,7 +11,7 @@ std::string ConvertCellToString(const CellType& cell) {
         else if constexpr (std::is_same_v<T, Wall>) {
             if (arg.IsDestructible()) {
                 if (arg.GetContainedBomb() != nullptr) {
-                    return "DB"; // Pereu destructibil cu bomb?
+                    return "DB"; // Pereu destructibil cu bomba
                 }
                 else {
                     return "D"; // Pereu destructibil
@@ -57,7 +57,6 @@ void Routing::Run() {
     //    });
 
     SetupLoginRoutes(m_app);
-
     m_app.port(18080).multithreaded().run();
 }
 
