@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include <string>
-#include <iostream>
-#include <cpr/cpr.h>
-#include <crow.h>
-
-class LoginMenu
+//#include <string>
+//#include <iostream>
+//#include <cpr/cpr.h>
+//#include <crow.h>
+#include "Menu.h"
+class LoginMenu:public Menu
 {
 public:
     void display();                   // Afișează meniul de login/sign up

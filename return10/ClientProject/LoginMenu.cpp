@@ -60,7 +60,7 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
 
     // Trimite un POST request către server
     auto response = cpr::Post(
-        cpr::Url{ "http://localhost:18080/login" },
+        cpr::Url{ "http://localhost:18081/login" },
         cpr::Header{ {"Content-Type", "application/json"} },
         cpr::Body{ jsonData.dump() }
     );
@@ -73,7 +73,16 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
         if (responseJson.has("message")) {
             std::string welcomeMessage = responseJson["message"].s();
             std::cout << welcomeMessage << std::endl;
+            std::cout << "A intrat aici";
         }
+
+        if (responseJson.has("userId")) {
+            std::cout << "A intrat si aici";
+            int userId = responseJson["userId"].i();
+            std::cout << "Received userId: " << userId << std::endl;  // Debugging line
+            setCurrentUserId(userId);  // Asigură-te că această metodă setează corect userId
+        }
+
 
         // Verificăm existența cheii "points" și "score"
         if (responseJson.has("points") && responseJson.has("score")) {
@@ -110,7 +119,7 @@ bool LoginMenu::handleSignUp(const std::string& username, const std::string& pas
 
     // Trimite un POST request către server
     auto response = cpr::Post(
-        cpr::Url{ "http://localhost:18080/signup" },
+        cpr::Url{ "http://localhost:18081/signup" },
         cpr::Header{ {"Content-Type", "application/json"} },  // Setează tipul de conținut ca JSON
         cpr::Body{ jsonData.dump() }  // Corpul cererii ca JSON (folosind `dump()` pentru a obține un string JSON)
     );

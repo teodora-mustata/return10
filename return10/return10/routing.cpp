@@ -57,7 +57,64 @@ void Routing::Run() {
     //    });
 
     SetupLoginRoutes(m_app);
-    m_app.port(18080).multithreaded().run();
+    GetTheBestPlayersByCrowns(m_app);
+    m_app.port(18081).multithreaded().run();
+}
+
+void Routing::GetTheBestPlayersByCrowns(crow::SimpleApp& app) {
+    CROW_ROUTE(m_app, "/leaderboard/<int>")
+        ([this](int userId) {
+        try {
+            auto players = m_storage.GetPlayersDAO();
+
+            // Sortează jucătorii descrescător pe baza scorului
+            std::sort(players.begin(), players.end(), [](const PlayerDAO& a, const PlayerDAO& b) {
+                return a.GetScore() > b.GetScore();
+                });
+
+            crow::json::wvalue res;
+            std::vector<crow::json::wvalue> topPlayers;
+            bool isUserInTop10 = false;
+            int userRank = -1;
+
+            // Adaugă primii 10 jucători în răspuns
+            for (size_t i = 0; i < players.size(); ++i) {
+                if (i < 10) {
+                    crow::json::wvalue playerJson;
+                    playerJson["rank"] = i + 1;
+                    playerJson["name"] = players[i].GetName();
+                    playerJson["score"] = players[i].GetScore();
+                    topPlayers.push_back(std::move(playerJson));
+                }
+                if (players[i].GetId() == userId) {
+                    userRank = i + 1;
+                    if (i < 10) {
+                        isUserInTop10 = true;
+                    }
+                }
+            }
+
+            // Verifică dacă utilizatorul există
+            if (userRank == -1) {
+                return crow::response(404, "User not found");
+            }
+
+            // Adaugă lista de top players în răspuns
+            res["topPlayers"] = std::move(topPlayers);
+
+            // Adaugă detaliile utilizatorului curent dacă nu e în top 10
+            if (!isUserInTop10 && userRank > 0) {
+                res["currentUser"]["rank"] = userRank;
+                res["currentUser"]["name"] = players[userRank - 1].GetName();
+                res["currentUser"]["score"] = players[userRank - 1].GetScore();
+            }
+
+            return crow::response(200, res);
+        }
+        catch (const std::exception& e) {
+            return crow::response(500, std::string("Database error: ") + e.what());
+        }
+            });
 }
 
 void Routing::SetupLoginRoutes(crow::SimpleApp& app)
@@ -104,6 +161,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
             res["points"] = user.GetPoints();
             res["score"] = user.GetScore();
             res["gunDetails"] = std::move(gunDetails);
+            res["userId"] = user.GetId(); 
             //CROW_LOG_INFO << "Response JSON: " << res.dump();
             return crow::response(200, res);
         }

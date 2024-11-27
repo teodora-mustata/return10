@@ -5,5 +5,6 @@
 class Leaderboard : public Menu {
 public:
     void display() override;
+    void displayPlayersByCrowns();
 };
 
