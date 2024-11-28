@@ -10,7 +10,8 @@ public:
 	Routing(crow::SimpleApp& app, GameStorage& storage);
 	void Run();
 	void SetupLoginRoutes(crow::SimpleApp& app);
-	void GetTheBestPlayersByCrowns(crow::SimpleApp& app);
+	void GetTheBestPlayersByCrowns();
+	void GetTheBestPlayersByPoints();
 private:
 	//crow::response AddProductToBasketRoute(ProductStorage& storage, const crow::request& req, int productId)const;
 

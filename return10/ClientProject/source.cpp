@@ -42,15 +42,12 @@ int main() {
     try {
         std::cout << "Welcome to Battle City!\n";
 
-        // Instanțiază meniul de login
         LoginMenu loginMenu;
         loginMenu.display();
 
         MainMenu mainMenu;
         mainMenu.display();  
 
-        // MainMenu mainMenu;
-        // mainMenu.display();
 
     }
     catch (const std::exception& e) {

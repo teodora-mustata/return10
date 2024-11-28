@@ -16,7 +16,7 @@ void Leaderboard::display() {
             displayPlayersByCrowns();
         }
         else if (choice == 2) {
-            std::cout << "Viewing best players by points...\n";
+            displayPlayersByPoints();
         }
         else if (choice == 3) {
             std::cout << "Returning to Main Menu...\n";
@@ -28,12 +28,38 @@ void Leaderboard::display() {
     }
 }
 
+void Leaderboard::displayPlayersByPoints() {
+    int userId = UserSession::getInstance().getUserId();
+
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/leaderboard/points/" + std::to_string(userId) });
+    if (response.status_code == 200) {
+
+        auto responseJson = crow::json::load(response.text);
+
+        std::cout << "==== Leaderboard ====\n";
+        for (const auto& player : responseJson["topPlayers"]) {
+            std::cout << player["rank"].i() << ". " << player["name"].s() << " - " << player["points"].i() << " points\n";
+        }
+
+        if (responseJson.has("currentUser")) {
+            auto currentUser = responseJson["currentUser"];
+            std::cout << "-----------------------\n";
+            std::cout << currentUser["rank"].i() << ". " << currentUser["name"].s() << " - " << currentUser["points"].i() << " points (You)\n";
+        }
+    }
+    else {
+        std::cout << "Error fetching leaderboard. Please try again.\n";
+        std::cout << userId;
+    }
+}
+
 
 void Leaderboard::displayPlayersByCrowns() {
-    int userId = currentUserId; // ID-ul utilizatorului logat
+    int userId = UserSession::getInstance().getUserId();
 
-    auto response = cpr::Get(cpr::Url{ "http://localhost:18081/leaderboard/" + std::to_string(userId) });
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/leaderboard/" + std::to_string(userId) });
     if (response.status_code == 200) {
+        
         auto responseJson = crow::json::load(response.text);
 
         std::cout << "==== Leaderboard ====\n";

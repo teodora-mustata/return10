@@ -28,7 +28,7 @@ int main()
 
     GameLogic logic(map); 
     GameInterface game(logic);
-    try {
+    /*try {
         
         logic.initializePlayers(3);
 
@@ -39,7 +39,7 @@ int main()
     }
     catch (const std::runtime_error& e) {
         std::cerr << "Error: " << e.what() << std::endl;
-    }
+    }*/
     logic.initializePlayers(1); 
     if (logic.GetPlayerCount() == 0) { 
         std::cerr << "No players available in the game!" << std::endl;
@@ -77,7 +77,7 @@ int main()
 
 
     // Start the game
-    game.mainLoop();
+   // game.mainLoop();
 
     game.startGame();
 	std::cout << "Server" << std::endl;

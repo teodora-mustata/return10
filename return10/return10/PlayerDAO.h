@@ -23,7 +23,7 @@ private:
 	int m_score;
 	int m_points;
 	std::string m_name;
-	int m_gunId;//defaft ar trebui un GunDAO
+	int m_gunId;
 	std::string m_password;
 };
 

@@ -134,7 +134,6 @@
     <ClCompile Include="Leaderboard.cpp" />
     <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="MainMenu.cpp" />
-    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="ShopMenu.cpp" />
     <ClCompile Include="source.cpp" />
   </ItemGroup>
@@ -144,6 +143,7 @@
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="ShopMenu.h" />
+    <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

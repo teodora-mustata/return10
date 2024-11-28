@@ -2,8 +2,9 @@
 
 void LoginMenu::display()
 {
-    int choice;
+    
     while (true) {
+        int choice;
         std::cout << "==== Login Menu ====\n";
         std::cout << "1. Login\n";
         std::cout << "2. Sign Up\n";
@@ -60,7 +61,7 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
 
     // Trimite un POST request către server
     auto response = cpr::Post(
-        cpr::Url{ "http://localhost:18081/login" },
+        cpr::Url{ "http://localhost:18080/login" },
         cpr::Header{ {"Content-Type", "application/json"} },
         cpr::Body{ jsonData.dump() }
     );
@@ -77,21 +78,18 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
         }
 
         if (responseJson.has("userId")) {
-            std::cout << "A intrat si aici";
             int userId = responseJson["userId"].i();
-            std::cout << "Received userId: " << userId << std::endl;  // Debugging line
-            setCurrentUserId(userId);  // Asigură-te că această metodă setează corect userId
+            UserSession::getInstance().setUserId(userId);
         }
 
+        
 
-        // Verificăm existența cheii "points" și "score"
         if (responseJson.has("points") && responseJson.has("score")) {
             int points = responseJson["points"].i();
             int score = responseJson["score"].i();
             std::cout << "Points: " << points << ", Score: " << score << std::endl;
         }
 
-        // Verificăm existența cheii "gunDetails"
         if (responseJson.has("gunDetails")) {
             auto gunDetailsJson = responseJson["gunDetails"];
             if (gunDetailsJson.has("fireRate") && gunDetailsJson.has("bulletSpeed")) {
@@ -100,7 +98,7 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
                 std::cout << "Gun - Fire Rate: " << fireRate << ", Bullet Speed: " << bulletSpeed << std::endl;
             }
         }
-        return true;  // Login reușit
+        return true;  
     }
     else if (response.status_code == 401) {
         showErrorMessage("Invalid username or password!");
@@ -109,7 +107,7 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
         showErrorMessage("Server error. Please try again later.");
     }
 
-    return false;  // Login eșuat
+    return false; 
 }
 
 bool LoginMenu::handleSignUp(const std::string& username, const std::string& password) {
@@ -119,7 +117,7 @@ bool LoginMenu::handleSignUp(const std::string& username, const std::string& pas
 
     // Trimite un POST request către server
     auto response = cpr::Post(
-        cpr::Url{ "http://localhost:18081/signup" },
+        cpr::Url{ "http://localhost:18080/signup" },
         cpr::Header{ {"Content-Type", "application/json"} },  // Setează tipul de conținut ca JSON
         cpr::Body{ jsonData.dump() }  // Corpul cererii ca JSON (folosind `dump()` pentru a obține un string JSON)
     );
