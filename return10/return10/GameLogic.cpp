@@ -8,50 +8,65 @@
 //    initializePlayers();
 //}
 
-GameLogic::GameLogic(Map& map) : map{map} {}
+GameLogic::GameLogic(Map& map) : map{ map } {}
 //
-std::vector<Player> GameLogic::initializePlayers(int numPlayers)
-{
-    //std::cout << "Placing players..." << std::endl;
-    //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
-    //    auto spawnPoint = map.GetRandomSpawnPoint();
-    //    Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
-    //    /*map.*/addPlayer(newPlayer);
-    //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
-    //}
-    std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
-    auto spawnPoints = map.GetSpawnPoints();
-    /*if (!map) {
-        throw std::runtime_error("Map is not initialized.");
-    }
-    if (numPlayers > spawnPoints.size()) {
-        throw std::runtime_error("Not enough spawn points");
-    }*/
-    /*for (const auto& spawnPoint:spawnPoints) {
+void GameLogic::initializePlayers(int numPlayers) {
+    map.initializePlayers(numPlayers); // Delegate player setup to Map
+}
+//moved to map also changed a lot will probably delete soon
+//std::vector<Player> GameLogic::initializePlayers(int numPlayers)
+//{
+//    //std::cout << "Placing players..." << std::endl;
+//    //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
+//    //    auto spawnPoint = map.GetRandomSpawnPoint();
+//    //    Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
+//    //    /*map.*/addPlayer(newPlayer);
+//    //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
+//    //}
+//    std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
+//    auto spawnPoints = map.GetSpawnPoints();
+//    /*if (!map) {
+//        throw std::runtime_error("Map is not initialized.");
+//    }
+//    if (numPlayers > spawnPoints.size()) {
+//        throw std::runtime_error("Not enough spawn points");
+//    }*/
+//    /*for (const auto& spawnPoint:spawnPoints) {
+//
+//        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+//        name[0]++;
+//
+//        m_players.push_back(newPlayer);
+//
+//        std::cout << "Player " << 1 << " initialized at ("
+//            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
+//    }*/
+//    for (int i = 0; i < numPlayers; ++i) {
+//        const auto& spawnPoint = spawnPoints[i];
+//        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
+//        name[0]++;
+//        map.GetPlayers().push_back(newPlayer);
+//
+//        std::cout << "Player " << i + 1 << " initialized at ("
+//            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
+//    }
+//    return map.GetPlayers();
+//}
 
-        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
-        name[0]++;
+Player& GameLogic::GetPlayer(int index) {
+    return map.GetPlayer(index); 
+}
 
-        m_players.push_back(newPlayer);
-
-        std::cout << "Player " << 1 << " initialized at ("
-            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
-    }*/
-    for (int i = 0; i < numPlayers; ++i) {
-        const auto& spawnPoint = spawnPoints[i];
-        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
-        name[0]++;
-        m_players.push_back(newPlayer);
-
-        std::cout << "Player " << i + 1 << " initialized at ("
-            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
-    }
-    return m_players;
+const Player& GameLogic::GetPlayer(int index) const {
+    return map.GetPlayer(index); 
+}
+void GameLogic::MovePlayer(int index, Direction direction) {
+    map.GetPlayer(index).move(direction); 
 }
 
 void GameLogic::initializeScores()
 {
-    for (Player player : GetPlayers())
+    for (Player player : map.GetPlayers())
     {
         player.setInitialScore();
     }
@@ -77,7 +92,7 @@ void GameLogic::ApplyDamage(Bomb bomb)
         int x = coord.first;
         int y = coord.second;
 
-        for (Player player : GetPlayers())
+        for (Player player : map.GetPlayers())
         {
             int playerXCoord = player.GetPosition().i;
             int playerYCoord = player.GetPosition().j;
@@ -110,7 +125,7 @@ void GameLogic::ExplodeBomb(Bomb bomb)
 
 void GameLogic::addPlayer(Player player)
 {
-    m_players.push_back(player);
+    map.GetPlayers().push_back(player);
 }
 
 //Bullet
@@ -167,18 +182,15 @@ void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
 
 }
 
-std::vector<Player>& GameLogic::GetPlayers()
-{
-    return m_players;
-}
+
 
 void GameLogic::removePlayer(Player player)
 {
-    for (auto it = m_players.begin(); it != m_players.end();)
+    for (auto it = map.GetPlayers().begin(); it != map.GetPlayers().end();)
     {
         if (*it == player)
         {
-            it = m_players.erase(it);
+            it = map.GetPlayers().erase(it);
         }
         else
         {
@@ -196,6 +208,10 @@ bool GameLogic::isRunning() const
 {
     return gameRunning;
 }
+int GameLogic::GetPlayerCount() const {
+    return map.GetPlayers().size();
+}
+
 
 //void GameLogic::movePlayer(Player player, Direction direction)
 //{

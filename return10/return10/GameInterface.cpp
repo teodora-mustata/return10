@@ -14,47 +14,38 @@ void GameInterface::mainLoop() {
     auto lastTime = std::chrono::steady_clock::now();
 
     while (gameLogic.isRunning()) {
-        // Capture the current time
         auto currentTime = std::chrono::steady_clock::now();
         auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
         lastTime = currentTime;
 
-        // Handle inputs
         handleInput();
 
+        // Debug player position
+        const Player& player = gameLogic.GetPlayer(0);
+        //player.printPosition();
 
-        // Render the game map
-        //std::cout << gameLogic.GetMap()<<"\n";
-
-
-        // Debugging player position (can be toggled)
-       
-        //auto playerPos = gameLogic.GetPlayers()[0].GetPosition();
-        //std::cout << "Player Position: (" << playerPos.i << ", " << playerPos.j << ")\n";
-        gameLogic.GetPlayers()[0].printPosition();
-
-        // Throttle loop to prevent excessive CPU usage
         std::this_thread::sleep_for(std::chrono::milliseconds(80)); // ~60 FPS
     }
 }
 
+
 void GameInterface::handleInput() {
     if (GetKeyState('A') & 0x8000) {
-        gameLogic.GetPlayers()[0].move(Direction::LEFT);
+        gameLogic.GetPlayer(0).move(Direction::LEFT);
     }
     if (GetKeyState('D') & 0x8000) {
-        gameLogic.GetPlayers()[0].move(Direction::RIGHT);
+        gameLogic.GetPlayer(0).move(Direction::RIGHT);
     }
     if (GetKeyState('W') & 0x8000) {
-        gameLogic.GetPlayers()[0].move(Direction::UP);
+        gameLogic.GetPlayer(0).move(Direction::UP);
     }
     if (GetKeyState('S') & 0x8000) {
-        gameLogic.GetPlayers()[0].move(Direction::DOWN);
+        gameLogic.GetPlayer(0).move(Direction::DOWN);
     }
 }
 
 
-GameInterface::GameInterface(GameLogic& gl):gameLogic(gl)
+GameInterface::GameInterface(GameLogic& gl) :gameLogic(gl)
 {
 }
 
@@ -115,7 +106,7 @@ GameLogic& GameInterface::GetGameLogic()
 
 void GameInterface::handlePlayerMove(Player& player) {
     char dir;
-    std::cout << "Enter direction (W / A / S / D): "<<std::endl;
+    std::cout << "Enter direction (W / A / S / D): " << std::endl;
     std::cin >> dir;
 
     Direction direction;
@@ -162,7 +153,4 @@ void GameInterface::handlePlayerShoot(Player& player) {
     }
     player.shoot(direction, 0.25);
 }
-
-
-
 

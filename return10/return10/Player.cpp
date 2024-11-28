@@ -33,7 +33,7 @@ void Player::move(Direction direction)
 	}
 }
 
-void Player::printPosition() {
+void Player::printPosition() const {
 	std::cout << m_position.i << " " << m_position.j << "\n";
 }
 

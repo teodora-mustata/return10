@@ -20,6 +20,8 @@ private:
 	std::vector<Bomb> m_bombs;
 	std::vector<std::pair<int, int>> m_spawnPoints;
 
+	std::vector<Player> m_players;       // Players moved from GameLogic
+	std::vector<Bullet> firedBullets;
 	// game config
 	static const int max_players = 4;
 	const float destructible_wall_chance = 0.4f;
@@ -37,6 +39,13 @@ public:
 	//std::pair<int, int> GetRandomSpawnPoint();
 	std::vector<std::pair<int, int>> GetSpawnPoints();
 	CellType& GetCellType(int x, int y); // pentru a modifica celula
+	Player& GetPlayer(int index);
+	const Player& GetPlayer(int index) const;
+	std::vector<Player> initializePlayers(int numPlayers);
+	std::vector<Player>& GetPlayers();
+	void SetPlayers(const std::vector<Player>& players);
+	std::vector<Bullet>& GetFiredBullets();
+	void SetFiredBullets(const std::vector<Bullet>& bullets);
 	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);

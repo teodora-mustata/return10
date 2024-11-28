@@ -8,11 +8,12 @@ class Player
 {
 private:
 public:
+	
 	Player(std::string name, int startX, int startY);
 	//Player();
 	~Player();
 	void move(Direction direction);
-	void printPosition();
+	void printPosition() const;
 
 	bool operator==(const Player& other);
 	void shoot(Direction direction, float bulletSpeed);

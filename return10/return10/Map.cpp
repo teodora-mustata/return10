@@ -15,7 +15,7 @@ std::vector<std::vector<CellType>> Map::GetBoard()
 
 void Map::ResizeMap()
 {
-	std::random_device rd; 
+	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<> dist(40, 60); // map dimensions will be between 40 and 60
 
@@ -41,7 +41,7 @@ void Map::GenerateSpawnPoints()
 
 	for (const auto& point : temp) {
 		m_spawnPoints.push_back(point);
-		std::cout << point.first << " " << point.second<<"\n";
+		std::cout << point.first << " " << point.second << "\n";
 	}
 }
 
@@ -50,13 +50,13 @@ void Map::GenerateWalls()
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(0.0f, 1.0f);
-	for (int i = 0; i < m_height; ++i) 
+	for (int i = 0; i < m_height; ++i)
 	{
-		for (int j = 0; j < m_width; ++j) 
+		for (int j = 0; j < m_width; ++j)
 		{
 			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
 				continue;
-				}
+			}
 
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
@@ -65,7 +65,7 @@ void Map::GenerateWalls()
 			else if (random_value < destructible_wall_chance + indestructible_wall_chance) {
 				m_board[i][j] = Wall(i, j, false);
 			}
-			
+
 		}
 	}
 }
@@ -131,6 +131,56 @@ const CellType& Map::GetCellType(int x, int y) const
 {
 	return m_board[x][y];
 }
+std::vector<Player>& Map::GetPlayers() {
+	return m_players;
+}
+Player& Map::GetPlayer(int index) {
+	if (index < 0 || index >= m_players.size()) {
+		throw std::out_of_range("Invalid player index");
+	}
+	return m_players[index];
+}
+
+const Player& Map::GetPlayer(int index) const {
+	if (index < 0 || index >= m_players.size()) {
+		throw std::out_of_range("Invalid player index");
+	}
+	return m_players[index];
+}
+
+
+std::vector<Player> Map::initializePlayers(int numPlayers) {
+	m_players.clear(); // make list empty
+	std::string name = "Player1"; 
+
+	auto spawnPoints = GetSpawnPoints();
+	if (numPlayers > spawnPoints.size()) {
+		throw std::runtime_error("Not enough spawn points for the number of players.");
+	}
+
+	for (int i = 0; i < numPlayers; ++i) {
+		const auto& spawnPoint = spawnPoints[i];
+		m_players.emplace_back(name, spawnPoint.first, spawnPoint.second);
+		name[6]++; // increment player number
+
+		std::cout << "Player " << i + 1 << " initialized at ("
+			<< spawnPoint.first << ", " << spawnPoint.second << ")\n";
+	}
+
+	return m_players;
+}
+
+void Map::SetPlayers(const std::vector<Player>& players) {
+	m_players = players;
+}
+
+std::vector<Bullet>& Map::GetFiredBullets() {
+	return firedBullets;
+}
+
+void Map::SetFiredBullets(const std::vector<Bullet>& bullets) {
+	firedBullets = bullets;
+}
 
 void Map::SetCellType(int x, int y, CellType type)
 {
@@ -139,7 +189,7 @@ void Map::SetCellType(int x, int y, CellType type)
 
 void Map::BreakWall(int x, int y)
 {
-	if(std::holds_alternative<Wall>(m_board[x][y]))
+	if (std::holds_alternative<Wall>(m_board[x][y]))
 	{
 		// if it contains a bomb -> explode it
 		m_board[x][y] = std::monostate{};

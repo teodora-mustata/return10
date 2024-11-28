@@ -10,22 +10,23 @@ public:
     /*void gameStart();*/
 private:
     Map& map;
-    std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
 
 public:
     GameLogic(Map& map);
-
-    std::vector<Player> initializePlayers(int numPlayers);
+    Player& GetPlayer(int index);               
+    const Player& GetPlayer(int index) const;
+    void initializePlayers(int numPlayers);
     void initializeScores();
+    int GetPlayerCount() const;
+    void MovePlayer(int index, Direction direction);
     void startTimer();
     void showStartMenu();
     void ApplyDamage(Bomb bomb);
     void ExplodeBomb(Bomb bomb);
     void addPlayer(Player player);
     void updateBullets(Map& map, Player& target, Gun& bullets);
-    std::vector<Player>& GetPlayers();
     void removePlayer(Player player);
     //void movePlayer(Player player, Direction direction);
     const Map& GetMap() const;
