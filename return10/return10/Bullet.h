@@ -6,12 +6,6 @@
 
 class Bullet
 {
-private:
-    int m_x;
-    int m_y;
-    Direction m_direction;
-    bool m_active;
-    float m_speed;
 public:
     Bullet(int startX, int startY, Direction dir, float bulletSpeed);
     void Move();
@@ -27,6 +21,13 @@ public:
     void SetDirection(Direction direction);
     void SetSpeed(float speed);
     void SetActive(bool active);
+
+private:
+    int m_x;
+    int m_y;
+    Direction m_direction;
+    bool m_active;
+    float m_speed;
 };
 
 

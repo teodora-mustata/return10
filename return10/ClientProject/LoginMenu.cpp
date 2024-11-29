@@ -2,16 +2,15 @@
 
 void LoginMenu::display()
 {
-    
     while (true) {
-        int choice;
+        std::string choice;
         std::cout << "==== Login Menu ====\n";
         std::cout << "1. Login\n";
         std::cout << "2. Sign Up\n";
         std::cout << "Please select an option: ";
-        std::cin >> choice;
+        std::getline(std::cin, choice);
 
-        if (choice == 1) {
+        if (choice == "1") {
             std::string username, password;
             std::cout << "Enter your username: ";
             std::cin >> username;
@@ -26,16 +25,16 @@ void LoginMenu::display()
                 showErrorMessage("The username and password don't match. Please try again.");
             }
         }
-        else if (choice == 2) {
+        else if (choice == "2") {
             std::string username, password, passwordVerify;
             std::cout << "Choose a username: ";
             std::cin >> username;
-            std::cout << "Choose a password: ";
+            std::cout << "Choose a password! Make sure it has at least one: uppercase letter, number, special caracter, and that it has over 8 characters: ";
             std::cin >> password;
             std::cout << "Reenter your password: ";
             std::cin >> passwordVerify;
 
-            if (password == passwordVerify && handleSignUp(username, password)) {
+            if (password == passwordVerify && handleSignUp(username, password) && passwordValidation(password)) {
                 std::cout << "Account created successfully! Proceeding to log in...\n";
                 handleLogin(username, password);
                 break;
@@ -43,7 +42,12 @@ void LoginMenu::display()
             else if (password != passwordVerify) {
                 showErrorMessage("The passwords don't match! Please try again.\n");
             }
-            else {
+            else if (passwordValidation(password) == false)
+            {
+                showErrorMessage("Password is not strong enough! Please try again.\n");
+            }
+            else 
+            {
                 showErrorMessage("Sign Up failed. Please try again.\n");
             }
         }
@@ -51,6 +55,13 @@ void LoginMenu::display()
             std::cout << "Not a valid option! Please try again.\n";
         }
     }
+}
+
+bool LoginMenu::passwordValidation(const std::string& password)
+{
+    std::regex passwordRegex("^(?=.*[A-Z])(?=.*[0-9])(?=.*!@#$%^&*).{8,}$");
+    // cel putin o litera mare, cel putin o cifra, cel putin un caracter special, 8+ caractere total
+    return std::regex_match(password, passwordRegex);
 }
 
 bool LoginMenu::handleLogin(const std::string& username, const std::string& password) {

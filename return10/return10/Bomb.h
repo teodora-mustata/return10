@@ -5,11 +5,6 @@
 
 class Bomb
 {
-private:
-	int m_posX, m_posY;
-	bool m_isActive;
-	static const int m_damage = 1;
-	static const int m_radius = 1;
 public:
 	Bomb(int x, int y);
 	~Bomb() = default;
@@ -19,5 +14,10 @@ public:
 	std::list<std::pair<int,int>> CalculateEffectArea();
 	void Deactivate();
 	void Activate();
+private:
+	int m_posX, m_posY;
+	bool m_isActive;
+	static const int m_damage = 1;
+	static const int m_radius = 1;
 };
 

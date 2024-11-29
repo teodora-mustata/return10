@@ -219,6 +219,8 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         });
 
     // Route pentru signup
+    // TO DO: check if password meets regex criteria in server too
+
     CROW_ROUTE(app, "/signup").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
 

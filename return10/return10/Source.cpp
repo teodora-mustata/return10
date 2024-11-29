@@ -18,7 +18,7 @@ int main()
 	GameStorage storage;
 	if (!storage.Initialize())
 	{
-		std::cout << "Faild to initialize the database!";
+		std::cout << "Failed to initialize the database!";
 		return -1;
 	}
 	crow::SimpleApp app;

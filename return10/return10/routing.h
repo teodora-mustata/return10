@@ -13,9 +13,6 @@ public:
 	void GetTheBestPlayersByCrowns();
 	void GetTheBestPlayersByPoints();
 private:
-	//crow::response AddProductToBasketRoute(ProductStorage& storage, const crow::request& req, int productId)const;
-
-private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
 };

@@ -59,9 +59,3 @@ int main() {
     return 0;
 
 }
-
-
-//vizualizare a jocului
-//preia input de user si trimite la server
-
-//in server avem toata logica jocului

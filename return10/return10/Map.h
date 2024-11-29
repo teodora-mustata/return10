@@ -11,20 +11,6 @@
 
 class Map
 {
-private:
-	// dimensions
-	int m_height, m_width;
-
-	// game board
-	std::vector<std::vector<CellType>> m_board;
-	std::vector<Bomb> m_bombs;
-	std::vector<std::pair<int, int>> m_spawnPoints;
-
-	// game config
-	static const int max_players = 4;
-	const float destructible_wall_chance = 0.4f;
-	const float indestructible_wall_chance = 0.1f;
-	static const int bombs_count = 3;
 public:
 	Map();
 	~Map() = default;
@@ -43,8 +29,20 @@ public:
 	//void PrintMap() const; commented out because i overloaded the << operator
 	std::pair<int, int> GetDimensions();
 
-	//void addPlayer(const std::string& playerName);
-	/*void removePlayer(const Player& player, std::vector<Player>& players);
-	void movePlayer(const std::string& playerName, Direction direction, std::vector<Player>& players);*/
+private:
+	// dimensions
+	int m_height, m_width;
+
+	// game board
+	std::vector<std::vector<CellType>> m_board;
+	std::vector<Bomb> m_bombs;
+	std::vector<std::pair<int, int>> m_spawnPoints;
+
+	// game config
+	static const int max_players = 4;
+	const float destructible_wall_chance = 0.4f;
+	const float indestructible_wall_chance = 0.1f;
+	static const int bombs_count = 3;
+
 };
 

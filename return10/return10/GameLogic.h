@@ -8,12 +8,6 @@
 class GameLogic {
 public:
     /*void gameStart();*/
-private:
-    Map& map;
-    std::vector<Player> m_players;
-    std::chrono::steady_clock::time_point startTime;
-    bool gameRunning = true;
-
 public:
     GameLogic(Map& map);
 
@@ -33,6 +27,12 @@ public:
     //Bullet
     bool checkPlayerCollision(Player& target, Bullet& bullet);
     bool checkWallCollision(Map& map, Bullet& bullet);
+
+private:
+    Map& map;
+    std::vector<Player> m_players;
+    std::chrono::steady_clock::time_point startTime;
+    bool gameRunning = true;
 
     //void gameLoop() {
     //    while (gameRunning) {

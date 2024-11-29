@@ -7,7 +7,6 @@
 
 class Player
 {
-private:
 public:
 	Player(std::string name, int startX, int startY);
 	//Player();

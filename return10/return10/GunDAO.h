@@ -1,17 +1,18 @@
 #pragma once
 
-class GunDAO {
+class GunDAO 
+{
+public:
+    int GetId() const;
+    double GetFireRate() const;
+    double GetBulletSpeed() const;
+
+    void SetId(int id);
+    void SetFireRate(double firingRate);
+    void SetBulletSpeed(double bulletSpeed);
+
 private:
     int m_id;
     float m_firingRate;
     float m_bulletSpeed;
-public:
-    int GetId() const;
-    void SetId(int id);
-
-    double GetFireRate() const;
-    void SetFireRate(double firingRate);
-
-    double GetBulletSpeed() const;
-    void SetBulletSpeed(double bulletSpeed);
 };

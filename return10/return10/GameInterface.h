@@ -11,11 +11,6 @@
 #include "Coordinate.h"
 
 class GameInterface {
-private:
-    //Map m_gameMap;
-    std::vector<Player> m_players;
-    Login m_loginManager; 
-    GameLogic& gameLogic; // referință la GameLogic pentru a interacționa cu jocul
 public:
     GameInterface(GameLogic& gl); // jerry added ref here for debug assertion error 
     void startGame();
@@ -27,4 +22,9 @@ public:
     void login();
     //const Map& GetMap() const;
     GameLogic& GetGameLogic(); //put reference here to solve the debug assertion failure error
+private:
+    //Map m_gameMap;
+    std::vector<Player> m_players;
+    Login m_loginManager;
+    GameLogic& gameLogic; // referință la GameLogic pentru a interacționa cu jocul
 };
