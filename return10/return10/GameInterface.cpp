@@ -14,45 +14,42 @@ void GameInterface::mainLoop() {
     auto lastTime = std::chrono::steady_clock::now();
 
     while (gameLogic.isRunning()) {
+        // Capture the current time
         auto currentTime = std::chrono::steady_clock::now();
         auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
         lastTime = currentTime;
 
+        // Handle inputs
         handleInput();
 
-        // Debug player position
-        const Player& player = gameLogic.GetPlayer(0);
-        //player.printPosition();
 
+        // Render the game map
+        //std::cout << gameLogic.GetMap()<<"\n";
+
+
+        // Debugging player position (can be toggled)
+
+        //auto playerPos = gameLogic.GetPlayers()[0].GetPosition();
+        //std::cout << "Player Position: (" << playerPos.i << ", " << playerPos.j << ")\n";
+        gameLogic.GetPlayers()[0].printPosition();
+
+        // Throttle loop to prevent excessive CPU usage
         std::this_thread::sleep_for(std::chrono::milliseconds(80)); // ~60 FPS
     }
 }
 
-
 void GameInterface::handleInput() {
-    bool movement = false;
-
     if (GetKeyState('A') & 0x8000) {
-        gameLogic.GetPlayer(0).move(Direction::LEFT);
-        movement = true;
+        gameLogic.GetPlayers()[0].move(Direction::LEFT);
     }
     if (GetKeyState('D') & 0x8000) {
-        gameLogic.GetPlayer(0).move(Direction::RIGHT);
-        movement = true;
+        gameLogic.GetPlayers()[0].move(Direction::RIGHT);
     }
     if (GetKeyState('W') & 0x8000) {
-        gameLogic.GetPlayer(0).move(Direction::UP);
-        movement = true;
+        gameLogic.GetPlayers()[0].move(Direction::UP);
     }
     if (GetKeyState('S') & 0x8000) {
-        gameLogic.GetPlayer(0).move(Direction::DOWN);
-        movement = true;
-    }
-
-    if (movement) {
-        gameLogic.GetMap().UpdatePlayerPositionsOnMap();
-        system("cls");
-        std::cout << gameLogic.GetMap();
+        gameLogic.GetPlayers()[0].move(Direction::DOWN);
     }
 }
 
@@ -165,4 +162,7 @@ void GameInterface::handlePlayerShoot(Player& player) {
     }
     player.shoot(direction, 0.25);
 }
+
+
+
 

@@ -1,6 +1,6 @@
 #pragma once
 #include<string>
-#include"Direction.h"
+#include "Direction.h"
 #include "Gun.h"
 #include "Coordinate.h"
 
@@ -8,12 +8,11 @@ class Player
 {
 private:
 public:
-	Player(); //temporalily trying to fix a celltype problem by making a default constructor
 	Player(std::string name, int startX, int startY);
 	//Player();
 	~Player();
 	void move(Direction direction);
-	void printPosition() const;
+	void printPosition();
 
 	bool operator==(const Player& other);
 	void shoot(Direction direction, float bulletSpeed);
@@ -35,7 +34,7 @@ public:
 	bool operator==(const Player& other) const;
 
 private:
-	
+
 	int m_score;
 	int m_lives;
 	int m_crowns;

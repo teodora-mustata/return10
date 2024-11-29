@@ -1,14 +1,12 @@
 
 #include "Player.h"
-//temporalily trying to fix a celltype problem by making a default constructor
-Player::Player() : m_name(""), m_score(0), m_lives(3), m_crowns(0), m_initial_position{ 0, 0 }, m_position{ 0, 0 } {}
 
 Player::Player(std::string name, int startX, int startY) :
 	m_name(name),
 	m_score(0),
 	m_lives(3),
 	m_crowns(0),
-	m_initial_position{startX, startY},
+	m_initial_position{ startX, startY },
 	m_position{ startX, startY } {}
 
 
@@ -18,7 +16,6 @@ Player::~Player()
 
 void Player::move(Direction direction)
 {
-	
 	switch (direction)
 	{
 	case Direction::UP:
@@ -34,16 +31,15 @@ void Player::move(Direction direction)
 		m_position.j += 1;
 		break;
 	}
-
 }
 
-void Player::printPosition() const {
+void Player::printPosition() {
 	std::cout << m_position.i << " " << m_position.j << "\n";
 }
 
 bool Player::operator==(const Player& other)
 {
-	return m_name==other.m_name;
+	return m_name == other.m_name;
 }
 
 void Player::shoot(Direction direction, float bulletSpeed)

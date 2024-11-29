@@ -131,55 +131,6 @@ const CellType& Map::GetCellType(int x, int y) const
 {
 	return m_board[x][y];
 }
-std::vector<Player>& Map::GetPlayers() {
-	return m_players;
-}
-Player& Map::GetPlayer(int index) {
-	if (index < 0 || index >= m_players.size()) {
-		throw std::out_of_range("Invalid player index");
-	}
-	return m_players[index];
-}
-
-const Player& Map::GetPlayer(int index) const {
-	if (index < 0 || index >= m_players.size()) {
-		throw std::out_of_range("Invalid player index");
-	}
-	return m_players[index];
-}
-
-
-std::vector<Player> Map::initializePlayers(int numPlayers) {
-	m_players.clear(); // make list empty
-	std::string name = "Player1"; 
-
-	auto spawnPoints = GetSpawnPoints();
-	if (numPlayers > spawnPoints.size()) {
-		throw std::runtime_error("Not enough spawn points for the number of players.");
-	}
-
-	for (int i = 0; i < numPlayers; ++i) {
-		const auto& spawnPoint = spawnPoints[i];
-		m_players.emplace_back(name, spawnPoint.first, spawnPoint.second);
-		name[6]++; // increment player number
-
-		std::cout << "Player " << i + 1 << " initialized at ("	<< spawnPoint.first << ", " << spawnPoint.second << ")\n";
-	}
-
-	return m_players;
-}
-
-void Map::SetPlayers(const std::vector<Player>& players) {
-	m_players = players;
-}
-
-std::vector<Bullet>& Map::GetFiredBullets() {
-	return firedBullets;
-}
-
-void Map::SetFiredBullets(const std::vector<Bullet>& bullets) {
-	firedBullets = bullets;
-}
 
 void Map::SetCellType(int x, int y, CellType type)
 {
@@ -236,26 +187,6 @@ std::pair<int, int> Map::GetDimensions()
 	return dim;
 }
 
-void Map::UpdatePlayerPositionsOnMap() {
-	// clear old pos
-	for (int i = 0; i < m_height; ++i) {
-		for (int j = 0; j < m_width; ++j) {
-			if (std::holds_alternative<Player*>(m_board[i][j])) {
-				m_board[i][j] = std::monostate{}; // Clear the cell
-			}
-		}
-	}
-
-	// place in new pos after player movement
-	for (auto& player : m_players) {
-		Coordinate pos = player.GetPosition();
-
-		// inbounds
-		if (pos.i >= 0 && pos.i < m_height && pos.j >= 0 && pos.j < m_width) {
-			m_board[pos.i][pos.j] = &player; // place player pointer in the cell, should put player in a variant type of Player but CellType problem now
-		}
-	}
-}
 std::ostream& operator<<(std::ostream& os, const Map& map) {
 	const auto& board = map.m_board;
 	const auto& spawnPoints = map.m_spawnPoints;
@@ -283,9 +214,6 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
 						else {
 							os << "\033[34mI \033[0m"; // Indestructible wall = blue
 						}
-					}
-					else if constexpr (std::is_same_v<T, Player*>) {
-						os << "\033[35mP \033[0m"; // Player = magenta
 					}
 					}, board[i][j]);
 			}

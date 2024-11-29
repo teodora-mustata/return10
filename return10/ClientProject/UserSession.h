@@ -18,3 +18,4 @@ private:
     UserSession() : currentUserId(-1) {}
     int currentUserId;
 };
+

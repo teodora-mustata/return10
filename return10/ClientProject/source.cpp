@@ -44,7 +44,6 @@ int main() {
 
         LoginMenu loginMenu;
         loginMenu.display();
-
         MainMenu mainMenu;
         mainMenu.display();  
 
@@ -60,3 +59,9 @@ int main() {
     return 0;
 
 }
+
+
+//vizualizare a jocului
+//preia input de user si trimite la server
+
+//in server avem toata logica jocului
