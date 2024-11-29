@@ -9,6 +9,8 @@
 #include <sqlite_orm/sqlite_orm.h>
 #include "BattleCityDatabase.h"
 #include "routing.h"
+#include "Bullet.h"
+#include "Gun.h"
 
 int main()
 {

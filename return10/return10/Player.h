@@ -1,8 +1,9 @@
 #pragma once
-#include<string>
+#include <string>
 #include "Direction.h"
 #include "Gun.h"
 #include "Coordinate.h"
+#include <iostream>
 
 class Player
 {
@@ -24,6 +25,7 @@ public:
 	int GetLives()const;
 	Coordinate GetPosition() const;
 	Gun getGun() const;
+
 	//Updates for player
 	void addScore(int acumulated_points);
 	void addCrowns(int acumulated_points);
@@ -34,7 +36,6 @@ public:
 	bool operator==(const Player& other) const;
 
 private:
-
 	int m_score;
 	int m_lives;
 	int m_crowns;
@@ -42,7 +43,5 @@ private:
 	Coordinate m_position;
 	Coordinate m_initial_position;
 	Gun m_gun;
-
-
 };
 

@@ -2,8 +2,6 @@
 #include <iostream>
 #include <list>
 #include <variant>
-class Wall;
-class Map;
 
 class Bomb
 {

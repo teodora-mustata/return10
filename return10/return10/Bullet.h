@@ -2,7 +2,7 @@
 #include "Direction.h"
 #include <chrono>
 #include "DirectionUtils.h"
-#include "CellType.h"
+//#include "CellType.h"
 
 class Bullet
 {
