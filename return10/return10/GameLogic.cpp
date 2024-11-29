@@ -1,4 +1,5 @@
 ﻿#include "GameLogic.h"
+#include <variant>
 
 //void GameLogic::gameStart()
 //{
@@ -106,7 +107,7 @@ void GameLogic::ApplyDamage(Bomb bomb)
         auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
         {
-            map.SetCellType(x, y, std::monostate{});
+            map.SetCellType(x, y, CellType(std::monostate{}));
         }
     }
 }
@@ -199,7 +200,7 @@ void GameLogic::removePlayer(Player player)
     }
 }
 
-const Map& GameLogic::GetMap() const
+ Map& GameLogic::GetMap()
 {
     return map;
 }

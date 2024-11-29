@@ -8,7 +8,7 @@ class Player
 {
 private:
 public:
-	
+	Player(); //temporalily trying to fix a celltype problem by making a default constructor
 	Player(std::string name, int startX, int startY);
 	//Player();
 	~Player();

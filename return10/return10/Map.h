@@ -49,6 +49,7 @@ public:
 	const CellType& GetCellType(int x, int y) const; // read only
 	void SetCellType(int x, int y, CellType type);
 	void BreakWall(int x, int y);
+	void UpdatePlayerPositionsOnMap();
 	//void PrintMap() const; commented out because i overloaded the << operator
 	std::pair<int, int> GetDimensions();
 

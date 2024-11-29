@@ -30,17 +30,29 @@ void GameInterface::mainLoop() {
 
 
 void GameInterface::handleInput() {
+    bool movement = false;
+
     if (GetKeyState('A') & 0x8000) {
         gameLogic.GetPlayer(0).move(Direction::LEFT);
+        movement = true;
     }
     if (GetKeyState('D') & 0x8000) {
         gameLogic.GetPlayer(0).move(Direction::RIGHT);
+        movement = true;
     }
     if (GetKeyState('W') & 0x8000) {
         gameLogic.GetPlayer(0).move(Direction::UP);
+        movement = true;
     }
     if (GetKeyState('S') & 0x8000) {
         gameLogic.GetPlayer(0).move(Direction::DOWN);
+        movement = true;
+    }
+
+    if (movement) {
+        gameLogic.GetMap().UpdatePlayerPositionsOnMap();
+        system("cls");
+        std::cout << gameLogic.GetMap();
     }
 }
 
