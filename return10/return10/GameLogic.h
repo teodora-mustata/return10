@@ -33,17 +33,5 @@ private:
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
-
-    //void gameLoop() {
-    //    while (gameRunning) {
-    //        std::this_thread::sleep_for(std::chrono::seconds(1));
-    //        std::cout << "Game is running..." << std::endl;
-
-    //        if (score >= 100) {
-    //            gameRunning = false;
-    //            std::cout << "Game Over! You won!" << std::endl;
-    //        }
-    //    }
-    //}
 };
 

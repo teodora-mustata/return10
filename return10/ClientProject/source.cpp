@@ -38,15 +38,21 @@ int main() {
     //    std::cerr << "Failed to fetch map information. Status code: " << response.status_code << "\n";
     //    return 1;
     //}
+
     std::cout << "Client" << std::endl;
     try {
         std::cout << "Welcome to Battle City!\n";
 
         LoginMenu loginMenu;
         loginMenu.display();
-        MainMenu mainMenu;
-        mainMenu.display();  
-
+        if (UserSession::getInstance().getUserId() != -1) 
+        {
+            MainMenu mainMenu;
+            mainMenu.display();
+        }
+        else {
+            std::cout << "You need to log in to proceed!\n";
+        }
 
     }
     catch (const std::exception& e) {

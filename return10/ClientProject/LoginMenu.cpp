@@ -93,8 +93,6 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
             UserSession::getInstance().setUserId(userId);
         }
 
-        
-
         if (responseJson.has("points") && responseJson.has("score")) {
             int points = responseJson["points"].i();
             int score = responseJson["score"].i();

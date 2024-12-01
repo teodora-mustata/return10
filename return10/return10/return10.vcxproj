@@ -132,7 +132,6 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Coordinate.cpp" />
-    <ClCompile Include="GameInterface.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="GunDAO.cpp" />
@@ -154,7 +153,6 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="DirectionUtils.h" />
-    <ClInclude Include="GameInterface.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="GunDAO.h" />

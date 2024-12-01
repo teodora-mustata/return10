@@ -4,27 +4,18 @@
 
 #include "Map.h"
 #include "Player.h"
-#include "Direction.h"
-#include "Login.h"
-#include "Shop.h"
-#include "GameLogic.h"
-#include "Coordinate.h"
 
 class GameInterface {
 public:
-    GameInterface(GameLogic& gl); // jerry added ref here for debug assertion error 
+    GameInterface(Player user);
     void startGame();
     void mainLoop();
-    void handleInput();
-    void handlePlayerMove(Player& player);
-    void handlePlayerShoot(Player& player);
+    void handleInput(); // se ocupa de comenzile playerului
+    void renderGame(); // afiseaza mapa
+    // void sendCommandToServer()
     void displayStatus();
-    void login();
-    //const Map& GetMap() const;
-    GameLogic& GetGameLogic(); //put reference here to solve the debug assertion failure error
 private:
     //Map m_gameMap;
-    std::vector<Player> m_players;
-    Login m_loginManager;
-    GameLogic& gameLogic; // referință la GameLogic pentru a interacționa cu jocul
+    std::vector<Player> m_enemyPlayers;
+    Player m_user;
 };

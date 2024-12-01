@@ -1,4 +1,3 @@
-
 #include "MainMenu.h"
 
 void MainMenu::display() {
@@ -16,6 +15,7 @@ void MainMenu::display() {
 
         if (choice == 1) {
             std::cout << "Starting game...\n";
+            GameInterface gameInterface;
         }
         else if (choice == 2) {
             ShopMenu shopMenu;
