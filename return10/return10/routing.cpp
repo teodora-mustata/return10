@@ -113,6 +113,17 @@ void Routing::GetTheBestPlayersByPoints() {
             });
 }
 
+PlayerDAO Routing::getPlayerById(int userId)
+{
+    auto players = m_storage.GetPlayersDAO();
+    for (const auto& player : players) {
+        if (player.GetId() == userId) {
+            return player;
+        }
+    }
+    throw std::runtime_error("Player not found with ID: " + std::to_string(userId));
+}
+
 
 void Routing::GetTheBestPlayersByCrowns() {
     CROW_ROUTE(m_app, "/leaderboard/<int>")
@@ -219,7 +230,6 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         });
 
     // Route pentru signup
-    // TO DO: check if password meets regex criteria in server too
 
     CROW_ROUTE(app, "/signup").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
@@ -231,6 +241,12 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         // Obține numele utilizatorului și parola
         std::string username = body["username"].s();
         std::string password = body["password"].s();
+
+        // Verificăm dacă parola îndeplinește criteriile regex
+        std::regex passwordRegex("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$");
+        if (!std::regex_match(password, passwordRegex)) {
+            return crow::response(400, "Password does not meet complexity requirements");
+        }
 
         // Verificăm dacă utilizatorul există deja în baza de date
         auto players = m_storage.GetPlayersDAO();
