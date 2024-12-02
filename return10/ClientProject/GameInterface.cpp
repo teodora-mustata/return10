@@ -92,55 +92,66 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
 }
 
 
-GameInterface::GameInterface(Player user) : m_user(user)
-{}
+void GameInterface::addPlayerToGame(int playerID)
+{
+    if (m_players.size() < 4)
+    {
+        m_players.push_back(playerID);
+        std::cout << "Player with ID " << playerID << " joined!\n";
+        std::cout << "There are currently " << m_players.size() << "/4 players in the game.\n";
+    }
+    else std::cout << "Lobby is full! Only 4 players allowed.\n"
+}
 
 void GameInterface::startGame() {
-    // ID-ul player-ului curent
-    int playerId = UserSession::getInstance().getUserId();
+    if (m_players.size() == 2) // placeholder ; change to 4 later
+    {
+        // ID-ul player-ului curent
+        int playerId = UserSession::getInstance().getUserId();
 
-    while (true) {
-        // Trimite cererea GET pentru a obține starea jocului
-        cpr::Response r = cpr::Get(cpr::Url{ "http://localhost:18080/get_game_state" });
+        while (true) {
+            // Trimite cererea GET pentru a obține starea jocului
+            cpr::Response r = cpr::Get(cpr::Url{ "http://localhost:18080/get_game_state" });
 
-        // Verifică dacă cererea a avut succes (status_code 200)
-        if (r.status_code == 200) {
-            // Parsează răspunsul JSON
-            crow::json::rvalue gameData = crow::json::load(r.text);
+            // Verifică dacă cererea a avut succes (status_code 200)
+            if (r.status_code == 200) {
+                // Parsează răspunsul JSON
+                crow::json::rvalue gameData = crow::json::load(r.text);
 
-            // Verifică dacă datele conțin informațiile necesare
-            if (gameData.has("board") && gameData.has("players")) {
-                // Afișează harta și procesăm inputurile
-                renderGame(gameData, playerId);  // Afișează harta curentă
-                handleInput();  // Gestionează inputurile utilizatorului
-                displayStatus();
+                // Verifică dacă datele conțin informațiile necesare
+                if (gameData.has("board") && gameData.has("players")) {
+                    // Afișează harta și procesăm inputurile
+                    renderGame(gameData, playerId);  // Afișează harta curentă
+                    handleInput();  // Gestionează inputurile utilizatorului
+                    //displayStatus();
+                }
+                else {
+                    std::cerr << "Game data is missing necessary fields!" << std::endl;
+                    break;  // Ieșim din buclă dacă datele sunt incomplete
+                }
             }
             else {
-                std::cerr << "Game data is missing necessary fields!" << std::endl;
-                break;  // Ieșim din buclă dacă datele sunt incomplete
+                // Dacă cererea nu a avut succes, afișează un mesaj de eroare
+                std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
+                break;
             }
-        }
-        else {
-            // Dacă cererea nu a avut succes, afișează un mesaj de eroare
-            std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
-            break;
-        }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        std::cout << "\033[2J\033[1;1H";  // Comandă ANSI pentru curățarea terminalului
+            std::cout << "\033[2J\033[1;1H";  // Comandă ANSI pentru curățarea terminalului
+        }
     }
 }
 
 
-void GameInterface::displayStatus() {
-    
-    std::cout << m_user.GetName() << ": Lives=" << m_user.GetLives()
-        << ", Score=" << m_user.GetScore()
-        << ", Position=(" << m_user.GetPosition().i
-        << ", " << m_user.GetPosition().j << ")\n";
-  
-}
+//void GameInterface::displayStatus() {
+//    
+//    std::cout << m_user.GetName() << ": Lives=" << m_user.GetLives()
+//        << ", Score=" << m_user.GetScore()
+//        << ", Position=(" << m_user.GetPosition().i
+//        << ", " << m_user.GetPosition().j << ")\n";
+//  
+//}
 
 
 
