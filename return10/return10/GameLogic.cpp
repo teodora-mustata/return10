@@ -146,6 +146,67 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
     return false;
 }
 
+std::vector<std::string> GameLogic::convertMapToString() const
+{
+    std::vector<std::string> charMap;
+
+    for (int rowIndex = 0; rowIndex < map.GetDimensions().first; ++rowIndex) {
+        std::string rowStr;
+
+        for (int colIndex = 0; colIndex < map.GetDimensions().second; ++colIndex) {
+            bool cellOverridden = false;
+
+            // Adăugăm jucătorii
+            for (const auto& player : m_players) {
+                if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex) 
+                {
+                    rowStr.push_back('P');  // Jucător
+                    cellOverridden = true;
+                    break; 
+                }
+
+                // Adăugăm gloanțele
+                if (!cellOverridden)
+                {
+                    for (const auto& bullet : player.getGun().getFiredBullets()) {
+                        if (bullet.GetX() == rowIndex && bullet.GetY() == colIndex) {
+                            rowStr.push_back('*');  // Glonț
+                            cellOverridden = true;
+                            break;
+                        }
+                    }
+                }
+
+            }
+
+            // Dacă celula nu a fost suprascrisă de un jucător sau glonț
+            if (!cellOverridden) {
+                const auto& cell = map.GetCellType(rowIndex, colIndex);
+                if (std::holds_alternative<std::monostate>(cell)) {
+                    rowStr.push_back('0');  // Celulă goală
+                }
+                else if (std::holds_alternative<Wall>(cell)) {
+                    const Wall& wall = std::get<Wall>(cell);
+
+                    if (wall.IsDestructible() == false) {
+                        rowStr.push_back('I');  // Zid indestructibil
+                    }
+                    else if (wall.IsDestructible() && wall.GetContainedBomb() != nullptr) {
+                        rowStr.push_back('B');  // Zid destructibil cu bombă
+                    }
+                    else {
+                        rowStr.push_back('D');  // Zid destructibil
+                    }
+                }
+            }
+        }
+
+        charMap.push_back(rowStr);  // Adăugăm rândul la hartă
+    }
+
+    return charMap;
+}
+
 //checks to see status of bullets and removes any inactive bullets that have collided from the m_firedBullets vector
 //method called 
 void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)

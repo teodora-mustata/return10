@@ -27,7 +27,7 @@ public:
     //Bullet
     bool checkPlayerCollision(Player& target, Bullet& bullet);
     bool checkWallCollision(Map& map, Bullet& bullet);
-
+    std::vector<std::string> convertMapToString() const;
 private:
     Map& map;
     std::vector<Player> m_players;

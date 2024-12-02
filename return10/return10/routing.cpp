@@ -25,7 +25,7 @@ std::string ConvertCellToString(const CellType& cell) {
         }, cell);
 }
 
-Routing::Routing(crow::SimpleApp& app, GameStorage& storage):m_app(app), m_storage(storage)
+Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic):m_app(app), m_storage(storage), m_gameLogic(gameLogic)
 {
 }
 
@@ -59,6 +59,7 @@ void Routing::Run() {
     SetupLoginRoutes(m_app);
     GetTheBestPlayersByCrowns();
     GetTheBestPlayersByPoints();
+    SetupGameRoute();
     m_app.port(18080).multithreaded().run();
 }
 
@@ -276,4 +277,29 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
 
         return crow::response(201, "Account created successfully!");
         });
+}
+
+void Routing::sendMap(crow::response& res) 
+{
+    std::vector<std::string> map = m_gameLogic.convertMapToString();
+    crow::json::wvalue mapJson;
+
+    crow::json::wvalue::list mapArray; 
+    for (const auto& line : map) {
+        mapArray.push_back(line); 
+    }
+
+    mapJson["map"] = std::move(mapArray);
+
+    res.set_header("Content-Type", "application/json");
+    res.write(mapJson.dump()); 
+}
+
+void Routing::SetupGameRoute() 
+{
+    CROW_ROUTE(m_app, "/map")
+        .methods(crow::HTTPMethod::GET)([this](const crow::request&, crow::response& res) {
+        sendMap(res); 
+        res.end();
+            });
 }

@@ -30,7 +30,7 @@
     <ClCompile Include="Leaderboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\return10\GameInterface.cpp">
+    <ClCompile Include="GameInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,7 +53,7 @@
     <ClInclude Include="UserSession.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\return10\GameInterface.h">
+    <ClInclude Include="GameInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
