@@ -325,44 +325,79 @@ void Routing::BuyReloadSpeedUpgrade() {
     CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
         ([this](int userId) {
         try {
-            // Obține jucătorul din baza de date
             PlayerDAO player = getPlayerById(userId);
-            if (player.GetId() == 0) { // Presupunem că un ID 0 semnifică lipsa utilizatorului
+            if (player.GetId() == 0) { 
                 return crow::response(404, "User not found");
             }
 
-            // Obține arma asociată jucătorului
             GunDAO gun = getGunById(player.GetGunId());
-            if (gun.GetId() == 0) { // Presupunem că un ID 0 semnifică lipsa armei
+            if (gun.GetId() == 0) { 
                 return crow::response(404, "Gun not found for this player");
             }
 
-            const int upgradeCost = 500;     // Costul upgrade-ului
-            const double minReloadSpeed = 0.25; // Rata minimă de reîncărcare
+            const int upgradeCost = 500;     
+            const double minReloadSpeed = 0.25;
 
-            // Verificăm dacă rata de foc este deja la minim
             if (gun.GetFireRate() <= minReloadSpeed) {
                 return crow::response(400, "Reload speed is already at minimum value");
             }
 
-            // Verificăm dacă jucătorul are suficiente puncte
             if (player.GetPoints() < upgradeCost) {
                 return crow::response(400, "Not enough points to buy upgrade");
             }
 
-            // Actualizăm punctele și rata de foc
             player.SetPoints(player.GetPoints() - upgradeCost);
             gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
 
-            // Salvează modificările
             m_storage.UpdatePlayerDAO(player);
             m_storage.UpdateGunDAO(gun);
 
-            // Construim răspunsul JSON
             crow::json::wvalue res;
             res["message"] = "Reload speed upgrade purchased successfully!";
             res["remainingPoints"] = player.GetPoints();
             res["newReloadSpeed"] = gun.GetFireRate();
+
+            return crow::response(200, res);
+        }
+        catch (const std::exception& e) {
+            return crow::response(500, std::string("Database error: ") + e.what());
+        }
+            });
+}
+
+void Routing::BuyBulletSpeedUpgrade() {
+    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>")
+        ([this](int userId) {
+        try {
+            PlayerDAO player = getPlayerById(userId);
+            if (player.GetId() == 0) { 
+                return crow::response(404, "User not found");
+            }
+
+            GunDAO gun = getGunById(player.GetGunId());
+            if (gun.GetId() == 0) { 
+                return crow::response(404, "Gun not found for this player");
+            }
+
+            const float maxBulletSpeed = 0.5; 
+            const int requiredCrowns = 10; 
+
+            if (player.GetScore() < requiredCrowns) {
+                return crow::response(400, "Not enough crowns to upgrade bullet speed");
+            }
+
+            if (gun.GetBulletSpeed() >= maxBulletSpeed) {
+                return crow::response(400, "Bullet speed is already at maximum value");
+            }
+
+            gun.SetBulletSpeed(maxBulletSpeed);
+
+            m_storage.UpdateGunDAO(gun);
+
+            crow::json::wvalue res;
+            res["message"] = "Bullet speed upgrade applied successfully!";
+            res["newBulletSpeed"] = gun.GetBulletSpeed();
+            res["remainingCrowns"] = player.GetScore(); 
 
             return crow::response(200, res);
         }

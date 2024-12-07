@@ -20,6 +20,7 @@ public:
 	void sendMap(crow::response& res);
 	void SetupGameRoute();
 	void BuyReloadSpeedUpgrade();//intreaba daca ar trebui sa facem tabelele separat(GunDAO PlayerDAO)
+	void BuyBulletSpeedUpgrade();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;

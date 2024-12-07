@@ -15,7 +15,7 @@ void ShopMenu::display() {
             buyReloadSpeedUpgrade();
         }
         else if (choice == 2) {
-            std::cout << "Buying bullet speed upgrade...\n";
+            buyReloadSpeedUpgrade();
         }
         else if (choice == 3) {
             std::cout << "Returning to Main Menu...\n";
@@ -38,6 +38,36 @@ void ShopMenu::buyReloadSpeedUpgrade() {
         std::cout << responseJson["message"].s() << "\n";
         std::cout << "Remaining Points: " << responseJson["remainingPoints"].i() << "\n";
         std::cout << "New Reload Speed: " << responseJson["newReloadSpeed"].d() << "\n";
+    }
+    else if (response.status_code == 400) {
+        auto responseJson = crow::json::load(response.text);
+        if (responseJson.has("error")) {
+            std::cout << "Error: " << responseJson["error"].s() << "\n";
+        }
+        else {
+            std::cout << "Error: Something went wrong. Try again.\n";
+        }
+    }
+    else if (response.status_code == 404) {
+        std::cout << "Error: User or gun not found. Check your user ID.\n";
+    }
+    else {
+        std::cout << "Error performing upgrade. Please try again later.\n";
+        std::cout << "Server responded with status code: " << response.status_code << "\n";
+    }
+}
+void ShopMenu::buyBulletSpeedUpgrade() {
+    int userId = UserSession::getInstance().getUserId();
+
+    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/upgrade/bullet_speed/" + std::to_string(userId) });
+
+    if (response.status_code == 200) {
+        auto responseJson = crow::json::load(response.text);
+
+        std::cout << "==== Bullet Speed Upgrade Successful ====\n";
+        std::cout << responseJson["message"].s() << "\n";
+        std::cout << "New Bullet Speed: " << responseJson["newBulletSpeed"].d() << "\n";
+        std::cout << "Remaining Crowns: " << responseJson["remainingCrowns"].i() << "\n";
     }
     else if (response.status_code == 400) {
         auto responseJson = crow::json::load(response.text);
