@@ -9,13 +9,17 @@ class Routing
 {
 public:
 	Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic);
+	Routing( GameStorage& storage, GameLogic& gameLogic);
+
 	void Run();
 	void SetupLoginRoutes(crow::SimpleApp& app);
 	void GetTheBestPlayersByCrowns();
 	void GetTheBestPlayersByPoints();
+	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
 	void sendMap(crow::response& res);
 	void SetupGameRoute();
+	void BuyReloadSpeedUpgrade();//intreaba daca ar trebui sa facem tabelele separat(GunDAO PlayerDAO)
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;

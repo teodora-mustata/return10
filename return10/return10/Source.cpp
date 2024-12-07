@@ -21,11 +21,12 @@ int main()
 		std::cout << "Failed to initialize the database!";
 		return -1;
 	}
-	crow::SimpleApp app;
-
+	//crow::SimpleApp app;
+	
 	storage.DisplayDatabaseContents();
-
-	Routing routing(app, storage);
+	Map map;
+	GameLogic game(map);
+	Routing routing( storage,game);
 	routing.Run();
 
 	//storage.DisplayDatabaseContents();

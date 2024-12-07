@@ -55,6 +55,25 @@ std::vector<GunDAO> GameStorage::GetGunsDAO()
 GunDAO GameStorage::GetGunById(int gunId) {
     return m_db.get<GunDAO>(gunId);  // Aruncă excepție dacă nu există
 }
+void GameStorage::UpdatePlayerDAO(const PlayerDAO& player) {
+    try {
+        
+        m_db.update(player); // Actualizează jucătorul în baza de date
+    }
+    catch (const std::exception& e) {
+        throw std::runtime_error(std::string("Failed to update player: ") + e.what());
+    }
+}
+
+void GameStorage::UpdateGunDAO(const GunDAO& gun) {
+    try {
+        m_db.update(gun); // Actualizează arma în baza de date
+    }
+    catch (const std::exception& e) {
+        throw std::runtime_error(std::string("Failed to update gun: ") + e.what());
+    }
+}
+
 
 void GameStorage::DisplayDatabaseContents()
 {

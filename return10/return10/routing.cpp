@@ -1,6 +1,8 @@
 ﻿#include "routing.h"
 #include "Map.h"
-
+Routing::Routing(GameStorage& storage,GameLogic& gameLogic):m_storage(storage),m_gameLogic(gameLogic)
+{
+}
 
 std::string ConvertCellToString(const CellType& cell) {
     return std::visit([](auto&& arg) -> std::string {
@@ -125,6 +127,17 @@ PlayerDAO Routing::getPlayerById(int userId)
     throw std::runtime_error("Player not found with ID: " + std::to_string(userId));
 }
 
+
+GunDAO Routing::getGunById(int userId)
+{
+    auto guns = m_storage.GetGunsDAO();
+    for (const auto& gun : guns) {
+        if (gun.GetId() == userId) {
+            return gun;
+        }
+    }
+    throw std::runtime_error("Player not found with ID: " + std::to_string(userId));
+}
 
 void Routing::GetTheBestPlayersByCrowns() {
     CROW_ROUTE(m_app, "/leaderboard/<int>")
@@ -301,5 +314,60 @@ void Routing::SetupGameRoute()
         .methods(crow::HTTPMethod::GET)([this](const crow::request&, crow::response& res) {
         sendMap(res); 
         res.end();
+            });
+}
+
+
+
+
+
+void Routing::BuyReloadSpeedUpgrade() {
+    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
+        ([this](int userId) {
+        try {
+            // Obține jucătorul din baza de date
+            PlayerDAO player = getPlayerById(userId);
+            if (player.GetId() == 0) { // Presupunem că un ID 0 semnifică lipsa utilizatorului
+                return crow::response(404, "User not found");
+            }
+
+            // Obține arma asociată jucătorului
+            GunDAO gun = getGunById(player.GetGunId());
+            if (gun.GetId() == 0) { // Presupunem că un ID 0 semnifică lipsa armei
+                return crow::response(404, "Gun not found for this player");
+            }
+
+            const int upgradeCost = 500;     // Costul upgrade-ului
+            const double minReloadSpeed = 0.25; // Rata minimă de reîncărcare
+
+            // Verificăm dacă rata de foc este deja la minim
+            if (gun.GetFireRate() <= minReloadSpeed) {
+                return crow::response(400, "Reload speed is already at minimum value");
+            }
+
+            // Verificăm dacă jucătorul are suficiente puncte
+            if (player.GetPoints() < upgradeCost) {
+                return crow::response(400, "Not enough points to buy upgrade");
+            }
+
+            // Actualizăm punctele și rata de foc
+            player.SetPoints(player.GetPoints() - upgradeCost);
+            gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
+
+            // Salvează modificările
+            m_storage.UpdatePlayerDAO(player);
+            m_storage.UpdateGunDAO(gun);
+
+            // Construim răspunsul JSON
+            crow::json::wvalue res;
+            res["message"] = "Reload speed upgrade purchased successfully!";
+            res["remainingPoints"] = player.GetPoints();
+            res["newReloadSpeed"] = gun.GetFireRate();
+
+            return crow::response(200, res);
+        }
+        catch (const std::exception& e) {
+            return crow::response(500, std::string("Database error: ") + e.what());
+        }
             });
 }

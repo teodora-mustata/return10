@@ -100,7 +100,7 @@ void GameInterface::addPlayerToGame(int playerID)
         std::cout << "Player with ID " << playerID << " joined!\n";
         std::cout << "There are currently " << m_players.size() << "/4 players in the game.\n";
     }
-    else std::cout << "Lobby is full! Only 4 players allowed.\n"
+    else std::cout << "Lobby is full! Only 4 players allowed.\n";
 }
 
 void GameInterface::startGame() {

@@ -5,5 +5,6 @@
 class ShopMenu : public Menu {
 public:
     void display() override;
+    void buyReloadSpeedUpgrade();
 };
 

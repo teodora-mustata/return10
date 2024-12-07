@@ -50,10 +50,10 @@
     <ClInclude Include="Leaderboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UserSession.h">
+    <ClInclude Include="GameInterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameInterface.h">
+    <ClInclude Include="UserSession.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
