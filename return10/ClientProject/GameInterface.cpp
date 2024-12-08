@@ -33,7 +33,7 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
     for (size_t i = 0; i < board.size(); ++i) {
         for (size_t j = 0; j < board[i].size(); ++j) {
             // Afișează fiecare element pe harta
-            char cell = board[i][j].s()[0];
+            const auto& cell = board[i][j];
 
             if (cell == '0') {
                 std::cout << "0 ";  // Gol
@@ -94,17 +94,28 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
 
 void GameInterface::addPlayerToGame(int playerID)
 {
-    if (m_players.size() < 4)
-    {
-        m_players.push_back(playerID);
-        std::cout << "Player with ID " << playerID << " joined!\n";
-        std::cout << "There are currently " << m_players.size() << "/4 players in the game.\n";
+    cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/add_player" },
+        cpr::Payload{ {"player_id", std::to_string(playerID)} });
+
+    if (r.status_code == 200) {
+        crow::json::rvalue responseData = crow::json::load(r.text);
+
+        if (responseData.has("current_players")) {
+            int currentPlayers = responseData["current_players"].i();
+            std::cout << "Player with ID " << playerID << " joined!\n";
+            std::cout << "There are currently " << currentPlayers << "/4 players in the game.\n";
+        }
+        else {
+            std::cerr << "Failed to retrieve current players count from server.\n";
+        }
     }
-    else std::cout << "Lobby is full! Only 4 players allowed.\n";
+    else {
+        std::cerr << "Failed to add player to game. Status code: " << r.status_code << std::endl;
+    }
 }
 
 void GameInterface::startGame() {
-    if (m_players.size() == 2) // placeholder ; change to 4 later
+    if (getActivePlayers() == 2) // placeholder ; change to 4 later
     {
         // ID-ul player-ului curent
         int playerId = UserSession::getInstance().getUserId();
@@ -143,6 +154,18 @@ void GameInterface::startGame() {
     }
 }
 
+int GameInterface::getActivePlayers()
+{
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/getActivePlayers" });
+
+    if (response.status_code == 200) {
+        auto jsonResponse = crow::json::load(response.text);
+        if (jsonResponse) {
+            return jsonResponse["active_players"].i(); // Preluăm numărul de jucători
+        }
+    }
+    return 0; // În caz de eroare
+}
 
 //void GameInterface::displayStatus() {
 //    

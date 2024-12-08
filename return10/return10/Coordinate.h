@@ -1,7 +1,8 @@
 #pragma once
-struct Coordinate {
+struct Coordinate 
+{
 	int i, j;
-	Coordinate(int _i, int _j) :
+	Coordinate(int _i=0, int _j=0) :
 		i{ _i },
 		j{ _j }
 	{}
