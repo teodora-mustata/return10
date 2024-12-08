@@ -53,8 +53,14 @@ std::vector<GunDAO> GameStorage::GetGunsDAO()
 }
 
 GunDAO GameStorage::GetGunById(int gunId) {
-    return m_db.get<GunDAO>(gunId);  // Aruncă excepție dacă nu există
+    return m_db.get<GunDAO>(gunId); 
 }
+
+PlayerDAO GameStorage::GetPlayernByID(int playerId)
+{
+    return m_db.get<PlayerDAO>(playerId);
+}
+
 void GameStorage::UpdatePlayerDAO(const PlayerDAO& player) {
     try {
         
