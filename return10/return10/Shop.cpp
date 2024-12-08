@@ -25,8 +25,8 @@ void Shop::buyReloadUpgrade(Player player)
     Gun gun = player.getGun();//am nevoie de getGun in player
 
     // Verificam daca jucatorul are suficient scor
-    if (player.GetScore() < RELOAD_UPGRADE_COST) {
-        std::cout << "Insufficient score to buy upgrade!" << std::endl;
+    if (player.GetCrowns() < RELOAD_UPGRADE_COST) {
+        std::cout << "Insufficient crowns to buy upgrade!" << std::endl;
         return;
     }
 
@@ -41,7 +41,7 @@ void Shop::buyReloadUpgrade(Player player)
     gun.setFiringRate(currentFiringRate / 2);//am nevoie de setFiringRate in Gun
 
     // Scadem 500 din scorul jucatorului
-    player.addScore(-RELOAD_UPGRADE_COST);
+    player.addCrowns(-RELOAD_UPGRADE_COST);
 
     std::cout << "Gun upgraded! New firing rate: " << currentFiringRate.count() / 2 << " seconds" << std::endl;
 }

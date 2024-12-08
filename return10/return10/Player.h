@@ -19,14 +19,14 @@ public:
 
 	//Getters
 	std::string GetName() const;
-	int GetScore() const;
+	int GetCrowns() const;
 	int GetCrowns() const;
 	int GetLives()const;
 	Coordinate GetPosition() const;
 	Gun getGun() const;
 
 	//Updates for player
-	void addScore(int acumulated_points);
+	void addCrowns(int acumulated_points);
 	void addCrowns(int acumulated_points);
 	void setInitialScore();
 	void setInitialCrowns();

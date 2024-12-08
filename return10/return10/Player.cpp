@@ -53,7 +53,7 @@ std::string Player::GetName() const
 	return m_name;
 }
 
-int Player::GetScore() const
+int Player::GetCrowns() const
 {
 	return m_score;
 }
@@ -78,7 +78,7 @@ Gun Player::getGun() const
 	return m_gun;
 }
 
-void Player::addScore(int acumulated_points)
+void Player::addCrowns(int acumulated_points)
 {
 	m_score += acumulated_points;
 }

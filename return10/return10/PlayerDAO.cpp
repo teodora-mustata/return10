@@ -14,7 +14,7 @@ std::string PlayerDAO::GetName() const
 	return m_name;
 }
 
-int PlayerDAO::GetScore() const
+int PlayerDAO::GetCrowns() const
 {
 	return m_score;
 }
@@ -49,7 +49,7 @@ void PlayerDAO::SetName(std::string name)
 	this->m_name = name;
 }
 
-void PlayerDAO::SetScore(int score)
+void PlayerDAO::SetCrowns(int score)
 {
 	this->m_score = score;
 }

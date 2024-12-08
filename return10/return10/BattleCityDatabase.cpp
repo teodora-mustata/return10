@@ -24,8 +24,8 @@ void GameStorage::AddPlayer(const Player& player)
     // Cream PlayerDAO pentru a adauga player-ul în baza de date
     PlayerDAO playerDAO;
     playerDAO.SetName(player.GetName());
-    playerDAO.SetPoints(player.GetScore());
-    playerDAO.SetScore(player.GetCrowns());
+    playerDAO.SetPoints(player.GetCrowns());
+    playerDAO.SetCrowns(player.GetCrowns());
     playerDAO.SetGunId(gunId);  // Setam gunId-ul asociat player-ului
 
     // Adaugam player-ul în baza de date
@@ -94,7 +94,7 @@ void GameStorage::DisplayDatabaseContents()
             << ", Name: " << player.GetName()
             << ", Password: " << player.GetPassword()
             << ", Points: " << player.GetPoints()
-            << ", Score: " << player.GetScore()
+            << ", Crowns: " << player.GetCrowns()
             << ", Gun ID: " << player.GetGunId() << std::endl;
     }
 }

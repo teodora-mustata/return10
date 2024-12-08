@@ -146,7 +146,7 @@ void Routing::GetTheBestPlayersByCrowns() {
             auto players = m_storage.GetPlayersDAO();
 
             std::sort(players.begin(), players.end(), [](const PlayerDAO& a, const PlayerDAO& b) {
-                return a.GetScore() > b.GetScore();
+                return a.GetCrowns() > b.GetCrowns();
                 });
 
             crow::json::wvalue res;
@@ -159,7 +159,7 @@ void Routing::GetTheBestPlayersByCrowns() {
                     crow::json::wvalue playerJson;
                     playerJson["rank"] = i + 1;
                     playerJson["name"] = players[i].GetName();
-                    playerJson["score"] = players[i].GetScore();
+                    playerJson["crowns"] = players[i].GetCrowns();
                     topPlayers.push_back(std::move(playerJson));
                 }
                 if (players[i].GetId() == userId) {
@@ -179,7 +179,7 @@ void Routing::GetTheBestPlayersByCrowns() {
             if (!isUserInTop10 && userRank > 0) {
                 res["currentUser"]["rank"] = userRank;
                 res["currentUser"]["name"] = players[userRank - 1].GetName();
-                res["currentUser"]["score"] = players[userRank - 1].GetScore();
+                res["currentUser"]["crowns"] = players[userRank - 1].GetCrowns();
             }
 
             return crow::response(200, res);
@@ -232,7 +232,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
             crow::json::wvalue res;
             res["message"] = "Welcome " + user.GetName() + "!";
             res["points"] = user.GetPoints();
-            res["score"] = user.GetScore();
+            res["crowns"] = user.GetCrowns();
             res["gunDetails"] = std::move(gunDetails);
             res["userId"] = user.GetId(); 
             //CROW_LOG_INFO << "Response JSON: " << res.dump();
@@ -281,7 +281,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         PlayerDAO newPlayer;
         newPlayer.SetName(username);
         newPlayer.SetPassword(password);
-        newPlayer.SetScore(0);  // Scor implicit: 0
+        newPlayer.SetCrowns(0);  // Scor implicit: 0
         newPlayer.SetPoints(0); // Puncte implicite: 0
         newPlayer.SetGunId(gunId);  // Asociere implicită cu un GunId, poți schimba această logică
 
@@ -383,7 +383,7 @@ void Routing::BuyBulletSpeedUpgrade() {
             const float maxBulletSpeed = 0.5; 
             const int requiredCrowns = 10; 
 
-            if (player.GetScore() < requiredCrowns) {
+            if (player.GetCrowns() < requiredCrowns) {
                 return crow::response(400, "Not enough crowns to upgrade bullet speed");
             }
 
@@ -398,7 +398,7 @@ void Routing::BuyBulletSpeedUpgrade() {
             crow::json::wvalue res;
             res["message"] = "Bullet speed upgrade applied successfully!";
             res["newBulletSpeed"] = gun.GetBulletSpeed();
-            res["remainingCrowns"] = player.GetScore(); 
+            res["remainingCrowns"] = player.GetCrowns(); 
 
             return crow::response(200, res);
         }
@@ -436,7 +436,7 @@ void Routing::AddPlayerToGame(const crow::request& req, crow::response& res)
     player_gun.SetBulletSpeed(gun_data.GetBulletSpeed());
 
     // Creăm un obiect Player folosind datele extrase
-    Player new_player(player_data.GetName(), player_data.GetPoints(), player_data.GetScore(),
+    Player new_player(player_data.GetName(), player_data.GetPoints(), player_data.GetCrowns(),
         3, player_data.GetPosition(), player_data.GetInitialPosition(), player_gun);
 
     // Obținem vectorul de jucători din GameLogic
