@@ -33,10 +33,7 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
     for (size_t i = 0; i < board.size(); ++i) {
         for (size_t j = 0; j < board[i].size(); ++j) {
             // Afișează fiecare element pe harta
-            const auto& cell = board[i][j];
-
-            // Extragem șirul direct
-            //std::string cellValue = cell.s();  // "s()" extrage șirul
+            char cell = board[i][j].s()[0];
 
             if (cell == '0') {
                 std::cout << "0 ";  // Gol
@@ -94,32 +91,20 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
     return false;
 }
 
+
 void GameInterface::addPlayerToGame(int playerID)
 {
-    // Trimite cererea POST pentru a adăuga jucătorul pe server
-    cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/add_player" },
-        cpr::Payload{ {"player_id", std::to_string(playerID)} });
-
-    if (r.status_code == 200) {
-        // Serverul a acceptat cererea. Încercăm să obținem numărul de jucători.
-        crow::json::rvalue responseData = crow::json::load(r.text);
-
-        if (responseData.has("current_players")) {
-            int currentPlayers = responseData["current_players"].i();
-            std::cout << "Player with ID " << playerID << " joined!\n";
-            std::cout << "There are currently " << currentPlayers << "/4 players in the game.\n";
-        }
-        else {
-            std::cerr << "Failed to retrieve current players count from server.\n";
-        }
+    if (m_players.size() < 4)
+    {
+        m_players.push_back(playerID);
+        std::cout << "Player with ID " << playerID << " joined!\n";
+        std::cout << "There are currently " << m_players.size() << "/4 players in the game.\n";
     }
-    else {
-        std::cerr << "Failed to add player to game. Status code: " << r.status_code << std::endl;
-    }
+    else std::cout << "Lobby is full! Only 4 players allowed.\n";
 }
 
 void GameInterface::startGame() {
-    while (true)
+    if (m_players.size() == 2) // placeholder ; change to 4 later
     {
         // ID-ul player-ului curent
         int playerId = UserSession::getInstance().getUserId();

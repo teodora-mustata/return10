@@ -53,7 +53,6 @@ public:
 	std::vector<PlayerDAO> GetPlayersDAO();
 	std::vector<GunDAO> GetGunsDAO();
 	GunDAO GetGunById(int gunId);
-	PlayerDAO GetPlayernByID(int playerId);
 	void UpdatePlayerDAO(const PlayerDAO& player);
 	void UpdateGunDAO(const GunDAO& gun);
 	void DisplayDatabaseContents();

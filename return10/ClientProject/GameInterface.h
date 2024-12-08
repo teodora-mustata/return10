@@ -14,5 +14,6 @@ public:
     void renderGame(const crow::json::rvalue& gameData, int playerId); // afiseaza mapa
     bool sendCommandToServer(const std::string& command);
     void displayStatus();
-    std::vector<int> getPlayersID();
+private:
+    std::vector<int> m_players;
 };
