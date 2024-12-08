@@ -3,6 +3,8 @@
 #include "ShopMenu.h"  
 #include "Leaderboard.h"  
 #include "GameInterface.h"
+#include <chrono>
+#include <thread>
 
 class MainMenu : public Menu {
 public:

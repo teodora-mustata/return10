@@ -85,7 +85,6 @@ bool LoginMenu::handleLogin(const std::string& username, const std::string& pass
         if (responseJson.has("message")) {
             std::string welcomeMessage = responseJson["message"].s();
             std::cout << welcomeMessage << std::endl;
-            std::cout << "A intrat aici";
         }
 
         if (responseJson.has("userId")) {
