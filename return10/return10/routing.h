@@ -21,6 +21,7 @@ public:
 	void SetupGameRoute();
 	void BuyReloadSpeedUpgrade();//intreaba daca ar trebui sa facem tabelele separat(GunDAO PlayerDAO)
 	void BuyBulletSpeedUpgrade();
+	void AddPlayerToGame(const crow::request& req, crow::response& res);
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;

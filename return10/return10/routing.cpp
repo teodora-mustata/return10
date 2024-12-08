@@ -310,16 +310,17 @@ void Routing::sendMap(crow::response& res)
 
 void Routing::SetupGameRoute() 
 {
+    // Rută pentru a trimite harta
     CROW_ROUTE(m_app, "/map")
         .methods(crow::HTTPMethod::GET)([this](const crow::request&, crow::response& res) {
         sendMap(res); 
         res.end();
             });
+    // Rută pentru a adăuga un jucător
+    CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
+        AddPlayerToGame(req, res); // Folosim funcția AddPlayerToGame pentru a adăuga jucătorul
+        });
 }
-
-
-
-
 
 void Routing::BuyReloadSpeedUpgrade() {
     CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
@@ -405,4 +406,52 @@ void Routing::BuyBulletSpeedUpgrade() {
             return crow::response(500, std::string("Database error: ") + e.what());
         }
             });
+}
+
+void Routing::AddPlayerToGame(const crow::request& req, crow::response& res)
+{
+    auto player_id = std::stoi(req.body());
+
+    PlayerDAO player_data = m_storage.GetPlayernByID(player_id);
+
+    // Verificăm dacă există un jucător cu acest ID
+    if (player_data.GetId() == 0) {
+        res.code = 404;
+        res.body = "Player not found!";
+        return;
+    }
+
+    GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId()); // presupunem că ai o metodă care extrage un GunDAO
+
+    // Verificăm dacă există o armă cu acest ID
+    if (gun_data.GetId() == 0) {
+        res.code = 404;
+        res.body = "Gun not found!";
+        return;
+    }
+
+    // Creăm un obiect Gun
+    Gun player_gun;
+    player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
+    player_gun.SetBulletSpeed(gun_data.GetBulletSpeed());
+
+    // Creăm un obiect Player folosind datele extrase
+    Player new_player(player_data.GetName(), player_data.GetPoints(), player_data.GetScore(),
+        3, player_data.GetPosition(), player_data.GetInitialPosition(), player_gun);
+
+    // Obținem vectorul de jucători din GameLogic
+    auto& players = m_gameLogic.GetPlayers();
+
+    // Adăugăm jucătorul în joc
+    if (players.size() < 4) {
+        players.push_back(new_player); // Adăugăm jucătorul la listă
+        crow::json::wvalue response;
+        response["current_players"] = players.size(); // Returnăm numărul de jucători activi
+        res.body = response.dump(); // Convertim wvalue într-un string
+        res.code = 200; // OK
+    }
+    else {
+        res.code = 400;
+        res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
+    }
 }
