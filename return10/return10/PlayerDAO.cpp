@@ -19,9 +19,9 @@ int PlayerDAO::GetCrowns() const
 	return m_score;
 }
 
-int PlayerDAO::GetPoints() const
+int PlayerDAO::GetScore() const
 {
-	return m_points;
+	return m_crowns;
 }
 
 std::string PlayerDAO::GetPassword() const
@@ -56,7 +56,7 @@ void PlayerDAO::SetCrowns(int score)
 
 void PlayerDAO::SetPoints(int points)
 {
-	this->m_points = points;
+	this->m_crowns = points;
 }
 
 void PlayerDAO::SetPassword(std::string password)

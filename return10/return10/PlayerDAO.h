@@ -9,7 +9,7 @@ public:
 
 	std::string GetName() const;
 	int GetCrowns() const;
-	int GetPoints()const;
+	int GetScore() const;
 	std::string GetPassword() const;
 	int GetId() const;
 	int GetGunId()const;
@@ -24,7 +24,7 @@ public:
 private:
 	int m_id;
 	int m_score;
-	int m_points;
+	int m_crowns;
 	std::string m_name;
 	int m_gunId;
 	std::string m_password;

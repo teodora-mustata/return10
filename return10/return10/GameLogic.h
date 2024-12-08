@@ -11,7 +11,7 @@ public:
 public:
     GameLogic(Map& map);
 
-    std::vector<Player> initializePlayers(int numPlayers);
+    void initializePlayers();
     void initializeScores();
     void startTimer();
     void showStartMenu();

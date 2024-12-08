@@ -1,52 +1,21 @@
 ﻿#include "GameLogic.h"
 
-//void GameLogic::gameStart()
-//{
-//    showStartMenu();
-//    startTimer();
-//    initializeScores();
-//    initializePlayers();
-//}
-
 GameLogic::GameLogic(Map& map) : map{ map } {}
-//
-std::vector<Player> GameLogic::initializePlayers(int numPlayers)
+
+void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 {
-    //std::cout << "Placing players..." << std::endl;
-    //for (int i = 0; i < map.GetSpawnPoints().size() && i < 4; ++i) {
-    //    auto spawnPoint = map.GetRandomSpawnPoint();
-    //    Player newPlayer{ "Player" + std::to_string(i + 1), spawnPoint.first, spawnPoint.second };
-    //    /*map.*/addPlayer(newPlayer);
-    //    std::cout << "Player " << i + 1 << " spawned at (" << spawnPoint.first << ", " << spawnPoint.second << ")" << std::endl;
-    //}
-    std::string name = "A"; //placeholder, playerii vor trebui sa fie initializati cu numele ales la login
     auto spawnPoints = map.GetSpawnPoints();
-    /*if (!map) {
-        throw std::runtime_error("Map is not initialized.");
-    }
-    if (numPlayers > spawnPoints.size()) {
-        throw std::runtime_error("Not enough spawn points");
-    }*/
-    /*for (const auto& spawnPoint:spawnPoints) {
+    int numPlayers = m_players.size();
 
-        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
-        name[0]++;
-
-        m_players.push_back(newPlayer);
-
-        std::cout << "Player " << 1 << " initialized at ("
-            << spawnPoint.first << ", " << spawnPoint.second << ")\n";
-    }*/
     for (int i = 0; i < numPlayers; ++i) {
         const auto& spawnPoint = spawnPoints[i];
-        Player newPlayer(name, spawnPoint.first, spawnPoint.second);
-        name[0]++;
-        m_players.push_back(newPlayer);
-
+        Coordinate coords;
+        coords.i= spawnPoint.first;
+        coords.j = spawnPoint.second;
+        m_players[i].setInitialPosition(coords);
         std::cout << "Player " << i + 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }
-    return m_players;
 }
 
 void GameLogic::initializeScores()

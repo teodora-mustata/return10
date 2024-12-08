@@ -101,26 +101,10 @@ void Map::SetBombs()
 	}
 }
 
-//std::pair<int, int> Map::GetRandomSpawnPoint()
-//{
-//	if (!m_spawnPoints.empty())
-//	{
-//		std::pair<int, int> spawnPoint = m_spawnPoints.back();
-//		m_spawnPoints.pop_back();
-//		return spawnPoint;
-//	}
-//	throw std::runtime_error("No more spawn points available!");
-//}
-
 std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {
 	return m_spawnPoints;
 }
-
-//std::vector<Player> Map::GetPlayers()
-//{
-//	return m_players;
-//}
 
 CellType& Map::GetCellType(int x, int y)
 {
@@ -146,40 +130,6 @@ void Map::BreakWall(int x, int y)
 		std::cout << "Wall destroyed at (" << x << ", " << y << ")." << std::endl;
 	}
 }
-
-//commented out because i overloaded the << operator
-
-//void Map::PrintMap() const {
-//	for (int i = 0; i < m_board.size(); ++i) {
-//		for (int j = 0; j < m_board[i].size(); ++j) {
-//			if (std::find(m_spawnPoints.begin(), m_spawnPoints.end(), std::make_pair(i, j)) != m_spawnPoints.end()) {
-//				std::cout << "\033[32mS \033[0m"; // Spawn point = green
-//			}
-//			else {
-//				std::visit([&](auto&& arg) {
-//					using T = std::decay_t<decltype(arg)>;
-//					if constexpr (std::is_same_v<T, std::monostate>) {
-//						std::cout << "0 "; // Empty
-//					}
-//					else if constexpr (std::is_same_v<T, Wall>) {
-//						if (arg.IsDestructible()) {
-//							if (arg.GetContainedBomb() != nullptr) {
-//								std::cout << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
-//							}
-//							else {
-//								std::cout << "\033[36mD \033[0m"; // Destructible wall = cyan
-//							}
-//						}
-//						else {
-//							std::cout << "\033[34mI \033[0m"; // Indestructible wall = blue
-//						}
-//					}
-//					}, m_board[i][j]);
-//			}
-//		}
-//		std::cout << std::endl;
-//	}
-//}
 
 std::pair<int, int> Map::GetDimensions()
 {

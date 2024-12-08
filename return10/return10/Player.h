@@ -9,6 +9,7 @@ class Player
 {
 public:
 	Player(std::string name, int startX, int startY);
+	Player(std::string name, int score, int crowns, Gun gun);
 	//Player();
 	~Player();
 	void move(Direction direction);
@@ -19,20 +20,22 @@ public:
 
 	//Getters
 	std::string GetName() const;
-	int GetCrowns() const;
+	int GetScore() const;
 	int GetCrowns() const;
 	int GetLives()const;
 	Coordinate GetPosition() const;
 	Gun getGun() const;
 
 	//Updates for player
-	void addCrowns(int acumulated_points);
+	void addScore(int acumulated_points);
 	void addCrowns(int acumulated_points);
 	void setInitialScore();
 	void setInitialCrowns();
 	void resetPosition();
 	void loseLife();
 	bool operator==(const Player& other) const;
+
+	void setInitialPosition(Coordinate coords);
 
 private:
 	int m_score;

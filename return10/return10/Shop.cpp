@@ -14,7 +14,7 @@ void Shop::buySpeedUpgrade(Player player) {
         // Double the speed of the bullet
         float currentSpeed = gun.GetBulletSpeed();
         gun.SetBulletSpeed(currentSpeed * 2.0f);
-        player.addCrowns(-SPEED_UPGRADE_COST);
+        player.addScore(-SPEED_UPGRADE_COST);
         std::cout << "Bullet speed has been doubled! New speed: " << gun.GetBulletSpeed() << std::endl;
     }
 }
@@ -41,7 +41,7 @@ void Shop::buyReloadUpgrade(Player player)
     gun.setFiringRate(currentFiringRate / 2);//am nevoie de setFiringRate in Gun
 
     // Scadem 500 din scorul jucatorului
-    player.addCrowns(-RELOAD_UPGRADE_COST);
+    player.addScore(-RELOAD_UPGRADE_COST);
 
     std::cout << "Gun upgraded! New firing rate: " << currentFiringRate.count() / 2 << " seconds" << std::endl;
 }

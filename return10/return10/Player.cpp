@@ -9,6 +9,10 @@ Player::Player(std::string name, int startX, int startY) :
 	m_initial_position{ startX, startY },
 	m_position{ startX, startY } {}
 
+Player::Player(std::string name, int score, int crowns, Gun gun) : m_name(name), m_score(score), m_crowns(crowns), m_gun(gun)
+{
+}
+
 
 Player::~Player()
 {
@@ -53,7 +57,7 @@ std::string Player::GetName() const
 	return m_name;
 }
 
-int Player::GetCrowns() const
+int Player::GetScore() const
 {
 	return m_score;
 }
@@ -78,7 +82,7 @@ Gun Player::getGun() const
 	return m_gun;
 }
 
-void Player::addCrowns(int acumulated_points)
+void Player::addScore(int acumulated_points)
 {
 	m_score += acumulated_points;
 }
@@ -116,4 +120,9 @@ bool Player::operator==(const Player& other) const
 {
 	if (this->m_name == other.GetName()) return true;
 	return false;
+}
+
+void Player::setInitialPosition(Coordinate coords)
+{
+	m_initial_position = coords;
 }

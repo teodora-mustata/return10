@@ -16,8 +16,9 @@ void MainMenu::display() {
         if (choice == 1) {
             std::cout << "Starting game...\n";
             GameInterface gameInterface;
-            gameInterface.addPlayerToGame(UserSession::getInstance().getUserId());
-            while (gameInterface.getPlayersID().size() < 2) //change to 4 later
+            int currentId = UserSession::getInstance().getUserId();
+            gameInterface.addPlayerToGame(currentId);
+            while (gameInterface.getActivePlayers() < 2) //change to 4 later
             {
                 std::cout << "Waiting for players";
                 std::cout << std::flush;
@@ -26,8 +27,10 @@ void MainMenu::display() {
                     std::cout << "." << std::flush;
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
+                std::cout << "No one joined. Exiting...\n";
+                break;
             }
-            if (gameInterface.getPlayersID().size() == 2)
+            if (gameInterface.getActivePlayers() == 2)
             {
                 bool gameRunning = true;
                 while (gameRunning)
