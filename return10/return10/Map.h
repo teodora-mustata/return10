@@ -19,6 +19,7 @@ public:
 	void GenerateSpawnPoints();
 	void GenerateWalls();
 	void SetBombs();
+	void GenerateRandomTrap();
 	std::vector<std::vector<CellType>> GetBoard();
 	//std::pair<int, int> GetRandomSpawnPoint();
 	std::vector<std::pair<int, int>> GetSpawnPoints();

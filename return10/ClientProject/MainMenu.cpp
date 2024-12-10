@@ -17,20 +17,22 @@ void MainMenu::display() {
             std::cout << "Starting game...\n";
             GameInterface gameInterface;
             int currentId = UserSession::getInstance().getUserId();
+            
             gameInterface.addPlayerToGame(currentId);
-            while (gameInterface.getActivePlayers() < 2) //change to 4 later
-            {
-                std::cout << "Waiting for players";
-                std::cout << std::flush;
+            
+            //while (gameInterface.getActivePlayers() < 2) //change to 4 later
+            //{
+            //    std::cout << "Waiting for players";
+            //    std::cout << std::flush;
 
-                for (int i = 0; i < 30; ++i) {  // asteptam 30 de secunde pentru a intra playerii
-                    std::cout << "." << std::flush;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                std::cout << "No one joined. Exiting...\n";
-                break;
-            }
-            if (gameInterface.getActivePlayers() == 2)
+            //    for (int i = 0; i < 30; ++i) {  // asteptam 30 de secunde pentru a intra playerii
+            //        std::cout << "." << std::flush;
+            //        std::this_thread::sleep_for(std::chrono::seconds(1));
+            //    }
+            //    std::cout << "No one joined. Exiting...\n";
+            //    break;
+            //}
+            if (gameInterface.getActivePlayers() == 1/*2*/)
             {
                 bool gameRunning = true;
                 while (gameRunning)

@@ -32,6 +32,7 @@ void Leaderboard::displayPlayersByPoints() {
     int userId = UserSession::getInstance().getUserId();
 
     auto response = cpr::Get(cpr::Url{ "http://localhost:18080/leaderboard/points/" + std::to_string(userId) });
+
     if (response.status_code == 200) {
 
         auto responseJson = crow::json::load(response.text);

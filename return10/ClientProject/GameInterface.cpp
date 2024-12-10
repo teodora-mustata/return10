@@ -94,10 +94,12 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
 
 void GameInterface::addPlayerToGame(int playerID)
 {
+    std::cout << "Initializing POST request...\n";
     cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/add_player" },
         cpr::Payload{ {"player_id", std::to_string(playerID)} });
-
+  
     if (r.status_code == 200) {
+        
         crow::json::rvalue responseData = crow::json::load(r.text);
 
         if (responseData.has("current_players")) {
@@ -122,6 +124,7 @@ void GameInterface::startGame() {
 
         while (true) {
             // Trimite cererea GET pentru a obține starea jocului
+
             cpr::Response r = cpr::Get(cpr::Url{ "http://localhost:18080/get_game_state" });
 
             // Verifică dacă cererea a avut succes (status_code 200)
