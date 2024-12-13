@@ -1,7 +1,7 @@
 #pragma once
 
 #include <utility> 
-
+#include "Player.h"
 class Trap {
 public:
     Trap(int x, int y);
@@ -11,7 +11,7 @@ public:
     bool IsActive() const;
     void SetState(bool isActive);
 
-    virtual void ActivateEffect() = 0; 
+    virtual void ActivateEffect(Player& player) = 0;
 
 protected:
     std::pair<int, int> m_coordinates;

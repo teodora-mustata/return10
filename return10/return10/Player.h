@@ -37,6 +37,10 @@ public:
 
 	void setInitialPosition(Coordinate coords);
 
+	void Immobilize(float duration);
+	void UpdateStatus(float deltaTime);
+	bool IsImmobilized() const;
+
 private:
 	int m_score;
 	int m_lives;
@@ -45,5 +49,8 @@ private:
 	Coordinate m_position;
 	Coordinate m_initial_position;
 	Gun m_gun;
+
+	bool m_isImmobilized = false;
+	float m_immobilizedTimeRemaining = 0.0f;
 };
 

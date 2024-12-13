@@ -20,6 +20,10 @@ Player::~Player()
 
 void Player::move(Direction direction)
 {
+	if (m_isImmobilized) {
+		std::cout << "Player is immobilized and cannot move.\n";
+		return;
+	}
 	switch (direction)
 	{
 	case Direction::UP:
@@ -125,4 +129,24 @@ bool Player::operator==(const Player& other) const
 void Player::setInitialPosition(Coordinate coords)
 {
 	m_initial_position = coords;
+}
+
+
+void Player::Immobilize(float duration) {
+	m_isImmobilized = true;
+	m_immobilizedTimeRemaining = duration;
+}
+
+void Player::UpdateStatus(float deltaTime) {
+	if (m_isImmobilized) {
+		m_immobilizedTimeRemaining -= deltaTime;
+		if (m_immobilizedTimeRemaining <= 0) {
+			m_isImmobilized = false;
+			m_immobilizedTimeRemaining = 0;
+		}
+	}
+}
+
+bool Player::IsImmobilized() const {
+	return m_isImmobilized;
 }

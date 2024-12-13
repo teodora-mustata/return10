@@ -1,14 +1,17 @@
 #include "StunTrap.h"
 #include <iostream>
 
-StunTrap::StunTrap(int x, int y)
-    : Trap(x, y) {}
+StunTrap::StunTrap(int x, int y, float duration)
+    : Trap(x, y) {
+    m_duration = duration;
+}
 
-void StunTrap::ActivateEffect() {
-    std::cout << "Player is stunned at ("
-        << m_coordinates.first << ", "
-        << m_coordinates.second << ")"
-        << std::endl;
-    //logic for disabling player movement for x ammount of time
-    SetState(false);
+void StunTrap::ActivateEffect(Player& player) {
+  
+ 
+    if (m_isActive) {
+        player.Immobilize(m_duration);
+        std::cout << "Player has been immobilized for " << m_duration << " seconds.\n";
+        SetState(false);
+    }
 }

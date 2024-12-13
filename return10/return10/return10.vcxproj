@@ -132,6 +132,7 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Coordinate.cpp" />
+    <ClCompile Include="DisableGunTrap.cpp" />
     <ClCompile Include="GameLogic.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="GunDAO.cpp" />
@@ -143,6 +144,9 @@
     <ClCompile Include="routing.cpp" />
     <ClCompile Include="Shop.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StunTrap.cpp" />
+    <ClCompile Include="TeleportTrap.cpp" />
+    <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -153,6 +157,7 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Direction.h" />
     <ClInclude Include="DirectionUtils.h" />
+    <ClInclude Include="DisableGunTrap.h" />
     <ClInclude Include="GameLogic.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="GunDAO.h" />
@@ -163,6 +168,9 @@
     <ClInclude Include="Register.h" />
     <ClInclude Include="routing.h" />
     <ClInclude Include="Shop.h" />
+    <ClInclude Include="StunTrap.h" />
+    <ClInclude Include="TeleportTrap.h" />
+    <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
