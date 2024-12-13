@@ -11,6 +11,7 @@ public:
 public:
     GameLogic(Map& map);
 
+    void generateTaps();
     void initializePlayers();
     void initializeScores();
     void startTimer();

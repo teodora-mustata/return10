@@ -101,46 +101,35 @@ void Map::SetBombs()
 	}
 }
 
-void Map::GenerateRandomTrap()
-{
+void Map::GenerateRandomTrap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<std::pair<int, int>> validCells;
 	for (int i = 0; i < m_height; i++)
-	{
 		for (int j = 0; j < m_width; j++)
-		{
 			if (std::holds_alternative<std::monostate>(m_board[i][j]))
 				validCells.emplace_back(i, j);
-		}
-	}
-	if (validCells.empty()) {
+	if (validCells.empty())
 		return;
-	}
 	std::shuffle(validCells.begin(), validCells.end(), gen);
 	const std::pair<int, int>& cell = validCells.front();
 	int x = cell.first;
 	int y = cell.second;
 	//int trapType = (std::rand() % 3) + 1;
-	std::uniform_int_distribution<int>trapTypeDist(1,3);
+	std::uniform_int_distribution<int>trapTypeDist(1, 3);
 	int trapType = trapTypeDist(gen);
-	//commented till jerry makes those classes
 	/*switch (trapType)
 	{
 	case(1):
-		m_board[x, y] = TeleportTrap(x, y);
+		m_board[x][y] = TeleportTrap(x, y);
 	case(2):
-		m_board[x, y] = DisableGunTrap(x, y);
+		m_board[x][y] = DisableGunTrap(x, y);
 	case(3):
-		m_board[x, y] = StunTrap(x, y);
+		m_board[x][y] = StunTrap(x, y);
 	default:
 		break;
 	}*/
-
-
-
 }
-
 std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {
 	return m_spawnPoints;
