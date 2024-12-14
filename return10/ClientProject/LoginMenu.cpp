@@ -33,7 +33,7 @@ void LoginMenu::display()
             std::cin >> password;
             std::cout << "Reenter your password: ";
             std::cin >> passwordVerify;
-
+            //Validator validator;
             if (passwordValidation(password) == true)
             {
                 if (password == passwordVerify && handleSignUp(username, password)) {
