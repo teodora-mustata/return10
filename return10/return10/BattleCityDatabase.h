@@ -26,7 +26,7 @@ inline auto CreateStorage(const std::string& filename)
 			//&UsersEntity::SetUsername, &UsersEntity::GetUsername
 			sql::make_column("id", &PlayerDAO::SetId, &PlayerDAO::GetId, sql::primary_key().autoincrement()),
 			sql::make_column("name", &PlayerDAO::SetName, &PlayerDAO::GetName),
-			sql::make_column("points", &PlayerDAO::SetPoints, &PlayerDAO::GetScore),
+			sql::make_column("score", &PlayerDAO::SetScore, &PlayerDAO::GetScore),
 			sql::make_column("crowns", &PlayerDAO::SetCrowns, &PlayerDAO::GetCrowns),
 			sql::make_column("gunId", &PlayerDAO::SetGunId, &PlayerDAO::GetGunId),
 			sql::make_column("password", &PlayerDAO::SetPassword, &PlayerDAO::GetPassword),

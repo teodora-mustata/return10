@@ -16,8 +16,8 @@ public:
 
 	void SetId(int id);
 	void SetName(std::string name);
-	void SetCrowns(int score);
-	void SetPoints(int points);
+	void SetCrowns(int crowns);
+	void SetScore(int score);
 	void SetPassword(std::string password);
 	void SetGunId(int gunId);
 

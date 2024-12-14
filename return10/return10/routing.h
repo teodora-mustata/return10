@@ -14,7 +14,7 @@ public:
 	void Run();
 	void SetupLoginRoutes(crow::SimpleApp& app);
 	void GetTheBestPlayersByCrowns();
-	void GetTheBestPlayersByPoints();
+	void GetTheBestPlayersByScore();
 	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
 	void sendMap(crow::response& res);

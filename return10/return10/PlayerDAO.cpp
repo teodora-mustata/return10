@@ -16,12 +16,12 @@ std::string PlayerDAO::GetName() const
 
 int PlayerDAO::GetCrowns() const
 {
-	return m_score;
+	return m_crowns;
 }
 
 int PlayerDAO::GetScore() const
 {
-	return m_crowns;
+	return m_score;
 }
 
 std::string PlayerDAO::GetPassword() const
@@ -49,14 +49,14 @@ void PlayerDAO::SetName(std::string name)
 	this->m_name = name;
 }
 
-void PlayerDAO::SetCrowns(int score)
+void PlayerDAO::SetCrowns(int crowns)
 {
-	this->m_score = score;
+	this->m_crowns = crowns;
 }
 
-void PlayerDAO::SetPoints(int points)
+void PlayerDAO::SetScore(int score)
 {
-	this->m_crowns = points;
+	this->m_score = score;
 }
 
 void PlayerDAO::SetPassword(std::string password)

@@ -34,21 +34,23 @@ void LoginMenu::display()
             std::cout << "Reenter your password: ";
             std::cin >> passwordVerify;
 
-            if (password == passwordVerify && handleSignUp(username, password) && passwordValidation(password)) {
-                std::cout << "Account created successfully! Proceeding to log in...\n";
-                handleLogin(username, password);
-                break;
-            }
-            else if (password != passwordVerify) {
-                showErrorMessage("The passwords don't match! Please try again.\n");
-            }
-            else if (passwordValidation(password) == false)
+            if (passwordValidation(password) == true)
             {
+                if (password == passwordVerify && handleSignUp(username, password)) {
+                    std::cout << "Account created successfully! Proceeding to log in...\n";
+                    handleLogin(username, password);
+                    break;
+                }
+                else if (password != passwordVerify) {
+                    showErrorMessage("The passwords don't match! Please try again.\n");
+                }
+                else
+                {
+                    showErrorMessage("Sign Up failed. Please try again.\n");
+                }
+            }
+            else {
                 showErrorMessage("Password is not strong enough! Please try again.\n");
-            }
-            else 
-            {
-                showErrorMessage("Sign Up failed. Please try again.\n");
             }
         }
         else {
@@ -59,7 +61,7 @@ void LoginMenu::display()
 
 bool LoginMenu::passwordValidation(const std::string& password)
 {
-    std::regex passwordRegex("^(?=.*[A-Z])(?=.*[0-9])(?=.*!@#$%^&*).{8,}$");
+    std::regex passwordRegex(R"(^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$)");
     // cel putin o litera mare, cel putin o cifra, cel putin un caracter special, 8+ caractere total
     return std::regex_match(password, passwordRegex);
 }

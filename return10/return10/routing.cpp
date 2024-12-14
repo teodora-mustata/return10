@@ -60,14 +60,16 @@ void Routing::Run() {
 
     SetupLoginRoutes(m_app);
     GetTheBestPlayersByCrowns();
-    GetTheBestPlayersByPoints();
+    GetTheBestPlayersByScore();
+    BuyReloadSpeedUpgrade();
+    BuyBulletSpeedUpgrade();
     SetupGameRoute();
     GetActivePlayers();
     m_app.port(18080).multithreaded().run();
 }
 
-void Routing::GetTheBestPlayersByPoints() {
-    CROW_ROUTE(m_app, "/leaderboard/points/<int>")
+void Routing::GetTheBestPlayersByScore() {
+    CROW_ROUTE(m_app, "/leaderboard/score/<int>")
         ([this](int userId) {
         try {
             auto players = m_storage.GetPlayersDAO();
@@ -86,7 +88,7 @@ void Routing::GetTheBestPlayersByPoints() {
                     crow::json::wvalue playerJson;
                     playerJson["rank"] = i + 1;
                     playerJson["name"] = players[i].GetName();
-                    playerJson["points"] = players[i].GetScore(); 
+                    playerJson["score"] = players[i].GetScore(); 
                     topPlayers.push_back(std::move(playerJson));
                 }
                 if (players[i].GetId() == userId) {
@@ -106,7 +108,7 @@ void Routing::GetTheBestPlayersByPoints() {
             if (!isUserInTop10 && userRank > 0) {
                 res["currentUser"]["rank"] = userRank;
                 res["currentUser"]["name"] = players[userRank - 1].GetName();
-                res["currentUser"]["points"] = players[userRank - 1].GetScore();
+                res["currentUser"]["score"] = players[userRank - 1].GetScore();
             }
 
             return crow::response(200, res);
@@ -129,15 +131,15 @@ PlayerDAO Routing::getPlayerById(int userId)
 }
 
 
-GunDAO Routing::getGunById(int userId)
+GunDAO Routing::getGunById(int gunId)
 {
     auto guns = m_storage.GetGunsDAO();
     for (const auto& gun : guns) {
-        if (gun.GetId() == userId) {
+        if (gun.GetId() == gunId) {
             return gun;
         }
     }
-    throw std::runtime_error("Player not found with ID: " + std::to_string(userId));
+    throw std::runtime_error("Gun not found with ID: " + std::to_string(gunId));
 }
 
 void Routing::GetTheBestPlayersByCrowns() {
@@ -232,7 +234,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
             // Construiește răspunsul JSON
             crow::json::wvalue res;
             res["message"] = "Welcome " + user.GetName() + "!";
-            res["points"] = user.GetScore();
+            res["score"] = user.GetScore();
             res["crowns"] = user.GetCrowns();
             res["gunDetails"] = std::move(gunDetails);
             res["userId"] = user.GetId(); 
@@ -283,7 +285,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
         newPlayer.SetName(username);
         newPlayer.SetPassword(password);
         newPlayer.SetCrowns(0);  // Scor implicit: 0
-        newPlayer.SetPoints(0); // Puncte implicite: 0
+        newPlayer.SetScore(0); // Puncte implicite: 0
         newPlayer.SetGunId(gunId);  // Asociere implicită cu un GunId, poți schimba această logică
 
         // Adăugăm player-ul în baza de date
@@ -323,16 +325,22 @@ void Routing::SetupGameRoute()
         });
 }
 
+
 void Routing::BuyReloadSpeedUpgrade() {
-    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
+    
+    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")//.methods("Put"_method)
         ([this](int userId) {
+        std::cout<<"a ajuns";
         try {
-            PlayerDAO player = getPlayerById(userId);
+            //PlayerDAO player = getPlayerById(userId);
+            PlayerDAO player = m_storage.GetPlayerByID(userId);
+           
             if (player.GetId() == 0) { 
                 return crow::response(404, "User not found");
             }
 
-            GunDAO gun = getGunById(player.GetGunId());
+            //GunDAO gun = getGunById(player.GetGunId());
+            GunDAO gun = m_storage.GetGunById(player.GetGunId());
             if (gun.GetId() == 0) { 
                 return crow::response(404, "Gun not found for this player");
             }
@@ -345,10 +353,10 @@ void Routing::BuyReloadSpeedUpgrade() {
             }
 
             if (player.GetScore() < upgradeCost) {
-                return crow::response(400, "Not enough points to buy upgrade");
+                return crow::response(400, "Not enough score to buy upgrade");
             }
 
-            player.SetPoints(player.GetScore() - upgradeCost);
+            player.SetScore(player.GetScore() - upgradeCost);
             gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
 
             m_storage.UpdatePlayerDAO(player);
@@ -356,7 +364,7 @@ void Routing::BuyReloadSpeedUpgrade() {
 
             crow::json::wvalue res;
             res["message"] = "Reload speed upgrade purchased successfully!";
-            res["remainingPoints"] = player.GetScore();
+            res["remainingScore"] = player.GetScore();
             res["newReloadSpeed"] = gun.GetFireRate();
 
             return crow::response(200, res);
