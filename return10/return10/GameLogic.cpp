@@ -2,6 +2,30 @@
 
 GameLogic::GameLogic(Map& map) : map{ map } {}
 
+
+void GameLogic::checkForTraps(Player& player) {
+    Coordinate pos = player.GetPosition();
+    auto& cell = map.GetCellType(pos.i, pos.j);
+
+    if (auto trap = std::get_if<TeleportTrap>(&cell)) {
+        std::cout << "Player " << player.GetName() << " stepped on a Teleport Trap!\n";
+        trap->ActivateEffect(); // Implement teleportation logic in the trap class
+        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap after activation
+    }
+    else if (auto trap = std::get_if<DisableGunTrap>(&cell)) {
+        std::cout << "Player " << player.GetName() << "'s gun is disabled!\n";
+        trap->ActivateEffect(player);
+        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap
+    }
+    else if (auto trap = std::get_if<StunTrap>(&cell)) {
+        std::cout << "Player " << player.GetName() << " is stunned!\n";
+        trap->ActivateEffect(player);
+        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap
+    }
+}
+
+//must be updated in the game
+
 void GameLogic::generateTaps()
 {
     static std::chrono::steady_clock::time_point lastTrap = std::chrono::steady_clock::now();
