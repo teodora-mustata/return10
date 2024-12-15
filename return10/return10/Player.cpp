@@ -81,6 +81,10 @@ Coordinate Player::GetPosition() const
 	return m_position;
 }
 
+Gun& Player::getGun() {
+	return m_gun; 
+}
+
 Gun Player::getGun() const
 {
 	return m_gun;
@@ -145,6 +149,7 @@ void Player::UpdateStatus(float deltaTime) {
 			m_immobilizedTimeRemaining = 0;
 		}
 	}
+	m_gun.UpdateJammed(deltaTime);
 }
 
 bool Player::IsImmobilized() const {

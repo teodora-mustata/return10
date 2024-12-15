@@ -24,7 +24,9 @@ public:
 	int GetCrowns() const;
 	int GetLives()const;
 	Coordinate GetPosition() const;
+	Gun& getGun();
 	Gun getGun() const;
+
 
 	//Updates for player
 	void addScore(int acumulated_points);

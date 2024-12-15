@@ -2,16 +2,34 @@
 
 Gun::Gun() : m_lastFiredTime(std::chrono::steady_clock::now()) {}
 
+
 bool Gun::canFire() const
 {
     auto now = std::chrono::steady_clock::now();
     return std::chrono::duration<float>(now - m_lastFiredTime) >= m_firingRate;
 }
 
-bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed)
-{
-    if (canFire())
-    {
+void Gun::Jam(float duration) {
+    m_isJammed = true;
+    m_jammedTimeRemaining = duration;
+}
+
+void Gun::UpdateJammed(float deltaTime) {
+    if (m_isJammed) {
+        m_jammedTimeRemaining -= deltaTime;
+        if (m_jammedTimeRemaining <= 0) {
+            m_isJammed = false;
+            m_jammedTimeRemaining = 0.0f;
+        }
+    }
+}
+
+bool Gun::IsJammed() const {
+    return m_isJammed;
+}
+
+bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed) {
+    if (!m_isJammed && canFire()) {
         Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
         newBullet.SetActive(true);
 
@@ -20,7 +38,7 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bullet
 
         return true; // Fired
     }
-    return false; // Not enough time has passed to fire again
+    return false; // Gun is jammed or firing rate not met
 }
 
 

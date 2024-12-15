@@ -1,14 +1,15 @@
 #include "DisableGunTrap.h"
 #include <iostream>
+#include <thread>
+#include <chrono>
 
-DisableGunTrap::DisableGunTrap(int x, int y)
-    : Trap(x, y) {}
+DisableGunTrap::DisableGunTrap(int x, int y, float duration)
+    : Trap(x, y), m_duration(duration) {}
 
-void DisableGunTrap::ActivateEffect() {
-    std::cout << "Player's gun is disabled at ("
-        << m_coordinates.first << ", "
-        << m_coordinates.second << ")"
-        << std::endl;
-    //implementation of Player at this coordinate to not be able to shoot for x ammount of time
-    SetState(false); 
+void DisableGunTrap::ActivateEffect(Player& player) {
+    auto& gun = player.getGun();
+    gun.Jam(m_duration);
+    std::cout << "Gun disabled at (" << m_coordinates.first << ", " << m_coordinates.second
+        << ") for " << m_duration << " seconds.\n";
 }
+
