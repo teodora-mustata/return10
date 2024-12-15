@@ -136,20 +136,24 @@ void Player::setInitialPosition(Coordinate coords)
 }
 
 
-void Player::Immobilize(float duration) {
+void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
 	m_isImmobilized = true;
-	m_immobilizedTimeRemaining = duration;
+	m_immobilizedStartTime = startTime;
+	m_immobilizedDuration = duration;
 }
 
 void Player::UpdateStatus(float deltaTime) {
+
 	if (m_isImmobilized) {
-		m_immobilizedTimeRemaining -= deltaTime;
-		if (m_immobilizedTimeRemaining <= 0) {
+		auto now = std::chrono::steady_clock::now();
+		if (now - m_immobilizedStartTime >= m_immobilizedDuration) {
 			m_isImmobilized = false;
-			m_immobilizedTimeRemaining = 0;
+			std::cout << "Player is no longer immobilized.\n";
 		}
 	}
-	m_gun.UpdateJammed(deltaTime);
+
+	
+	m_gun.UpdateJammed();
 }
 
 bool Player::IsImmobilized() const {

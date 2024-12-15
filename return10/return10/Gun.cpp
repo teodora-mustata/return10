@@ -9,18 +9,14 @@ bool Gun::canFire() const
     return std::chrono::duration<float>(now - m_lastFiredTime) >= m_firingRate;
 }
 
-void Gun::Jam(float duration) {
+void Gun::Jam(std::chrono::duration<float> duration) {
     m_isJammed = true;
-    m_jammedTimeRemaining = duration;
+    m_jammedEndTime = std::chrono::steady_clock::now() + std::chrono::duration_cast<std::chrono::steady_clock::duration>(duration);
 }
 
-void Gun::UpdateJammed(float deltaTime) {
-    if (m_isJammed) {
-        m_jammedTimeRemaining -= deltaTime;
-        if (m_jammedTimeRemaining <= 0) {
-            m_isJammed = false;
-            m_jammedTimeRemaining = 0.0f;
-        }
+void Gun::UpdateJammed() {
+    if (m_isJammed && std::chrono::steady_clock::now() >= m_jammedEndTime) {
+        m_isJammed = false;
     }
 }
 

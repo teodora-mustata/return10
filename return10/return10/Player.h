@@ -39,7 +39,7 @@ public:
 
 	void setInitialPosition(Coordinate coords);
 
-	void Immobilize(float duration);
+	void Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration);
 	void UpdateStatus(float deltaTime);
 	bool IsImmobilized() const;
 
@@ -53,6 +53,7 @@ private:
 	Gun m_gun;
 
 	bool m_isImmobilized = false;
-	float m_immobilizedTimeRemaining = 0.0f;
+	std::chrono::steady_clock::time_point m_immobilizedStartTime;
+	std::chrono::duration<float> m_immobilizedDuration;
 };
 

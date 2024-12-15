@@ -1,6 +1,7 @@
 #pragma once
 #include "Trap.h"
 #include "Player.h"
+#include <chrono>
 
 class DisableGunTrap : public Trap {
 public:
@@ -8,5 +9,5 @@ public:
     void ActivateEffect(Player& player) override;
 
 private:
-    float m_duration; 
+    std::chrono::duration<float> m_duration;
 };

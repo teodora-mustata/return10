@@ -20,8 +20,8 @@ public:
     void SetBulletSpeed(float newBulletSpeed);
     void setFiringRate(std::chrono::duration<float> newRate);
 
-    void Jam(float duration);
-    void UpdateJammed(float deltaTime);
+    void Jam(std::chrono::duration<float> duration);
+    void UpdateJammed();
     bool IsJammed() const;
 
 private:
@@ -31,4 +31,5 @@ private:
     float m_bulletSpeed = 0.25;
     bool m_isJammed = false;
     float m_jammedTimeRemaining = 0.0f;
+    std::chrono::time_point<std::chrono::steady_clock> m_jammedEndTime;
 };

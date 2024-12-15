@@ -1,5 +1,6 @@
 #pragma once
 #include "Trap.h"
+#include <chrono>
 
 
 class StunTrap : public Trap {
@@ -7,5 +8,5 @@ public:
     StunTrap(int x, int y, float duration);
     void ActivateEffect(Player& player) override;
 private:
-    float m_duration = 2.0f;
+    std::chrono::duration<float> m_duration;
 };
