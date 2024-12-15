@@ -2,27 +2,26 @@
 
 GameLogic::GameLogic(Map& map) : map{ map } {}
 
-
 void GameLogic::checkForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
     auto& cell = map.GetCellType(pos.i, pos.j);
 
-    if (auto trap = std::get_if<TeleportTrap>(&cell)) {
-        std::cout << "Player " << player.GetName() << " stepped on a Teleport Trap!\n";
-        trap->ActivateEffect(); // Implement teleportation logic in the trap class
-        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap after activation
-    }
-    else if (auto trap = std::get_if<DisableGunTrap>(&cell)) {
-        std::cout << "Player " << player.GetName() << "'s gun is disabled!\n";
-        trap->ActivateEffect(player);
-        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap
-    }
-    else if (auto trap = std::get_if<StunTrap>(&cell)) {
-        std::cout << "Player " << player.GetName() << " is stunned!\n";
-        trap->ActivateEffect(player);
-        map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove the trap
-    }
+    // Use std::visit to handle the cell type
+    std::visit(
+        [&player, this, &pos](auto&& cellType) {
+            using T = std::decay_t<decltype(cellType)>;
+            if constexpr (std::is_base_of_v<Trap, T>) {
+                // If the cell is a Trap or derived from Trap, activate it
+                cellType.ActivateEffect(player);
+                map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
+            }
+            
+        },
+        cell
+    );
 }
+
+
 
 //must be updated in the game
 

@@ -21,6 +21,8 @@ void GameInterface::handleInput()
         default: 
             std::cout << "Invalid command!" << std::endl;
             return;
+
+            
     }
 
     // Trimitem comanda către server

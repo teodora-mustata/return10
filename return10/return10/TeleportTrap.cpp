@@ -4,7 +4,7 @@
 TeleportTrap::TeleportTrap(int x, int y)
     : Trap(x, y) {}
 
-void TeleportTrap::ActivateEffect() {
+void TeleportTrap::ActivateEffect(Player& player) {
     std::cout << "Player is teleported from ("
         << m_coordinates.first << ", "
         << m_coordinates.second << ")"

@@ -4,5 +4,5 @@
 class TeleportTrap : public Trap {
 public:
     TeleportTrap(int x, int y);
-    void ActivateEffect() /*override*/;
+    void ActivateEffect(Player& player) override;
 };
