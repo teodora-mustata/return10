@@ -118,17 +118,17 @@ void Map::GenerateRandomTrap() {
 	//int trapType = (std::rand() % 3) + 1;
 	std::uniform_int_distribution<int>trapTypeDist(1, 3);
 	int trapType = trapTypeDist(gen);
-	/*switch (trapType)
+	switch (trapType)
 	{
 	case(1):
-		m_board[x][y] = TeleportTrap(x, y);
+		m_board[x][y] = CellType(TeleportTrap(x, y));
 	case(2):
-		m_board[x][y] = DisableGunTrap(x, y);
+		m_board[x][y] = CellType(DisableGunTrap(x, y,5.0f));
 	case(3):
-		m_board[x][y] = StunTrap(x, y);
+		m_board[x][y] = CellType(StunTrap(x, y,5.0f));
 	default:
 		break;
-	}*/
+	}
 }
 std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {

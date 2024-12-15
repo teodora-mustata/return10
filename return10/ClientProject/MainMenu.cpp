@@ -14,6 +14,33 @@ void MainMenu::display() {
         std::cin >> choice;
 
         if (choice == 1) {
+            //1-easy, 2-medium,3-hard;
+            //For Teo
+            int difficulty;
+            bool validDifficulty = false;
+            do{
+            std::cout << "====Choose Difficulty====\n";
+            std::cout << "1.Easy\n";
+            std::cout << "2.Medium\n";
+            std::cout << "3.Hard\n";
+            std::cout << "Please select difficulty: ";
+            std::cin >> difficulty;
+            switch (difficulty) {
+            case 1:
+                // TO DO:Set game parameters
+                break;
+            case 2:
+                // TO DO:Set game parameters
+                break;
+            case 3:
+                // TO DO:Set game parameters
+                break;
+            default:
+                std::cout << "Invalid choice! Please select 1, 2, or 3.\n";
+                break;
+            }
+        } while (!validDifficulty);
+
             std::cout << "Starting game...\n";
             GameInterface gameInterface;
             int currentId = UserSession::getInstance().getUserId();
