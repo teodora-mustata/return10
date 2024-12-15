@@ -257,6 +257,11 @@ const Map& GameLogic::GetMap() const
     return map;
 }
 
+Map& GameLogic::GetMap()
+{
+    return map;
+}
+
 bool GameLogic::isRunning() const
 {
     return gameRunning;

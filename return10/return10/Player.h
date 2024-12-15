@@ -9,14 +9,14 @@ class Player
 {
 public:
 	Player(std::string name, int startX, int startY);
-	Player(std::string name, int score, int crowns, Gun gun);
-	//Player();
+	Player(int id, std::string name, int score, int crowns, Gun gun);
+	Player() = default;
 	~Player();
 	void move(Direction direction);
 	void printPosition();
 
 	bool operator==(const Player& other);
-	void shoot(Direction direction, float bulletSpeed);
+	void shoot(Direction direction);
 
 	//Getters
 	std::string GetName() const;
@@ -26,6 +26,7 @@ public:
 	Coordinate GetPosition() const;
 	Gun& getGun();
 	Gun getGun() const;
+	int GetId() const;
 
 
 	//Updates for player
@@ -33,9 +34,11 @@ public:
 	void addCrowns(int acumulated_points);
 	void setInitialScore();
 	void setInitialCrowns();
+	void setId(int id);
 	void resetPosition();
 	void loseLife();
 	bool operator==(const Player& other) const;
+	Player& operator=(const Player& other);
 
 	void setInitialPosition(Coordinate coords);
 
@@ -44,6 +47,7 @@ public:
 	bool IsImmobilized() const;
 
 private:
+	int m_id;
 	int m_score;
 	int m_lives;
 	int m_crowns;
@@ -51,7 +55,7 @@ private:
 	Coordinate m_position;
 	Coordinate m_initial_position;
 	Gun m_gun;
-
+	Direction facingDirection;
 	bool m_isImmobilized = false;
 	std::chrono::steady_clock::time_point m_immobilizedStartTime;
 	std::chrono::duration<float> m_immobilizedDuration;

@@ -20,15 +20,19 @@ public:
 	void GenerateWalls();
 	void SetBombs();
 	void GenerateRandomTrap();
+
 	std::vector<std::vector<CellType>> GetBoard();
-	//std::pair<int, int> GetRandomSpawnPoint();
 	std::vector<std::pair<int, int>> GetSpawnPoints();
 	CellType& GetCellType(int x, int y); // pentru a modifica celula
 	const CellType& GetCellType(int x, int y) const; // read only
-	void SetCellType(int x, int y, CellType type);
-	void BreakWall(int x, int y);
-	//void PrintMap() const; commented out because i overloaded the << operator
 	std::pair<int, int> GetDimensions();
+	int GetDifficulty();
+
+	void SetCellType(int x, int y, CellType type);
+	void SetDifficulty(int difficulty);
+
+	void BreakWall(int x, int y);
+
 
 private:
 	// dimensions
@@ -44,6 +48,6 @@ private:
 	const float destructible_wall_chance = 0.4f;
 	const float indestructible_wall_chance = 0.1f;
 	static const int bombs_count = 3;
-
+	int m_difficulty;
 };
 

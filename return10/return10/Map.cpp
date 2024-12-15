@@ -17,7 +17,7 @@ void Map::ResizeMap()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(40, 60); // map dimensions will be between 40 and 60
+	std::uniform_int_distribution<> dist(20,30); // map dimensions will be between 20 and 30
 
 	m_height = dist(gen);
 	m_width = dist(gen);
@@ -118,6 +118,8 @@ void Map::GenerateRandomTrap() {
 	//int trapType = (std::rand() % 3) + 1;
 	std::uniform_int_distribution<int>trapTypeDist(1, 3);
 	int trapType = trapTypeDist(gen);
+
+	// For Stefi: here you should also check what the difficulty is, and have different chances for the traps depending on the difficulty level
 	switch (trapType)
 	{
 	case(1):
@@ -150,6 +152,12 @@ void Map::SetCellType(int x, int y, CellType type)
 	m_board[x][y] = type;
 }
 
+void Map::SetDifficulty(int difficulty)
+{
+	m_difficulty = difficulty;
+}
+
+
 void Map::BreakWall(int x, int y)
 {
 	if (std::holds_alternative<Wall>(m_board[x][y]))
@@ -164,6 +172,11 @@ std::pair<int, int> Map::GetDimensions()
 {
 	std::pair<int, int> dim(m_height, m_width);
 	return dim;
+}
+
+int Map::GetDifficulty()
+{
+	return m_difficulty;
 }
 
 std::ostream& operator<<(std::ostream& os, const Map& map) {

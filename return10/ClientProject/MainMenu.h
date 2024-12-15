@@ -9,5 +9,6 @@
 class MainMenu : public Menu {
 public:
     void display() override;  
+    void sendDifficultyToServer(int difficulty);
 };
 

@@ -134,6 +134,7 @@
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="DisableGunTrap.cpp" />
     <ClCompile Include="GameLogic.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="Gun.cpp" />
     <ClCompile Include="GunDAO.cpp" />
     <ClCompile Include="Login.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="DirectionUtils.h" />
     <ClInclude Include="DisableGunTrap.h" />
     <ClInclude Include="GameLogic.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="Gun.h" />
     <ClInclude Include="GunDAO.h" />
     <ClInclude Include="Login.h" />

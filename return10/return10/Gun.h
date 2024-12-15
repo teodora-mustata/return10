@@ -10,7 +10,7 @@ class Gun
 public:
     Gun();
     bool canFire() const;
-    bool fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed);
+    bool fire(int playerX, int playerY, Direction playerDirection);
 
     std::vector<Bullet> getFiredBullets() const;
     std::chrono::duration<float> getFiringRate() const;

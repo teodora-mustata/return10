@@ -24,9 +24,9 @@ bool Gun::IsJammed() const {
     return m_isJammed;
 }
 
-bool Gun::fire(int playerX, int playerY, Direction playerDirection, float bulletSpeed) {
+bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
     if (!m_isJammed && canFire()) {
-        Bullet newBullet(playerX, playerY, playerDirection, bulletSpeed);
+        Bullet newBullet(playerX, playerY, playerDirection, m_bulletSpeed);
         newBullet.SetActive(true);
 
         m_firedBullets.push_back(newBullet);

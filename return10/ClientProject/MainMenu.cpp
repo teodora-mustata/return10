@@ -14,53 +14,50 @@ void MainMenu::display() {
         std::cin >> choice;
 
         if (choice == 1) {
-            //1-easy, 2-medium,3-hard;
-            //For Teo
             int difficulty;
             bool validDifficulty = false;
-            do{
             std::cout << "====Choose Difficulty====\n";
             std::cout << "1.Easy\n";
             std::cout << "2.Medium\n";
             std::cout << "3.Hard\n";
             std::cout << "Please select difficulty: ";
             std::cin >> difficulty;
-            switch (difficulty) {
-            case 1:
-                // TO DO:Set game parameters
-                break;
-            case 2:
-                // TO DO:Set game parameters
-                break;
-            case 3:
-                // TO DO:Set game parameters
-                break;
-            default:
-                std::cout << "Invalid choice! Please select 1, 2, or 3.\n";
-                break;
+            if (difficulty >= 1 && difficulty <= 3)
+            {
+                sendDifficultyToServer(difficulty);
+                validDifficulty = true;
             }
-        } while (!validDifficulty);
+            else std::cout << "Invalid choice! Please select 1, 2, or 3.\n";
+            if (validDifficulty);
 
             std::cout << "Starting game...\n";
             GameInterface gameInterface;
             int currentId = UserSession::getInstance().getUserId();
             
-            gameInterface.addPlayerToGame(currentId);
+            int currentPlayers = gameInterface.addPlayerToGame(currentId);
             
-            //while (gameInterface.getActivePlayers() < 2) //change to 4 later
-            //{
-            //    std::cout << "Waiting for players";
-            //    std::cout << std::flush;
-
-            //    for (int i = 0; i < 30; ++i) {  // asteptam 30 de secunde pentru a intra playerii
-            //        std::cout << "." << std::flush;
-            //        std::this_thread::sleep_for(std::chrono::seconds(1));
-            //    }
-            //    std::cout << "No one joined. Exiting...\n";
-            //    break;
-            //}
-            if (gameInterface.getActivePlayers() == 1/*2*/)
+            while (currentPlayers < 1) //change to 4 later
             {
+                std::cout << "Waiting for players";
+                std::cout << std::flush;
+
+                for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
+                    std::cout << "." << std::flush;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+                std::cout << "No one joined. Exiting...\n";
+                break;
+            }
+            if (currentPlayers == 1)
+            {
+                std::cout << "Game starting now!" << std::endl;
+
+                for (int i = 3; i > 0; --i)
+                {
+                    std::cout << i << "..." << std::endl;
+                    std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă
+                }
+
                 bool gameRunning = true;
                 while (gameRunning)
                 {
@@ -84,4 +81,22 @@ void MainMenu::display() {
             std::cout << "Invalid option! Please try again.\n";
         }
     }
+}
+
+void MainMenu::sendDifficultyToServer(int difficulty)
+{
+    crow::json::wvalue jsonData;
+    jsonData["difficulty"] = difficulty;
+
+    auto response = cpr::Post(
+        cpr::Url{ "http://localhost:18080/send_difficulty" },
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
+    );
+
+    if (response.status_code == 200) {
+        auto responseJson = crow::json::load(response.text);
+        std::cout << "Difficulty sent successfully!\n";
+    }
+    else std::cout << "Couldn't send difficulty to server. Try again.\n";
 }

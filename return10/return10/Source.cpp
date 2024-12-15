@@ -13,6 +13,7 @@
 #include "Gun.h"
 #include "Trap.h"
 #include "StunTrap.h"
+
 int main()
 {
 	std::cout << "Server" << std::endl;

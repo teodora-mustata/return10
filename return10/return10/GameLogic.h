@@ -25,6 +25,7 @@ public:
     void removePlayer(Player player);
     //void movePlayer(Player player, Direction direction);
     const Map& GetMap() const;
+    Map& GetMap();
     bool isRunning() const;
     //Bullet
     bool checkPlayerCollision(Player& target, Bullet& bullet);

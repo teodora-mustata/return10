@@ -1,4 +1,4 @@
-
+﻿
 #include "Player.h"
 
 Player::Player(std::string name, int startX, int startY) :
@@ -9,7 +9,7 @@ Player::Player(std::string name, int startX, int startY) :
 	m_initial_position{ startX, startY },
 	m_position{ startX, startY } {}
 
-Player::Player(std::string name, int score, int crowns, Gun gun) : m_name(name), m_score(score), m_crowns(crowns), m_gun(gun)
+Player::Player(int id, std::string name, int score, int crowns, Gun gun) : m_id(id), m_name(name), m_score(score), m_crowns(crowns), m_gun(gun)
 {
 }
 
@@ -50,9 +50,9 @@ bool Player::operator==(const Player& other)
 	return m_name == other.m_name;
 }
 
-void Player::shoot(Direction direction, float bulletSpeed)
+void Player::shoot(Direction direction)
 {
-	m_gun.fire(m_position.i, m_position.j, direction, bulletSpeed);
+	m_gun.fire(m_position.i, m_position.j, direction);
 	//TO DO: check if the bullet collided with any player, add the points and remove the health points :)
 }
 
@@ -90,6 +90,11 @@ Gun Player::getGun() const
 	return m_gun;
 }
 
+int Player::GetId() const
+{
+	return m_id;
+}
+
 void Player::addScore(int acumulated_points)
 {
 	m_score += acumulated_points;
@@ -110,6 +115,11 @@ void Player::setInitialCrowns()
 	this->m_crowns = 0;
 }
 
+void Player::setId(int id)
+{
+	m_id = id;
+}
+
 void Player::resetPosition()
 {
 	m_position = m_initial_position;
@@ -128,6 +138,24 @@ bool Player::operator==(const Player& other) const
 {
 	if (this->m_name == other.GetName()) return true;
 	return false;
+}
+
+Player& Player::operator=(const Player& other)
+{
+	if (this != &other) { // Protecție împotriva auto-atribuției
+		m_id = other.m_id;
+		m_score = other.m_score;
+		m_lives = other.m_lives;
+		m_crowns = other.m_crowns;
+		m_name = other.m_name;
+		m_position = other.m_position;
+		m_initial_position = other.m_initial_position;
+		m_gun = other.m_gun; // Dacă `Gun` are un operator `=` definit.
+		m_isImmobilized = other.m_isImmobilized;
+		m_immobilizedStartTime = other.m_immobilizedStartTime;
+		m_immobilizedDuration = other.m_immobilizedDuration;
+	}
+	return *this;
 }
 
 void Player::setInitialPosition(Coordinate coords)

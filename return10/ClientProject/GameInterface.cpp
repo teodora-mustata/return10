@@ -4,6 +4,20 @@
 #include <chrono>
 #include <thread>
 
+#ifdef _WIN32
+#include <windows.h>
+void enableANSIInWindows() {
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut != INVALID_HANDLE_VALUE) {
+        DWORD dwMode = 0;
+        if (GetConsoleMode(hOut, &dwMode)) {
+            dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+            SetConsoleMode(hOut, dwMode);
+        }
+    }
+}
+#endif
+
 void GameInterface::handleInput() 
 {
     char input;
@@ -21,21 +35,18 @@ void GameInterface::handleInput()
         default: 
             std::cout << "Invalid command!" << std::endl;
             return;
-
-            
     }
-
-    // Trimitem comanda către server
     sendCommandToServer(command);
 }
 
 void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId) {
-    const auto& board = gameData["board"];
+    const auto& board = gameData["map"];
 
     for (size_t i = 0; i < board.size(); ++i) {
-        for (size_t j = 0; j < board[i].size(); ++j) {
-            // Afișează fiecare element pe harta
-            const auto& cell = board[i][j];
+        const std::string& row = board[i].s();  // Accesăm fiecare șir.
+
+        for (size_t j = 0; j < row.size(); ++j) {
+            char cell = row[j]; 
 
             if (cell == '0') {
                 std::cout << "0 ";  // Gol
@@ -59,18 +70,16 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
 
 bool GameInterface::sendCommandToServer(const std::string& command) {
     try {
-        // Creează un obiect JSON pentru a trimite comanda
         crow::json::wvalue jsonData;
         jsonData["command"] = command;
+        jsonData["id"] = UserSession::getInstance().getUserId();
 
-        // Trimite cererea către server
         auto response = cpr::Post(
             cpr::Url{ "http://localhost:18080/command" },
             cpr::Header{ {"Content-Type", "application/json"} },
             cpr::Body{ jsonData.dump() }
         );
 
-        // Verifică răspunsul serverului
         if (response.status_code == 200) {
             auto responseJson = crow::json::load(response.text);
 
@@ -94,18 +103,23 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
 }
 
 
-void GameInterface::addPlayerToGame(int playerID)
+int GameInterface::addPlayerToGame(int playerID)
 {
-    std::cout << "Initializing POST request...\n";
-    cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/add_player" },
-        cpr::Payload{ {"player_id", std::to_string(playerID)} });
+    crow::json::wvalue jsonData;
+    jsonData["player_id"] = playerID;
+    int currentPlayers = -1;
+    auto r = cpr::Post(
+        cpr::Url{ "http://localhost:18080/add_player" },
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
+    );
   
     if (r.status_code == 200) {
         
         crow::json::rvalue responseData = crow::json::load(r.text);
 
         if (responseData.has("current_players")) {
-            int currentPlayers = responseData["current_players"].i();
+            currentPlayers = responseData["current_players"].i();
             std::cout << "Player with ID " << playerID << " joined!\n";
             std::cout << "There are currently " << currentPlayers << "/4 players in the game.\n";
         }
@@ -116,61 +130,111 @@ void GameInterface::addPlayerToGame(int playerID)
     else {
         std::cerr << "Failed to add player to game. Status code: " << r.status_code << std::endl;
     }
+    return currentPlayers;
 }
 
 void GameInterface::startGame() {
-    if (getActivePlayers() == 2) // placeholder ; change to 4 later
-    {
-        // ID-ul player-ului curent
-        int playerId = UserSession::getInstance().getUserId();
 
-        while (true) {
-            // Trimite cererea GET pentru a obține starea jocului
+#ifdef _WIN32
+    enableANSIInWindows();
+#endif
 
-            cpr::Response r = cpr::Get(cpr::Url{ "http://localhost:18080/get_game_state" });
+    int playerId = UserSession::getInstance().getUserId();
 
-            // Verifică dacă cererea a avut succes (status_code 200)
-            if (r.status_code == 200) {
-                // Parsează răspunsul JSON
-                crow::json::rvalue gameData = crow::json::load(r.text);
+    while (true) {
+#ifdef _WIN32
+        system("cls");
+#else
+        std::cout << "\033[2J\033[1;1H";
+#endif
 
-                // Verifică dacă datele conțin informațiile necesare
-                if (gameData.has("board") && gameData.has("players")) {
-                    // Afișează harta și procesăm inputurile
-                    renderGame(gameData, playerId);  // Afișează harta curentă
-                    handleInput();  // Gestionează inputurile utilizatorului
-                    //displayStatus();
-                }
-                else {
-                    std::cerr << "Game data is missing necessary fields!" << std::endl;
-                    break;  // Ieșim din buclă dacă datele sunt incomplete
-                }
+        cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/map" });
+
+        if (r.status_code == 200) {
+            crow::json::rvalue gameData = crow::json::load(r.text);
+
+            if (gameData.has("map") /* && gameData.has("players")*/) {
+                renderGame(gameData, playerId); 
+                handleInput(); 
+                //displayStatus();
             }
             else {
-                // Dacă cererea nu a avut succes, afișează un mesaj de eroare
-                std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
+                std::cerr << "Game data is missing necessary fields!" << std::endl;
                 break;
             }
-
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-            std::cout << "\033[2J\033[1;1H";  // Comandă ANSI pentru curățarea terminalului
         }
+        else {
+            std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
+            break;
+        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+        //std::cout << "\033[2J\033[1;1H"; 
     }
 }
 
-int GameInterface::getActivePlayers()
-{
-    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/getActivePlayers" });
+//void GameInterface::startGame() {
+//#ifdef _WIN32
+//    enableANSIInWindows();
+//#endif
+//
+//    int playerId = UserSession::getInstance().getUserId();
+//
+//    bool isRunning = true;
+//    std::thread inputThread([&]() {
+//        while (isRunning) {
+//            handleInput();
+//            std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//        }
+//        });
+//
+//
+//    while (isRunning) {
+//#ifdef _WIN32
+//        system("cls");
+//#else
+//        std::cout << "\033[2J\033[1;1H";
+//#endif
+//
+//        cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/map" });
+//
+//        if (r.status_code == 200) {
+//            crow::json::rvalue gameData = crow::json::load(r.text);
+//
+//            if (gameData.has("map")) {
+//                renderGame(gameData, playerId); 
+//            }
+//            else {
+//                std::cerr << "Game data is missing necessary fields!" << std::endl;
+//                isRunning = false;
+//            }
+//        }
+//        else {
+//            std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
+//            isRunning = false;
+//        }
+//
+//        //std::this_thread::sleep_for(std::chrono::milliseconds(50));
+//    }
+//
+//    isRunning = false;
+//    inputThread.join();
+//}
 
-    if (response.status_code == 200) {
-        auto jsonResponse = crow::json::load(response.text);
-        if (jsonResponse) {
-            return jsonResponse["active_players"].i(); // Preluăm numărul de jucători
-        }
-    }
-    return 0; // În caz de eroare
-}
+
+//int GameInterface::getActivePlayers()
+//{
+//    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/get_active_players" });
+//
+//    if (response.status_code == 200) {
+//        auto jsonResponse = crow::json::load(response.text);
+//        if (jsonResponse) {
+//            return jsonResponse["active_players"].i();
+//        }
+//    }
+//    return -1;
+//}
 
 //void GameInterface::displayStatus() {
 //    
