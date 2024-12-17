@@ -4,6 +4,7 @@
 #include "BattleCityDatabase.h"
 #include <regex>
 #include "GameLogic.h"
+#include "GameManager.h"
 
 class Routing
 {
@@ -28,6 +29,7 @@ public:
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
+	//GameManager m_games;
 
 	GameLogic& m_gameLogic;
 

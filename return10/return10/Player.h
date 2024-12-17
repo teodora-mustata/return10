@@ -27,7 +27,7 @@ public:
 	Gun& getGun();
 	Gun getGun() const;
 	int GetId() const;
-
+	Direction GetFacingDirection();
 
 	//Updates for player
 	void addScore(int acumulated_points);
@@ -35,6 +35,8 @@ public:
 	void setInitialScore();
 	void setInitialCrowns();
 	void setId(int id);
+	void SetFacingDirection(const Direction& dir);
+
 	void resetPosition();
 	void loseLife();
 	bool operator==(const Player& other) const;
@@ -45,6 +47,7 @@ public:
 	void Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration);
 	void UpdateStatus(float deltaTime);
 	bool IsImmobilized() const;
+	bool IsAlive() const;
 
 private:
 	int m_id;
@@ -55,7 +58,7 @@ private:
 	Coordinate m_position;
 	Coordinate m_initial_position;
 	Gun m_gun;
-	Direction facingDirection;
+	Direction m_facingDirection;
 	bool m_isImmobilized = false;
 	std::chrono::steady_clock::time_point m_immobilizedStartTime;
 	std::chrono::duration<float> m_immobilizedDuration;

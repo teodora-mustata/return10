@@ -3,6 +3,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <conio.h>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -20,24 +21,25 @@ void enableANSIInWindows() {
 
 void GameInterface::handleInput() 
 {
-    char input;
-    std::cout << "W/A/S/D to move, F to shoot: ";
-    std::cin >> input;
-    input = toupper(input);
+    if (_kbhit()) {
+        std::cout << "W/A/S/D to move, F to shoot: ";
+        char input = _getch();
+        input = toupper(input);
 
-    // Traducem input-ul într-o comandă pentru server
-    std::string command;
-    switch (input) {
+        // Traducem input-ul într-o comandă pentru server
+        std::string command;
+        switch (input) {
         case 'W': command = "MOVE_UP"; break;
         case 'A': command = "MOVE_LEFT"; break;
         case 'S': command = "MOVE_DOWN"; break;
         case 'D': command = "MOVE_RIGHT"; break;
         case 'F': command = "SHOOT"; break;
-        default: 
+        default:
             std::cout << "Invalid command!" << std::endl;
             return;
+        }
+        sendCommandToServer(command);
     }
-    sendCommandToServer(command);
 }
 
 void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId) {
@@ -145,12 +147,14 @@ void GameInterface::startGame() {
 
     int playerId = UserSession::getInstance().getUserId();
 
-    while (true) {
 #ifdef _WIN32
-        system("cls");
+    system("cls");
 #else
-        std::cout << "\033[2J\033[1;1H";
+    std::cout << "\033[2J\033[1;1H";
 #endif
+
+    while (true) {
+        std::cout << "\033[H";
 
         cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/map" });
 

@@ -67,12 +67,6 @@ void GameLogic::startTimer()
     std::cout << "Game timer started!" << std::endl;
 }
 
-void GameLogic::showStartMenu()
-{
-    std::cout << "Welcome to the game!" << std::endl;
-    std::cout << "The game is starting..." << std::endl;
-}
-
 void GameLogic::ApplyDamage(Bomb bomb)
 {
     std::list<std::pair<int, int>> area_of_effect = bomb.CalculateEffectArea();
@@ -160,21 +154,19 @@ std::vector<std::string> GameLogic::convertMapToString() const
         for (int colIndex = 0; colIndex < map.GetDimensions().second; ++colIndex) {
             bool cellOverridden = false;
 
-            // Adăugăm jucătorii
             for (const auto& player : m_players) {
                 if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex) 
                 {
-                    rowStr.push_back('P');  // Jucător
+                    rowStr.push_back('P');
                     cellOverridden = true;
                     break; 
                 }
 
-                // Adăugăm gloanțele
                 if (!cellOverridden)
                 {
                     for (const auto& bullet : player.getGun().getFiredBullets()) {
                         if (bullet.GetX() == rowIndex && bullet.GetY() == colIndex) {
-                            rowStr.push_back('*');  // Glonț
+                            rowStr.push_back('*');
                             cellOverridden = true;
                             break;
                         }
@@ -185,29 +177,28 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
 
 
-            // Dacă celula nu a fost suprascrisă de un jucător sau glonț
             if (!cellOverridden) {
                 const auto& cell = map.GetCellType(rowIndex, colIndex);
                 if (std::holds_alternative<std::monostate>(cell)) {
-                    rowStr.push_back('0');  // Celulă goală
+                    rowStr.push_back('0');
                 }
                 else if (std::holds_alternative<Wall>(cell)) {
                     const Wall& wall = std::get<Wall>(cell);
 
                     if (wall.IsDestructible() == false) {
-                        rowStr.push_back('I');  // Zid indestructibil
+                        rowStr.push_back('I');
                     }
                     else if (wall.IsDestructible() && wall.GetContainedBomb() != nullptr) {
-                        rowStr.push_back('B');  // Zid destructibil cu bombă
+                        rowStr.push_back('B');
                     }
                     else {
-                        rowStr.push_back('D');  // Zid destructibil
+                        rowStr.push_back('D');
                     }
                 }
             }
         }
 
-        charMap.push_back(rowStr);  // Adăugăm rândul la hartă
+        charMap.push_back(rowStr);
     }
 
     return charMap;
@@ -271,14 +262,8 @@ bool GameLogic::isRunning() const
 
 void GameLogic::movePlayer(Player *player, Direction direction)
 {
-    //auto it = std::find_if(m_players.begin(), m_players.end(), [&](const Player& player) {
-    //    return player.GetName() == playerName;
-    //    });
-
-    //Player& player = *it;
-
     auto [currentX, currentY] = (*player).GetPosition();
-    // Calculate the new position based on direction
+
     int newX = currentX;
     int newY = currentY;
 
@@ -289,14 +274,31 @@ void GameLogic::movePlayer(Player *player, Direction direction)
     case Direction::RIGHT: newY++; break;
     }
 
-    // Validate new position
     if (newX < 0 || newX >= map.GetDimensions().first || newY < 0 || newY >= map.GetDimensions().second) {
         return;
     }
 
-    if (!std::holds_alternative<std::monostate>(map.GetBoard()[newX][newY])) {
+    if (std::holds_alternative<Wall>(map.GetBoard()[newX][newY])) 
+    {
         return;
     }
 
-    (*player).move(direction);// Update player position
+    (*player).move(direction);
+}
+
+bool GameLogic::WinCondition()
+{
+    int aliveCount = 0;
+
+    for (const auto& player : m_players) {
+        if (player.IsAlive()) {
+            aliveCount++;
+        }
+
+        if (aliveCount > 1) {
+            return false;
+        }
+    }
+
+    return (aliveCount <= 1);
 }

@@ -28,15 +28,19 @@ void Player::move(Direction direction)
 	{
 	case Direction::UP:
 		m_position.i -= 1;
+		m_facingDirection = Direction::UP;
 		break;
 	case Direction::DOWN:
 		m_position.i += 1;
+		m_facingDirection = Direction::DOWN;
 		break;
 	case Direction::LEFT:
 		m_position.j -= 1;
+		m_facingDirection = Direction::LEFT;
 		break;
 	case Direction::RIGHT:
 		m_position.j += 1;
+		m_facingDirection = Direction::RIGHT;
 		break;
 	}
 }
@@ -95,6 +99,11 @@ int Player::GetId() const
 	return m_id;
 }
 
+Direction Player::GetFacingDirection()
+{
+	return m_facingDirection;
+}
+
 void Player::addScore(int acumulated_points)
 {
 	m_score += acumulated_points;
@@ -118,6 +127,11 @@ void Player::setInitialCrowns()
 void Player::setId(int id)
 {
 	m_id = id;
+}
+
+void Player::SetFacingDirection(const Direction& dir)
+{
+	m_facingDirection = dir;
 }
 
 void Player::resetPosition()
@@ -186,4 +200,10 @@ void Player::UpdateStatus(float deltaTime) {
 
 bool Player::IsImmobilized() const {
 	return m_isImmobilized;
+}
+
+bool Player::IsAlive() const
+{
+	if (m_lives == 0) return false;
+	return true;
 }

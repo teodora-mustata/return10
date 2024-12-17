@@ -37,16 +37,10 @@ inline auto CreateStorage(const std::string& filename)
 
 using Storage = decltype(CreateStorage(""));
 
-//proceseaza datele, interactioneaza cu DB
-//BattleCityStorage
 class GameStorage
 {
 public:
 	bool Initialize();
-
-	/*std::vector<Product> GetProducts();
-	void AddProductToShoppingBasket(int productId, int quantity);
-	std::vector<std::tuple<std::string, float, int>> GetBasket();*/
 	void AddPlayer(const Player& player); // to remove (?)
 	void AddPlayerDAO(const PlayerDAO& playerDAO);
 	int AddGunDAO(const GunDAO& gun);
@@ -57,7 +51,7 @@ public:
 	void UpdatePlayerDAO(const PlayerDAO& player);
 	void UpdateGunDAO(const GunDAO& gun);
 	void DisplayDatabaseContents();
-	//Map getMap()const;
+	int GetPlayerScoreById(int playerId);
 private:
 	const std::string kDbFile{ "BattleCity.sqlite" };
 

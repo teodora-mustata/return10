@@ -500,7 +500,7 @@ void Routing::SetDifficulty()
         ([&](const crow::request& req, crow::response& res) {
         auto jsonData = crow::json::load(req.body);
         if (!jsonData) {
-            res.code = 400; // Bad Request
+            res.code = 400;
             res.end();
             return;
         }
@@ -525,7 +525,7 @@ void Routing::HandlePlayerCommand()
         int id = commandData["id"].i();
 
 
-        Player* currentPlayer;
+        Player* currentPlayer = nullptr;
         for (auto& player : m_gameLogic.GetPlayers()) {
             if (player.GetId() == id) {
                 currentPlayer = &player;
@@ -533,7 +533,7 @@ void Routing::HandlePlayerCommand()
             }
         }
 
-        if (&currentPlayer == nullptr) {
+        if (currentPlayer == nullptr) {
             return crow::response(404, "Player not found");
         }
 
@@ -554,11 +554,19 @@ void Routing::HandlePlayerCommand()
             m_gameLogic.movePlayer(currentPlayer, Direction::RIGHT);
         }
         else if (command == "SHOOT") {
-            currentPlayer->shoot(Direction::DOWN); // temporary
+            Direction dir = currentPlayer->GetFacingDirection();
+            currentPlayer->shoot(dir);
         }
         else {
             return crow::response(400, "Invalid command");
         }
+
+        //if (m_gameLogic.WinCondition()) {
+        //    return crow::response(200, crow::json::wvalue{
+        //        {"status", "game_over"},
+        //        {"message", "A player has won the game!"}
+        //        });
+        //}
 
         return crow::response(200, "Command processed successfully");
             });

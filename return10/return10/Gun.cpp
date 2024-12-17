@@ -31,6 +31,7 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
 
         m_firedBullets.push_back(newBullet);
         m_lastFiredTime = std::chrono::steady_clock::now();
+        newBullet.Move();
 
         return true; // Fired
     }

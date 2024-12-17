@@ -109,3 +109,9 @@ void GameStorage::DisplayDatabaseContents()
     }
 }
 
+int GameStorage::GetPlayerScoreById(int playerId)
+{
+    PlayerDAO playerDAO = GetPlayerByID(playerId);
+    return playerDAO.GetScore();
+}
+
