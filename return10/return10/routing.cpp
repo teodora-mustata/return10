@@ -538,16 +538,20 @@ void Routing::HandlePlayerCommand()
         }
 
         if (command == "MOVE_UP") {
-            currentPlayer->move(Direction::UP);
+            //currentPlayer->move(Direction::UP);
+            m_gameLogic.movePlayer(currentPlayer, Direction::UP);
         }
         else if (command == "MOVE_LEFT") {
-            currentPlayer->move(Direction::LEFT);
+            //currentPlayer->move(Direction::LEFT);
+            m_gameLogic.movePlayer(currentPlayer, Direction::LEFT);
         }
         else if (command == "MOVE_DOWN") {
-            currentPlayer->move(Direction::DOWN);
+            //currentPlayer->move(Direction::DOWN);
+            m_gameLogic.movePlayer(currentPlayer, Direction::DOWN);
         }
         else if (command == "MOVE_RIGHT") {
-            currentPlayer->move(Direction::RIGHT);
+            //currentPlayer->move(Direction::RIGHT);
+            m_gameLogic.movePlayer(currentPlayer, Direction::RIGHT);
         }
         else if (command == "SHOOT") {
             currentPlayer->shoot(Direction::DOWN); // temporary

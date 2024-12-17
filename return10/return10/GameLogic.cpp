@@ -183,6 +183,8 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
             }
 
+
+
             // Dacă celula nu a fost suprascrisă de un jucător sau glonț
             if (!cellOverridden) {
                 const auto& cell = map.GetCellType(rowIndex, colIndex);
@@ -267,34 +269,34 @@ bool GameLogic::isRunning() const
     return gameRunning;
 }
 
-//void GameLogic::movePlayer(Player player, Direction direction)
-//{
-//    auto it = std::find_if(mplayers.begin(), players.end(), [&](const Player& player) {
-//        return player.GetName() == playerName;
-//        });
-//
-//    Player& player = *it;
-//
-//    auto [currentX, currentY] = player.GetPosition();
-//    // Calculate the new position based on direction
-//    int newX = currentX;
-//    int newY = currentY;
-//
-//    switch (direction) {
-//    case Direction::UP:    newX--; break;
-//    case Direction::DOWN:  newX++; break;
-//    case Direction::LEFT:  newY--; break;
-//    case Direction::RIGHT: newY++; break;
-//    }
-//
-//    // Validate new position
-//    if (newX < 0 || newX >= m_height || newY < 0 || newY >= m_width) {
-//        return;
-//    }
-//
-//    if (!std::holds_alternative<std::monostate>(m_board[newX][newY])) {
-//        return;
-//    }
-//
-//    player.move(direction);// Update player position
-//}
+void GameLogic::movePlayer(Player *player, Direction direction)
+{
+    //auto it = std::find_if(m_players.begin(), m_players.end(), [&](const Player& player) {
+    //    return player.GetName() == playerName;
+    //    });
+
+    //Player& player = *it;
+
+    auto [currentX, currentY] = (*player).GetPosition();
+    // Calculate the new position based on direction
+    int newX = currentX;
+    int newY = currentY;
+
+    switch (direction) {
+    case Direction::UP:    newX--; break;
+    case Direction::DOWN:  newX++; break;
+    case Direction::LEFT:  newY--; break;
+    case Direction::RIGHT: newY++; break;
+    }
+
+    // Validate new position
+    if (newX < 0 || newX >= map.GetDimensions().first || newY < 0 || newY >= map.GetDimensions().second) {
+        return;
+    }
+
+    if (!std::holds_alternative<std::monostate>(map.GetBoard()[newX][newY])) {
+        return;
+    }
+
+    (*player).move(direction);// Update player position
+}

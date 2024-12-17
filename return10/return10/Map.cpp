@@ -123,11 +123,11 @@ void Map::GenerateRandomTrap() {
 	switch (trapType)
 	{
 	case(1):
-		m_board[x][y] = CellType(TeleportTrap(x, y));
+		m_board[x][y] = CellType(TeleportTrap(x, y)); // 10%
 	case(2):
-		m_board[x][y] = CellType(DisableGunTrap(x, y,5.0f));
+		m_board[x][y] = CellType(DisableGunTrap(x, y,5.0f)); //15%
 	case(3):
-		m_board[x][y] = CellType(StunTrap(x, y,5.0f));
+		m_board[x][y] = CellType(StunTrap(x, y,5.0f)); //10%
 	default:
 		break;
 	}

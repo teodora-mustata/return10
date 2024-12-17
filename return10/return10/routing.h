@@ -28,7 +28,9 @@ public:
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
+
 	GameLogic& m_gameLogic;
+
 	std::vector<int> m_loggedInPlayers;
 };
 

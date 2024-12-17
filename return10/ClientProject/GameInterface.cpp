@@ -23,6 +23,7 @@ void GameInterface::handleInput()
     char input;
     std::cout << "W/A/S/D to move, F to shoot: ";
     std::cin >> input;
+    input = toupper(input);
 
     // Traducem input-ul într-o comandă pentru server
     std::string command;
@@ -53,6 +54,9 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
             }
             else if (cell == 'D') {
                 std::cout << "\033[36mD \033[0m";  // Zid destructibil
+            }
+            else if (cell == 'B') {
+                std::cout << "\033[35mB \033[0m";  // Bomba
             }
             else if (cell == 'I') {
                 std::cout << "\033[34mI \033[0m";  // Zid indestructibil
