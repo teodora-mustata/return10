@@ -513,61 +513,112 @@ void Routing::SetDifficulty()
             });
 }
 
+//void Routing::HandlePlayerCommand()
+//{
+//    CROW_ROUTE(m_app, "/command")
+//        .methods("POST"_method)([this](const crow::request& req) {
+//        auto commandData = crow::json::load(req.body);
+//        if (!commandData) {
+//            return crow::response(400, "Invalid input");
+//        }
+//        std::string command = commandData["command"].s();
+//        int id = commandData["id"].i();
+//
+//
+//        Player* currentPlayer = nullptr;
+//        for (auto& player : m_gameLogic.GetPlayers()) {
+//            if (player.GetId() == id) {
+//                currentPlayer = &player;
+//                break;
+//            }
+//        }
+//
+//        if (currentPlayer == nullptr) {
+//            return crow::response(404, "Player not found");
+//        }
+//
+//        if (command == "MOVE_UP") {
+//            m_gameLogic.movePlayer(currentPlayer, Direction::UP);
+//        }
+//        else if (command == "MOVE_LEFT") {
+//            m_gameLogic.movePlayer(currentPlayer, Direction::LEFT);
+//        }
+//        else if (command == "MOVE_DOWN") {
+//            m_gameLogic.movePlayer(currentPlayer, Direction::DOWN);
+//        }
+//        else if (command == "MOVE_RIGHT") {
+//           m_gameLogic.movePlayer(currentPlayer, Direction::RIGHT);
+//        }
+//        else if (command == "SHOOT") {
+//            Direction dir = currentPlayer->GetFacingDirection();
+//            currentPlayer->shoot(dir);
+//        }
+//        else {
+//            return crow::response(400, "Invalid command");
+//        }
+//
+//        //if (m_gameLogic.WinCondition()) {
+//        //    return crow::response(200, crow::json::wvalue{
+//        //        {"status", "game_over"},
+//        //        {"message", "A player has won the game!"}
+//        //        });
+//        //}
+//
+//        return crow::response(200, "Command processed successfully");
+//            });
+//}
 void Routing::HandlePlayerCommand()
 {
     CROW_ROUTE(m_app, "/command")
         .methods("POST"_method)([this](const crow::request& req) {
+  
         auto commandData = crow::json::load(req.body);
         if (!commandData) {
             return crow::response(400, "Invalid input");
         }
+
         std::string command = commandData["command"].s();
         int id = commandData["id"].i();
 
+       
+        auto it = std::find_if(
+            m_gameLogic.GetPlayers().begin(),
+            m_gameLogic.GetPlayers().end(),
+            [id](const Player& player) { return player.GetId() == id; }
+        );
 
-        Player* currentPlayer = nullptr;
-        for (auto& player : m_gameLogic.GetPlayers()) {
-            if (player.GetId() == id) {
-                currentPlayer = &player;
-                break;
-            }
-        }
-
-        if (currentPlayer == nullptr) {
+        if (it == m_gameLogic.GetPlayers().end()) {
             return crow::response(404, "Player not found");
         }
 
+        Player& currentPlayer = *it;
+
         if (command == "MOVE_UP") {
-            //currentPlayer->move(Direction::UP);
-            m_gameLogic.movePlayer(currentPlayer, Direction::UP);
+            m_gameLogic.movePlayer(&currentPlayer, Direction::UP);
         }
         else if (command == "MOVE_LEFT") {
-            //currentPlayer->move(Direction::LEFT);
-            m_gameLogic.movePlayer(currentPlayer, Direction::LEFT);
+            m_gameLogic.movePlayer(&currentPlayer, Direction::LEFT);
         }
         else if (command == "MOVE_DOWN") {
-            //currentPlayer->move(Direction::DOWN);
-            m_gameLogic.movePlayer(currentPlayer, Direction::DOWN);
+            m_gameLogic.movePlayer(&currentPlayer, Direction::DOWN);
         }
         else if (command == "MOVE_RIGHT") {
-            //currentPlayer->move(Direction::RIGHT);
-            m_gameLogic.movePlayer(currentPlayer, Direction::RIGHT);
+            m_gameLogic.movePlayer(&currentPlayer, Direction::RIGHT);
         }
         else if (command == "SHOOT") {
-            Direction dir = currentPlayer->GetFacingDirection();
-            currentPlayer->shoot(dir);
+            Direction dir = currentPlayer.GetFacingDirection();
+            currentPlayer.shoot(dir);
         }
         else {
             return crow::response(400, "Invalid command");
         }
-
         //if (m_gameLogic.WinCondition()) {
         //    return crow::response(200, crow::json::wvalue{
         //        {"status", "game_over"},
         //        {"message", "A player has won the game!"}
         //        });
         //}
-
         return crow::response(200, "Command processed successfully");
             });
 }
+

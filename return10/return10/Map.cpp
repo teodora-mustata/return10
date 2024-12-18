@@ -8,7 +8,7 @@ Map::Map() : m_height(40), m_width(40) //default dimensions
 	SetBombs();
 }
 
-std::vector<std::vector<CellType>> Map::GetBoard()
+std::vector<std::vector<CellType>>& Map::GetBoard() //here i put & jerry it solved the debug assertion failure for playerMove
 {
 	return this->m_board;
 }

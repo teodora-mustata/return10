@@ -260,9 +260,16 @@ bool GameLogic::isRunning() const
     return gameRunning;
 }
 
-void GameLogic::movePlayer(Player *player, Direction direction)
+void GameLogic::movePlayer(Player* player, Direction direction)
 {
-    auto [currentX, currentY] = (*player).GetPosition();
+    if (player == nullptr)
+    {
+        std::cout << "Player is null in movePlayer\n";
+        return;
+    }
+
+    auto [currentX, currentY] = player->GetPosition();
+    std::cout << "Current position: (" << currentX << ", " << currentY << ")\n";
 
     int newX = currentX;
     int newY = currentY;
@@ -274,17 +281,25 @@ void GameLogic::movePlayer(Player *player, Direction direction)
     case Direction::RIGHT: newY++; break;
     }
 
-    if (newX < 0 || newX >= map.GetDimensions().first || newY < 0 || newY >= map.GetDimensions().second) {
+    auto dimensions = map.GetDimensions();
+    std::cout << "Attempting to move to: (" << newX << ", " << newY << ")\n";
+    std::cout << "Map dimensions: (" << dimensions.first << ", " << dimensions.second << ")\n";
+
+    if (newX < 0 || newX >= dimensions.first || newY < 0 || newY >= dimensions.second) {
+        std::cout << "Out of bounds! Movement aborted.\n";
         return;
     }
 
-    if (std::holds_alternative<Wall>(map.GetBoard()[newX][newY])) 
+    if (std::holds_alternative<Wall>(map.GetBoard()[newX][newY]))
     {
+        std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
         return;
     }
 
-    (*player).move(direction);
+    player->move(direction);
+    std::cout << "Player moved successfully.\n";
 }
+
 
 bool GameLogic::WinCondition()
 {
