@@ -92,11 +92,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="ShopMenu.cpp" />
+    <ClCompile Include="source.cpp" />
     <QtRcc Include="Client.qrc" />
     <QtUic Include="Client.ui" />
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="GameInterface.cpp" />
+    <ClCompile Include="Leaderboard.cpp" />
+    <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -105,7 +110,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameInterface.h" />
+    <ClInclude Include="Leaderboard.h" />
+    <ClInclude Include="LoginMenu.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="ShopMenu.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
