@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ClientProject", "ClientProj
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Validator", "Validator\Validator.vcxproj", "{44AAC87C-433A-4287-84A6-9303C9361347}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Client", "Client\Client.vcxproj", "{04958C80-9E58-4F44-B480-F88F8D318318}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,14 @@ Global
 		{44AAC87C-433A-4287-84A6-9303C9361347}.Release|x64.Build.0 = Release|x64
 		{44AAC87C-433A-4287-84A6-9303C9361347}.Release|x86.ActiveCfg = Release|Win32
 		{44AAC87C-433A-4287-84A6-9303C9361347}.Release|x86.Build.0 = Release|Win32
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Debug|x64.ActiveCfg = Debug|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Debug|x64.Build.0 = Debug|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Debug|x86.ActiveCfg = Debug|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Debug|x86.Build.0 = Debug|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Release|x64.ActiveCfg = Release|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Release|x64.Build.0 = Release|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Release|x86.ActiveCfg = Release|x64
+		{04958C80-9E58-4F44-B480-F88F8D318318}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

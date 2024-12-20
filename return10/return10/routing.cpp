@@ -314,7 +314,7 @@ void Routing::SetupGameRoute()
 
 void Routing::BuyReloadSpeedUpgrade() {
     
-    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")//.methods("Put"_method)
+    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>").methods("Put"_method)
         ([this](int userId) {
         std::cout<<"a ajuns";
         try {
@@ -362,7 +362,7 @@ void Routing::BuyReloadSpeedUpgrade() {
 }
 
 void Routing::BuyBulletSpeedUpgrade() {
-    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>")
+    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>").methods("Put"_method)
         ([this](int userId) {
         try {
             PlayerDAO player = getPlayerById(userId);

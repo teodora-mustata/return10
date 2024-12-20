@@ -163,6 +163,11 @@
     <ClInclude Include="ShopMenu.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Validator\Validator.vcxproj">
+      <Project>{44aac87c-433a-4287-84a6-9303c9361347}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

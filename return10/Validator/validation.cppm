@@ -5,6 +5,6 @@ import <string>;
 export class __declspec(dllexport) Validator
 {
 public:
-	bool validatePassword(const std::string& password);
-	bool validateUserInput(const std::string& input);
+	bool ValidatePassword(const std::string& password);
+	bool ValidateUserInput(const std::string& input);
 };

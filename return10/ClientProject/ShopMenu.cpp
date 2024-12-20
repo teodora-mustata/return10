@@ -33,10 +33,9 @@ void ShopMenu::buyReloadSpeedUpgrade() {
 
     if (response.status_code == 200) {
         auto responseJson = crow::json::load(response.text);
-
         std::cout << "==== Upgrade Successful ====\n";
         std::cout << responseJson["message"].s() << "\n";
-        std::cout << "Remaining Points: " << responseJson["remainingPoints"].i() << "\n";
+        std::cout << "Remaining Score: " << responseJson["remainingScore"].i() << "\n";
         std::cout << "New Reload Speed: " << responseJson["newReloadSpeed"].d() << "\n";
     }
     else if (response.status_code == 400) {
