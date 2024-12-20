@@ -101,33 +101,61 @@ void Map::SetBombs()
 	}
 }
 
-void Map::GenerateRandomTrap() {
+void Map::GenerateRandomTrap(int difficulty) {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<std::pair<int, int>> validCells;
 	for (int i = 0; i < m_height; i++)
-		for (int j = 0; j < m_width; j++)
+		for (int j = 0; j < m_width; j++) 
 			if (std::holds_alternative<std::monostate>(m_board[i][j]))
 				validCells.emplace_back(i, j);
 	if (validCells.empty())
 		return;
-	std::shuffle(validCells.begin(), validCells.end(), gen);
-	const std::pair<int, int>& cell = validCells.front();
-	int x = cell.first;
-	int y = cell.second;
-	//int trapType = (std::rand() % 3) + 1;
-	std::uniform_int_distribution<int>trapTypeDist(1, 3);
-	int trapType = trapTypeDist(gen);
 
+	std::shuffle(validCells.begin(), validCells.end(), gen);
+	
 	// For Stefi: here you should also check what the difficulty is, and have different chances for the traps depending on the difficulty level
-	switch (trapType)
+
+	if (validCells.size() < 12&& difficulty==2)
+	{
+		std::cout << "Not enough valid cells for difficulty!\n";
+		return;
+	}
+	if (validCells.size() < 12 && difficulty == 3)
+	{
+		std::cout << "Not enough valid cells for difficulty!\n";
+		return;
+	}
+	switch (difficulty)
 	{
 	case(1):
-		m_board[x][y] = CellType(TeleportTrap(x, y)); // 10%
+		break;
 	case(2):
-		m_board[x][y] = CellType(DisableGunTrap(x, y,5.0f)); //15%
+		for (int k = 0; k < 8; ++k)
+		{
+			m_board[validCells[k].first][validCells[k].second] = CellType(TeleportTrap(/*validCells[k].first, validCells[k].second,*/validCells[k + 1].first, validCells[k + 1].second));
+			++k;
+		}
+		for (int k = 8; k < 12; ++k)
+		{
+			m_board[validCells[k].first][validCells[k].second] = CellType(DisableGunTrap(validCells[k].first, validCells[k].second,3.0f));
+		}
+		break;
 	case(3):
-		m_board[x][y] = CellType(StunTrap(x, y,5.0f)); //10%
+		for (int k = 0; k < 8; ++k)
+		{
+			m_board[validCells[k].first][validCells[k].second] = CellType(TeleportTrap(/*validCells[k].first, validCells[k].second,*/validCells[k + 1].first, validCells[k + 1].second));
+			++k;
+		}
+		for (int k = 8; k < 12; ++k)
+		{
+			m_board[validCells[k].first][validCells[k].second] = CellType(DisableGunTrap(validCells[k].first, validCells[k].second, 3.0f));
+		}
+		for (int k = 12; k < 16; ++k)
+		{
+			m_board[validCells[k].first][validCells[k].second] = CellType(StunTrap(validCells[k].first, validCells[k].second, 3.0f));
+		}
+		break;
 	default:
 		break;
 	}

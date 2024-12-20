@@ -11,7 +11,7 @@ public:
     GameLogic() = default;
     GameLogic(Map& map);
     void checkForTraps(Player& player);
-    void generateTaps();
+    void generateTaps(int difficulty);
     void initializePlayers();
     void initializeScores();
     void startTimer();
@@ -34,5 +34,6 @@ private:
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
+    int difficulty;
 };
 

@@ -23,18 +23,11 @@ void GameLogic::checkForTraps(Player& player) {
 
 
 
-//must be updated in the game
-
-void GameLogic::generateTaps()
+void GameLogic::generateTaps(int difficulty)
 {
-    static std::chrono::steady_clock::time_point lastTrap = std::chrono::steady_clock::now();
-    auto currentTime=std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(currentTime - lastTrap);
-    if (elapsed.count() >= 50)
-    {
-        map.GenerateRandomTrap();
-        lastTrap = currentTime;
-    }
+  
+        map.GenerateRandomTrap(difficulty);
+     
 }
 
 void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
