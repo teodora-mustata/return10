@@ -6,6 +6,7 @@ Map::Map() : m_height(40), m_width(40) //default dimensions
 	GenerateSpawnPoints();
 	GenerateWalls();
 	SetBombs();
+	GenerateRandomTrap();
 }
 
 std::vector<std::vector<CellType>>& Map::GetBoard() //here i put & jerry it solved the debug assertion failure for playerMove
@@ -101,7 +102,7 @@ void Map::SetBombs()
 	}
 }
 
-void Map::GenerateRandomTrap(int difficulty) {
+void Map::GenerateRandomTrap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<std::pair<int, int>> validCells;
@@ -116,17 +117,17 @@ void Map::GenerateRandomTrap(int difficulty) {
 	
 	// For Stefi: here you should also check what the difficulty is, and have different chances for the traps depending on the difficulty level
 
-	if (validCells.size() < 12&& difficulty==2)
+	if (validCells.size() < 12&& m_difficulty==2)
 	{
 		std::cout << "Not enough valid cells for difficulty!\n";
 		return;
 	}
-	if (validCells.size() < 12 && difficulty == 3)
+	if (validCells.size() < 12 && m_difficulty == 3)
 	{
 		std::cout << "Not enough valid cells for difficulty!\n";
 		return;
 	}
-	switch (difficulty)
+	switch (m_difficulty)
 	{
 	case(1):
 		break;

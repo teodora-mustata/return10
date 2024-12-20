@@ -11,7 +11,6 @@ public:
     GameLogic() = default;
     GameLogic(Map& map);
     void checkForTraps(Player& player);
-    void generateTaps(int difficulty);
     void initializePlayers();
     void initializeScores();
     void startTimer();

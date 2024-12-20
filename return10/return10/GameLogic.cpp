@@ -21,15 +21,6 @@ void GameLogic::checkForTraps(Player& player) {
     );
 }
 
-
-
-void GameLogic::generateTaps(int difficulty)
-{
-  
-        map.GenerateRandomTrap(difficulty);
-     
-}
-
 void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 {
     auto spawnPoints = map.GetSpawnPoints();

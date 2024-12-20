@@ -24,44 +24,49 @@ void MainMenu::display() {
             std::cin >> difficulty;
             if (difficulty >= 1 && difficulty <= 3)
             {
-                sendDifficultyToServer(difficulty);
+                if (sendDifficultyToServer(difficulty)) {
+                }
+                else {
+                    std::cout << "Difficulty could not be set. Another client may have already set it.\n";
+                }
                 validDifficulty = true;
             }
             else std::cout << "Invalid choice! Please select 1, 2, or 3.\n";
-            if (validDifficulty);
-
-            std::cout << "Starting game...\n";
-            GameInterface gameInterface;
-            int currentId = UserSession::getInstance().getUserId();
-            
-            int currentPlayers = gameInterface.addPlayerToGame(currentId);
-            
-            while (currentPlayers < 1) //change to 4 later
+            if (validDifficulty)
             {
-                std::cout << "Waiting for players";
-                std::cout << std::flush;
+                std::cout << "Starting game...\n";
+                GameInterface gameInterface;
+                int currentId = UserSession::getInstance().getUserId();
 
-                for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
-                    std::cout << "." << std::flush;
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-                std::cout << "No one joined. Exiting...\n";
-                break;
-            }
-            if (currentPlayers == 1)
-            {
-                std::cout << "Game starting now!" << std::endl;
+                int currentPlayers = gameInterface.addPlayerToGame(currentId);
 
-                for (int i = 3; i > 0; --i)
+                while (currentPlayers < 2) //change to 4 later
                 {
-                    std::cout << i << "..." << std::endl;
-                    std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă
-                }
+                    std::cout << "Waiting for players";
+                    std::cout << std::flush;
 
-                bool gameRunning = true;
-                while (gameRunning)
+                    for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
+                        std::cout << "." << std::flush;
+                        std::this_thread::sleep_for(std::chrono::seconds(1));
+                    }
+                    std::cout << "No one joined. Exiting...\n";
+                    break;
+                }
+                if (currentPlayers == 2)
                 {
-                    gameInterface.startGame();
+                    std::cout << "Game starting now!" << std::endl;
+
+                    for (int i = 3; i > 0; --i)
+                    {
+                        std::cout << i << "..." << std::endl;
+                        std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă
+                    }
+
+                    bool gameRunning = true;
+                    while (gameRunning)
+                    {
+                        gameInterface.startGame();
+                    }
                 }
             }
         }   
@@ -83,20 +88,49 @@ void MainMenu::display() {
     }
 }
 
-void MainMenu::sendDifficultyToServer(int difficulty)
+bool MainMenu::sendDifficultyToServer(int difficulty)
 {
     crow::json::wvalue jsonData;
     jsonData["difficulty"] = difficulty;
 
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/send_difficulty" },
-        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Header{ { "Content-Type", "application/json" } },
         cpr::Body{ jsonData.dump() }
     );
 
     if (response.status_code == 200) {
-        auto responseJson = crow::json::load(response.text);
-        std::cout << "Difficulty sent successfully!\n";
+        std::cout << "Difficulty set successfully!\n";
+        return true;
     }
-    else std::cout << "Couldn't send difficulty to server. Try again.\n";
+    else if (response.status_code == 403) {
+        std::cout << "Difficulty already set by another client.\n";
+    }
+    else {
+        std::cout << "Couldn't send difficulty to server. Try again.\n";
+    }
+    return false;
+}
+
+void MainMenu::checkCurrentDifficulty()
+{
+    auto response = cpr::Get(
+        cpr::Url{ "http://localhost:18080/get_difficulty" }
+    );
+
+    if (response.status_code == 200) {
+        auto responseJson = crow::json::load(response.text);
+        int currentDifficulty = responseJson["difficulty"].i();
+        std::cout << "Current difficulty: " << currentDifficulty << "\n";
+
+        if (currentDifficulty == 0) {
+            std::cout << "You can set the difficulty.\n";
+        }
+        else {
+            std::cout << "Difficulty already set to: " << currentDifficulty << ".\n";
+        }
+    }
+    else {
+        std::cout << "Couldn't retrieve current difficulty.\n";
+    }
 }

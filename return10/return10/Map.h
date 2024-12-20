@@ -19,7 +19,7 @@ public:
 	void GenerateSpawnPoints();
 	void GenerateWalls();
 	void SetBombs();
-	void GenerateRandomTrap(int difficulty);
+	void GenerateRandomTrap();
 
 	std::vector<std::vector<CellType>>& GetBoard(); // here put & jerry it solved the debug assertion failre for playerMove
 	std::vector<std::pair<int, int>> GetSpawnPoints();
@@ -48,6 +48,6 @@ private:
 	const float destructible_wall_chance = 0.4f;
 	const float indestructible_wall_chance = 0.1f;
 	static const int bombs_count = 3;
-	int m_difficulty;
+	int m_difficulty=0;
 };
 

@@ -36,7 +36,7 @@ Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogi
 
 void Routing::Run() {
 
-    SetupLoginRoutes(m_app);
+    SetupLoginRoutes();
     GetTheBestPlayersByCrowns();
     GetTheBestPlayersByScore();
     BuyReloadSpeedUpgrade();
@@ -174,10 +174,10 @@ void Routing::GetTheBestPlayersByCrowns() {
             });
 }
 
-void Routing::SetupLoginRoutes(crow::SimpleApp& app)
+void Routing::SetupLoginRoutes()
 {
     // Route pentru login
-    CROW_ROUTE(app, "/login").methods("POST"_method)([this](const crow::request& req) {
+    CROW_ROUTE(m_app, "/login").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
         if (!body) {
             return crow::response(400, "Invalid JSON format");
@@ -229,7 +229,7 @@ void Routing::SetupLoginRoutes(crow::SimpleApp& app)
 
     // Route pentru signup
 
-    CROW_ROUTE(app, "/signup").methods("POST"_method)([this](const crow::request& req) {
+    CROW_ROUTE(m_app, "/signup").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
 
         if (!body) {
@@ -314,9 +314,8 @@ void Routing::SetupGameRoute()
 
 void Routing::BuyReloadSpeedUpgrade() {
     
-    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>").methods("Put"_method)
+    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>").methods("PUT"_method)
         ([this](int userId) {
-        std::cout<<"a ajuns";
         try {
             //PlayerDAO player = getPlayerById(userId);
             PlayerDAO player = m_storage.GetPlayerByID(userId);
@@ -362,7 +361,7 @@ void Routing::BuyReloadSpeedUpgrade() {
 }
 
 void Routing::BuyBulletSpeedUpgrade() {
-    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>").methods("Put"_method)
+    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>").methods("PUT"_method)
         ([this](int userId) {
         try {
             PlayerDAO player = getPlayerById(userId);
@@ -501,72 +500,39 @@ void Routing::SetDifficulty()
         auto jsonData = crow::json::load(req.body);
         if (!jsonData) {
             res.code = 400;
+            res.write("Invalid JSON data.");
             res.end();
             return;
         }
 
-        int difficulty = jsonData["difficulty"].i();
-        m_gameLogic.GetMap().SetDifficulty(difficulty);
+        int requestedDifficulty = jsonData["difficulty"].i();
+        int currentDifficulty = m_gameLogic.GetMap().GetDifficulty();
+
+        if (currentDifficulty != 0) {
+            res.code = 403; // Forbidden
+            res.write("Difficulty already set by another client.");
+            res.end();
+            return;
+        }
+
+        m_gameLogic.GetMap().SetDifficulty(requestedDifficulty);
+        res.code = 200;
+        res.write("Difficulty set successfully.");
+        res.end();
+            });
+
+    CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
+        ([&](const crow::request& req, crow::response& res) {
+        int currentDifficulty = m_gameLogic.GetMap().GetDifficulty();
+        crow::json::wvalue jsonResponse;
+        jsonResponse["difficulty"] = currentDifficulty;
 
         res.code = 200;
+        res.write(jsonResponse.dump());
         res.end();
             });
 }
 
-//void Routing::HandlePlayerCommand()
-//{
-//    CROW_ROUTE(m_app, "/command")
-//        .methods("POST"_method)([this](const crow::request& req) {
-//        auto commandData = crow::json::load(req.body);
-//        if (!commandData) {
-//            return crow::response(400, "Invalid input");
-//        }
-//        std::string command = commandData["command"].s();
-//        int id = commandData["id"].i();
-//
-//
-//        Player* currentPlayer = nullptr;
-//        for (auto& player : m_gameLogic.GetPlayers()) {
-//            if (player.GetId() == id) {
-//                currentPlayer = &player;
-//                break;
-//            }
-//        }
-//
-//        if (currentPlayer == nullptr) {
-//            return crow::response(404, "Player not found");
-//        }
-//
-//        if (command == "MOVE_UP") {
-//            m_gameLogic.movePlayer(currentPlayer, Direction::UP);
-//        }
-//        else if (command == "MOVE_LEFT") {
-//            m_gameLogic.movePlayer(currentPlayer, Direction::LEFT);
-//        }
-//        else if (command == "MOVE_DOWN") {
-//            m_gameLogic.movePlayer(currentPlayer, Direction::DOWN);
-//        }
-//        else if (command == "MOVE_RIGHT") {
-//           m_gameLogic.movePlayer(currentPlayer, Direction::RIGHT);
-//        }
-//        else if (command == "SHOOT") {
-//            Direction dir = currentPlayer->GetFacingDirection();
-//            currentPlayer->shoot(dir);
-//        }
-//        else {
-//            return crow::response(400, "Invalid command");
-//        }
-//
-//        //if (m_gameLogic.WinCondition()) {
-//        //    return crow::response(200, crow::json::wvalue{
-//        //        {"status", "game_over"},
-//        //        {"message", "A player has won the game!"}
-//        //        });
-//        //}
-//
-//        return crow::response(200, "Command processed successfully");
-//            });
-//}
 void Routing::HandlePlayerCommand()
 {
     CROW_ROUTE(m_app, "/command")

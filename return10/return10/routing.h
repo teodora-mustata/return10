@@ -13,14 +13,14 @@ public:
 	Routing( GameStorage& storage, GameLogic& gameLogic);
 
 	void Run();
-	void SetupLoginRoutes(crow::SimpleApp& app);
+	void SetupLoginRoutes();
 	void GetTheBestPlayersByCrowns();
 	void GetTheBestPlayersByScore();
 	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
 	void sendMap(crow::response& res);
 	void SetupGameRoute();
-	void BuyReloadSpeedUpgrade();//intreaba daca ar trebui sa facem tabelele separat(GunDAO PlayerDAO)
+	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
 	void AddPlayerToGame();
 	void GetActivePlayers();
@@ -32,7 +32,6 @@ private:
 	//GameManager m_games;
 
 	GameLogic& m_gameLogic;
-
 	std::vector<int> m_loggedInPlayers;
 };
 
