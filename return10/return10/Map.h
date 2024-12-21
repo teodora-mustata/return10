@@ -21,6 +21,9 @@ public:
 	void SetBombs();
 	void GenerateRandomTrap();
 
+
+	int GetHeight();
+	int GetWidth();
 	std::vector<std::vector<CellType>>& GetBoard(); // here put & jerry it solved the debug assertion failre for playerMove
 	std::vector<std::pair<int, int>> GetSpawnPoints();
 	CellType& GetCellType(int x, int y); // pentru a modifica celula

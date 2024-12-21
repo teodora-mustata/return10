@@ -105,11 +105,14 @@ void Map::SetBombs()
 void Map::GenerateRandomTrap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::vector<std::pair<int, int>> validCells;
-	for (int i = 0; i < m_height; i++)
-		for (int j = 0; j < m_width; j++) 
-			if (std::holds_alternative<std::monostate>(m_board[i][j]))
+	std::vector<Coordinate> validCells;
+	for (int i = 0; i < m_height; ++i) {
+		for (int j = 0; j < m_width; ++j) {
+			if (std::holds_alternative<std::monostate>(m_board[i][j])) {
 				validCells.emplace_back(i, j);
+			}
+		}
+	}
 	if (validCells.empty())
 		return;
 
@@ -134,27 +137,27 @@ void Map::GenerateRandomTrap() {
 	case(2):
 		for (int k = 0; k < 8; ++k)
 		{
-			m_board[validCells[k].first][validCells[k].second] = CellType(TeleportTrap(/*validCells[k].first, validCells[k].second,*/validCells[k + 1].first, validCells[k + 1].second));
+			m_board[validCells[k].i][validCells[k].j] = CellType(TeleportTrap(validCells[k + 1].i, validCells[k + 1].j, validCells));
 			++k;
 		}
 		for (int k = 8; k < 12; ++k)
 		{
-			m_board[validCells[k].first][validCells[k].second] = CellType(DisableGunTrap(validCells[k].first, validCells[k].second,3.0f));
+			m_board[validCells[k].i][validCells[k].j] = CellType(DisableGunTrap(validCells[k].i, validCells[k].j,3.0f));
 		}
 		break;
 	case(3):
 		for (int k = 0; k < 8; ++k)
 		{
-			m_board[validCells[k].first][validCells[k].second] = CellType(TeleportTrap(/*validCells[k].first, validCells[k].second,*/validCells[k + 1].first, validCells[k + 1].second));
+			m_board[validCells[k].i][validCells[k].j] = CellType(TeleportTrap(validCells[k + 1].i, validCells[k + 1].j, validCells));
 			++k;
 		}
 		for (int k = 8; k < 12; ++k)
 		{
-			m_board[validCells[k].first][validCells[k].second] = CellType(DisableGunTrap(validCells[k].first, validCells[k].second, 3.0f));
+			m_board[validCells[k].i][validCells[k].j] = CellType(DisableGunTrap(validCells[k].i, validCells[k].j, 3.0f));
 		}
 		for (int k = 12; k < 16; ++k)
 		{
-			m_board[validCells[k].first][validCells[k].second] = CellType(StunTrap(validCells[k].first, validCells[k].second, 3.0f));
+			m_board[validCells[k].i][validCells[k].j] = CellType(StunTrap(validCells[k].i, validCells[k].j, 3.0f));
 		}
 		break;
 	default:
@@ -164,6 +167,15 @@ void Map::GenerateRandomTrap() {
 std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {
 	return m_spawnPoints;
+}
+
+int Map::GetHeight()
+{
+	return m_height;
+}
+int Map::GetWidth()
+{
+	return m_width;
 }
 
 CellType& Map::GetCellType(int x, int y)

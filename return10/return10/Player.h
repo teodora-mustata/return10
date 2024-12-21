@@ -43,6 +43,7 @@ public:
 	Player& operator=(const Player& other);
 
 	void setInitialPosition(Coordinate coords);
+	void setPosition(Coordinate coords);
 
 	void Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration);
 	void UpdateStatus(float deltaTime);

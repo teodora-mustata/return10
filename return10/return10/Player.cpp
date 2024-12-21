@@ -176,6 +176,10 @@ void Player::setInitialPosition(Coordinate coords)
 {
 	m_initial_position = coords;
 }
+void Player::setPosition(Coordinate coords)
+{
+	m_position = coords;
+}
 
 
 void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
