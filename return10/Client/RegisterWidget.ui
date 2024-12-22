@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+	<class>RegisterWidget</class>
+	<widget class="QWidget" name="RegisterWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Register</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="labelUsername">
+					<property name="text">
+						<string>Username:</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QLineEdit" name="lineEditUsername"/>
+			</item>
+			<item>
+				<widget class="QLabel" name="labelPassword">
+					<property name="text">
+						<string>Password:</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QLineEdit" name="lineEditPassword">
+					<property name="echoMode">
+						<enum>QLineEdit::Password</enum>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QLabel" name="labelConfirmPassword">
+					<property name="text">
+						<string>Confirm Password:</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QLineEdit" name="lineEditConfirmPassword">
+					<property name="echoMode">
+						<enum>QLineEdit::Password</enum>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="pushButtonRegister">
+					<property name="text">
+						<string>Register</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="pushButtonBackToLogin">
+					<property name="text">
+						<string>Back to Login</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>

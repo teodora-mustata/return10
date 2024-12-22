@@ -9,15 +9,15 @@
 //    return a.exec();
 //}
 #include <QApplication>
-#include "login.h"
+#include "LoginRegisterManager.h"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    Login loginWindow;
-    loginWindow.setWindowTitle("Login");
-    loginWindow.resize(400, 300);
-    loginWindow.show();
+    LoginRegisterManager loginRegisterWindow;
+    loginRegisterWindow.setWindowTitle("Login");
+    loginRegisterWindow.resize(400, 300);
+    loginRegisterWindow.show();
 
     return app.exec();
 }

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+	<class>LoginRegisterManager</class>
+	<widget class="QWidget" name="LoginRegisterManager">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Login/Register</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QStackedWidget" name="stackedWidget">
+					<property name="currentIndex">
+						<number>0</number>
+					</property>
+					<!-- Login Widget -->
+					<widget class="QWidget" name="loginPage">
+						<layout class="QVBoxLayout" name="loginLayout">
+							<item>
+								<widget class="QLabel" name="loginTitle">
+									<property name="text">
+										<string>Login</string>
+									</property>
+									<property name="alignment">
+										<set>Qt::AlignCenter</set>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLabel" name="usernameLabel">
+									<property name="text">
+										<string>Username:</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLineEdit" name="usernameEdit"/>
+							</item>
+							<item>
+								<widget class="QLabel" name="passwordLabel">
+									<property name="text">
+										<string>Password:</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLineEdit" name="passwordEdit">
+									<property name="echoMode">
+										<enum>QLineEdit::Password</enum>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QPushButton" name="loginButton">
+									<property name="text">
+										<string>Login</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QPushButton" name="goToRegisterButton">
+									<property name="text">
+										<string>Register</string>
+									</property>
+								</widget>
+							</item>
+						</layout>
+					</widget>
+					<!-- Register Widget -->
+					<widget class="QWidget" name="registerPage">
+						<layout class="QVBoxLayout" name="registerLayout">
+							<item>
+								<widget class="QLabel" name="registerTitle">
+									<property name="text">
+										<string>Register</string>
+									</property>
+									<property name="alignment">
+										<set>Qt::AlignCenter</set>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLabel" name="registerUsernameLabel">
+									<property name="text">
+										<string>Username:</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLineEdit" name="registerUsernameEdit"/>
+							</item>
+							<item>
+								<widget class="QLabel" name="registerPasswordLabel">
+									<property name="text">
+										<string>Password:</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLineEdit" name="registerPasswordEdit">
+									<property name="echoMode">
+										<enum>QLineEdit::Password</enum>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLabel" name="registerConfirmPasswordLabel">
+									<property name="text">
+										<string>Confirm Password:</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QLineEdit" name="registerConfirmPasswordEdit">
+									<property name="echoMode">
+										<enum>QLineEdit::Password</enum>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QPushButton" name="registerButton">
+									<property name="text">
+										<string>Register</string>
+									</property>
+								</widget>
+							</item>
+							<item>
+								<widget class="QPushButton" name="goToLoginButton">
+									<property name="text">
+										<string>Back to Login</string>
+									</property>
+								</widget>
+							</item>
+						</layout>
+					</widget>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>

@@ -103,7 +103,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Login.cpp" />
+    <ClCompile Include="LoginRegisterManager.cpp" />
+    <ClCompile Include="LoginWidget.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="RegisterWidget.cpp" />
     <ClCompile Include="ShopMenu.cpp" />
     <ClCompile Include="source.cpp" />
     <QtRcc Include="Client.qrc" />
@@ -114,7 +117,9 @@
     <ClCompile Include="Leaderboard.cpp" />
     <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="main.cpp" />
-    <QtUic Include="Login.ui" />
+    <QtUic Include="LoginRegisterManager.ui" />
+    <QtUic Include="LoginWidget.ui" />
+    <QtUic Include="RegisterWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Validator\Validator.vcxproj">
@@ -124,10 +129,13 @@
   <ItemGroup>
     <ClInclude Include="GameInterface.h" />
     <ClInclude Include="Leaderboard.h" />
-    <QtMoc Include="Login.h" />
+    <ClInclude Include="Login.h" />
     <ClInclude Include="LoginMenu.h" />
+    <QtMoc Include="LoginWidget.h" />
+    <QtMoc Include="LoginRegisterManager.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Menu.h" />
+    <QtMoc Include="RegisterWidget.h" />
     <ClInclude Include="ShopMenu.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>
