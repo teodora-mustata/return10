@@ -70,6 +70,12 @@
     <ClCompile Include="LoginRegisterManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenuWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LeaderboardWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -107,6 +113,12 @@
     <QtMoc Include="LoginRegisterManager.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="MainMenuWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="LeaderboardWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="LoginWidget.ui">
@@ -116,6 +128,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="LoginRegisterManager.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MainMenuWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="LeaderboardWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

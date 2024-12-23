@@ -1,4 +1,5 @@
 #include "LoginWidget.h"
+#include "MainMenuWidget.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QMessageBox>
@@ -64,8 +65,20 @@ void LoginWidget::handleLogin() {
             UserSession::getInstance().setUserId(userId);  // Seteaz? userId în sesiune
         }
 
+    /*    QMessageBox::information(this, "Login Successful", "Welcome back!");
+        emit loginSuccessful();*/
+
+
+        // Afi?eaz? mesaj de succes
         QMessageBox::information(this, "Login Successful", "Welcome back!");
-        emit loginSuccessful();
+
+        // Creeaz? ?i afi?eaz? fereastra MainMenu
+        MainMenuWidget* mainMenu = new MainMenuWidget();  // Creeaz? instan?a MainMenu
+        mainMenu->show();  // Afi?eaz? fereastra
+
+        // Închide fereastra de login
+        this->close();  // Închide fereastra de login
+
     }
     else if (response.status_code == 401) {
         QMessageBox::critical(this, "Login Failed", "Invalid username or password.");

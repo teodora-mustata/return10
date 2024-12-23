@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>MainMenuWidget</class>
+	<widget class="QWidget" name="MainMenuWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Battle City</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>Battle City</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="startGameButton">
+					<property name="text">
+						<string>Start Game</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="shopButton">
+					<property name="text">
+						<string>Shop</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="leaderboardButton">
+					<property name="text">
+						<string>Leaderboard</string>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="exitButton">
+					<property name="text">
+						<string>Exit</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>
