@@ -2,6 +2,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include "Gun.h"
 #include "Player.h"
 #include "Map.h"
 
@@ -26,6 +27,7 @@ public:
     bool checkPlayerCollision(Player& target, Bullet& bullet);
     bool checkWallCollision(Map& map, Bullet& bullet);
     std::vector<std::string> convertMapToString() const;
+    void moveBullet(Map& map, Player& target, Gun* bullets);
     void movePlayer(Player *player, Direction direction);
     bool WinCondition();
 private:
@@ -33,6 +35,6 @@ private:
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
-    int difficulty;
+    
 };
 

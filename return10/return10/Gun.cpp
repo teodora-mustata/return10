@@ -26,6 +26,20 @@ bool Gun::IsJammed() const {
 
 bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
     if (!m_isJammed && canFire()) {
+        
+        switch (playerDirection)
+        {
+        case Direction::UP:playerY -= 1;
+            break;
+        case Direction::DOWN:playerY += 1;
+            break;
+        case Direction::LEFT:playerX -= 1;
+            break;
+        case Direction::RIGHT:playerX += 1;
+            break;
+        default:
+            break;
+        }
         Bullet newBullet(playerX, playerY, playerDirection, m_bulletSpeed);
         newBullet.SetActive(true);
 

@@ -138,6 +138,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
         for (int colIndex = 0; colIndex < map.GetDimensions().second; ++colIndex) {
             bool cellOverridden = false;
 
+
             for (const auto& player : m_players) {
                 if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex) 
                 {
@@ -242,6 +243,26 @@ Map& GameLogic::GetMap()
 bool GameLogic::isRunning() const
 {
     return gameRunning;
+}
+
+void GameLogic::moveBullet(Map& map, Player& target, Gun* bullets)
+{
+    auto firedBullets = bullets->getFiredBullets(); // Reference to the vector of bullets
+    for (auto currentBullet = firedBullets.begin(); currentBullet != firedBullets.end(); ) {
+        currentBullet->Move(); // Update the position of the current bullet
+
+        //checkPlayerCollision(target, *currentBullet); // Check for collisions with the player
+        //checkWallCollision(map, *currentBullet);      // Check for collisions with walls
+
+        if (!currentBullet->IsActive()) {
+            // Remove inactive bullets and update iterator
+            currentBullet = firedBullets.erase(currentBullet);
+        }
+        else {
+            // Move to the next bullet if no erase
+            ++currentBullet;
+        }
+    }
 }
 
 void GameLogic::movePlayer(Player* player, Direction direction)
