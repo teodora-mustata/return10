@@ -9,7 +9,6 @@
 class GameLogic {
 public:
 public:
-    GameLogic() = default;
     GameLogic(Map& map);
     void checkForTraps(Player& player);
     void initializePlayers();

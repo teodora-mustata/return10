@@ -61,7 +61,7 @@ void MainMenu::display() {
                         std::cout << i << "..." << std::endl;
                         std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă
                     }
-
+                    startServerGame();
                     bool gameRunning = true;
                     while (gameRunning)
                     {
@@ -132,5 +132,24 @@ void MainMenu::checkCurrentDifficulty()
     }
     else {
         std::cout << "Couldn't retrieve current difficulty.\n";
+    }
+}
+
+void MainMenu::startServerGame()
+{
+    try {
+        auto response = cpr::Post(
+            cpr::Url{ "http://localhost:18080/start_game" }
+        );
+
+        if (response.status_code == 200) {
+            std::cout << "Game started!\n";
+        }
+        else {
+            std::cout << "Failed to contact server. Status code: " << response.status_code << std::endl;
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
     }
 }

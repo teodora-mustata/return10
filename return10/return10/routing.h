@@ -26,9 +26,11 @@ public:
 	void GetActivePlayers();
 	void SetDifficulty();
 	void HandlePlayerCommand();
+	void StartGame();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
+
 	//GameManager m_games;
 
 	GameLogic& m_gameLogic;

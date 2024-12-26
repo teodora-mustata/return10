@@ -11,5 +11,6 @@ public:
     void display() override;  
     bool sendDifficultyToServer(int difficulty);
     void checkCurrentDifficulty();
+    void startServerGame();
 };
 

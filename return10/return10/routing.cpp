@@ -455,7 +455,7 @@ void Routing::AddPlayerToGame()
 
             m_gameLogic.addPlayer(new_player);
 
-            if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
+            //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
 
             crow::json::wvalue response;
             response["current_players"] = players.size();
@@ -589,6 +589,16 @@ void Routing::HandlePlayerCommand()
         //        });
         //}
         return crow::response(200, "Command processed successfully");
+            });
+}
+
+void Routing::StartGame()
+{
+    CROW_ROUTE(m_app, "/start_game")
+        .methods("POST"_method)([this](const crow::request& req)
+            {
+                m_gameLogic.startGame();
+                return crow::response(200);
             });
 }
 

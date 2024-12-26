@@ -12,8 +12,12 @@ public:
 	void sortLobbyPlayers();
 	void addPlayerToLobby(int playerId);
 	void removePlayerFromLobby(int playerId);
-	void startNewGame();
+	void addPlayerToGame(int playerId);
+	void removePlayerFromGame(int playerId);
+	void createNewGame();
 	void endGame(int gameId);
+
+	Player getPlayerFromID(int id);
 private:
 	GameManager(GameStorage& storage);
 private:
