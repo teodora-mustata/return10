@@ -37,6 +37,7 @@ void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
     }
 }
 
+
 void GameLogic::initializeScores()
 {
     for (Player player : GetPlayers())
@@ -160,7 +161,37 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
             }
 
-
+          
+            if (!cellOverridden) {
+                auto trapInfo = map.GetTrapInfo(rowIndex, colIndex);
+                
+                if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
+                    std::cout << trapInfo->first << ' ' << trapInfo->second;
+                    if (trapInfo->first == 'T') {
+                        rowStr.push_back('T');
+                        if(rowStr[rowStr.size() - 1] == 'T')
+                             std::cout << "successfully sent the character T " << "\n ";
+                    }
+                        
+                    if (trapInfo->first == 'G') {
+                            rowStr.push_back('G');
+                            if (rowStr[rowStr.size() - 1] == 'G')
+                            std::cout << "successfully sent the character G " <<  "\n ";
+                    }
+                        
+                    if (trapInfo->first == 'S') {
+                              rowStr.push_back('S');
+                              if (rowStr[rowStr.size() - 1] == 'S')
+                                     std::cout << "successfully sent the character S "  << "\n ";
+                    }
+                        
+                    
+                    cellOverridden = true;
+                    
+                }
+                
+                 
+            }
 
             if (!cellOverridden) {
                 const auto& cell = map.GetCellType(rowIndex, colIndex);
@@ -180,6 +211,8 @@ std::vector<std::string> GameLogic::convertMapToString() const
                         rowStr.push_back('D');
                     }
                 }
+               
+
             }
         }
 

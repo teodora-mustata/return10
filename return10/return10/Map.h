@@ -8,6 +8,7 @@
 #include <list>
 #include <random>
 #include <algorithm>
+#include <optional>
 
 class Map
 {
@@ -19,6 +20,7 @@ public:
 	void GenerateSpawnPoints();
 	void GenerateWalls();
 	void SetBombs();
+	std::optional<std::pair<char, bool>> GetTrapInfo(int row, int col) const;
 	void GenerateRandomTrap();
 
 
@@ -51,6 +53,7 @@ private:
 	const float destructible_wall_chance = 0.4f;
 	const float indestructible_wall_chance = 0.1f;
 	static const int bombs_count = 3;
-	int m_difficulty=0;
+	int m_difficulty=3; //when i run the client doesnt send the difficulty properly it seems, traps dont seem to generate in GenerateRandomTraps 
+	// if i leavethis as 0
 };
 

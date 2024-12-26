@@ -15,5 +15,5 @@ public:
 
 protected:
     std::pair<int, int> m_coordinates;
-    bool m_isActive; // true = active, false = detonated
+    bool m_isActive = true; // true = active, false = detonated
 };

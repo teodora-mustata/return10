@@ -69,6 +69,15 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
             else if (cell == 'E') {
                 std::cout << "\033[31mP \033[0m";  // Inamic (roșu)
             }
+            else if (cell == 'T') {
+                std::cout << "\033[33mT \033[0m";  // Teleport Trap (galben)
+            }
+            else if (cell == 'G') {
+                std::cout << "\033[37mG \033[0m";  // Gun Disable Trap (alb)
+            }
+            else if (cell == 'S') {
+                std::cout << "\033[95mS \033[0m";  // Stun Trap (magenta deschis)
+            }
         }
         std::cout << std::endl;
     }
