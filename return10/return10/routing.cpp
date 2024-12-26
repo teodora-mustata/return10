@@ -455,6 +455,8 @@ void Routing::AddPlayerToGame()
 
             m_gameLogic.addPlayer(new_player);
 
+            if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
+
             crow::json::wvalue response;
             response["current_players"] = players.size();
             res.body = response.dump();

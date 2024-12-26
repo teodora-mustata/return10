@@ -46,10 +46,14 @@ void GameLogic::initializeScores()
     }
 }
 
-void GameLogic::startTimer()
+void GameLogic::startGame()
 {
     startTime = std::chrono::steady_clock::now();
-    std::cout << "Game timer started!" << std::endl;
+    while (gameRunning)
+    {
+        updateBullets();
+        if (WinCondition() == true) gameRunning = false;
+    }
 }
 
 void GameLogic::ApplyDamage(Bomb bomb)
@@ -117,6 +121,11 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
     CellType cell = map.GetCellType(bullet.GetX(), bullet.GetY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         if (wall->IsDestructible()) {
+            if (auto* bomb = wall->GetContainedBomb()) {
+                if (bomb->IsActive()) {
+                    ExplodeBomb(*bomb);
+                }
+            }
             map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});
             bullet.Deactivate();
             return true;
@@ -222,26 +231,43 @@ std::vector<std::string> GameLogic::convertMapToString() const
     return charMap;
 }
 
-//checks to see status of bullets and removes any inactive bullets that have collided from the m_firedBullets vector
-//method called 
-void GameLogic::updateBullets(Map& map, Player& target, Gun& bullets)
-{   //needs to stay with iterator not range base because by removing from the vector it messes up the range base type for
-    //need to choose where to call this and where if continous or maybe change it to once we see bullet collided somewhere else sent the message to 
-    //simply erase not sure yet
-    for (auto currentBullet = bullets.getFiredBullets().begin(); currentBullet != bullets.getFiredBullets().end(); ) {
-        checkPlayerCollision(target, *currentBullet);
-        checkWallCollision(map, *currentBullet);
 
-        if (!currentBullet->IsActive()) {
-            // if erased put iterator one place back because erase sets it further
-            currentBullet = bullets.getFiredBullets().erase(currentBullet);
-        }
-        else {
-            ++currentBullet; // only increment if we didnt erase
+void GameLogic::updateBullets() {
+    for (auto& player : m_players) {
+        // Parcurgem fiecare glonț tras de jucătorul curent
+        auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
+        for (size_t i = 0; i < bullets.size(); ++i) {
+            auto& bullet = bullets[i];
+
+            if (!bullet.IsActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
+
+            bullet.Move(); // Mutăm glonțul pe hartă
+
+            // Verificăm coliziunea cu zidurile
+            if (checkWallCollision(map, bullet)) {
+                continue; // Dacă glonțul lovește un zid, îl distrugem
+            }
+
+            // Verificăm coliziunea cu alți jucători
+            for (auto& enemyPlayer : m_players) {
+                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
+                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
+                }
+            }
+
+            // Verificăm coliziunea între gloanțele diferitelor jucători
+            for (size_t j = i + 1; j < bullets.size(); ++j) {
+                auto& otherBullet = bullets[j];
+                if (bullet.GetX() == otherBullet.GetX() && bullet.GetY() == otherBullet.GetY()) {
+                    // Dacă două gloanțe se întâlnesc, le anulam
+                    bullet.Deactivate();
+                    otherBullet.Deactivate();
+                }
+            }
         }
     }
-
 }
+
 
 std::vector<Player>& GameLogic::GetPlayers()
 {

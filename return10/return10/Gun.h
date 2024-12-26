@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <algorithm>
+using namespace std::chrono;
 
 class Gun
 {
@@ -13,6 +14,8 @@ public:
     bool fire(int playerX, int playerY, Direction playerDirection);
 
     std::vector<Bullet> getFiredBullets() const;
+    std::vector<Bullet>& getFiredBullets();
+
     std::chrono::duration<float> getFiringRate() const;
     float GetBulletSpeed() const;
     float GetFiringRate()const;

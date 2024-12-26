@@ -14,11 +14,11 @@ public:
     void checkForTraps(Player& player);
     void initializePlayers();
     void initializeScores();
-    void startTimer();
+    void startGame();
     void ApplyDamage(Bomb bomb);
     void ExplodeBomb(Bomb bomb);
     void addPlayer(Player player);
-    void updateBullets(Map& map, Player& target, Gun& bullets);
+    void updateBullets();
     std::vector<Player>& GetPlayers();
     void removePlayer(Player player);
     const Map& GetMap() const;

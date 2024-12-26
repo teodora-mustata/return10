@@ -59,7 +59,7 @@ private:
 	Coordinate m_position;
 	Coordinate m_initial_position;
 	Gun m_gun;
-	Direction m_facingDirection;
+	Direction m_facingDirection = Direction::DOWN;
 	bool m_isImmobilized = false;
 	std::chrono::steady_clock::time_point m_immobilizedStartTime;
 	std::chrono::duration<float> m_immobilizedDuration;

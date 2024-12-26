@@ -6,9 +6,20 @@ Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
 }
 
 void Bullet::Move() {
-    auto offset = DirectionUtils::toOffset(m_direction);
-    m_x += static_cast<int>(offset.first * m_speed);
-    m_y += static_cast<int>(offset.second * m_speed);
+    switch (m_direction) {
+    case Direction::UP:
+        m_y -= 1;
+        break;
+    case Direction::DOWN:
+        m_y += 1;
+        break;
+    case Direction::LEFT:
+        m_x -= 1;
+        break;
+    case Direction::RIGHT:
+        m_x += 1;
+        break;
+    }
 }
 
 void Bullet::Deactivate() {

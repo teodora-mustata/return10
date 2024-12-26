@@ -1,4 +1,4 @@
-#include "Gun.h"
+﻿#include "Gun.h"
 
 Gun::Gun() : m_lastFiredTime(std::chrono::steady_clock::now()) {}
 
@@ -25,27 +25,31 @@ bool Gun::IsJammed() const {
 }
 
 bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
+
     if (!m_isJammed && canFire()) {
         
-        switch (playerDirection)
-        {
-        case Direction::UP:playerY -= 1;
-            break;
-        case Direction::DOWN:playerY += 1;
-            break;
-        case Direction::LEFT:playerX -= 1;
-            break;
-        case Direction::RIGHT:playerX += 1;
-            break;
-        default:
-            break;
+        // Calculăm timpul scurs de la ultima tragere
+        auto now = steady_clock::now();
+        if (duration_cast<seconds>(now - m_lastFiredTime).count() < 4) {
+            return false; // Așteptăm 4 secunde între trageri
         }
+
+        int bulletX = playerX;
+        int bulletY = playerY;
+
+        switch (playerDirection) {
+        case Direction::UP: bulletY -= 1; break;
+        case Direction::DOWN: bulletY += 1; break;
+        case Direction::LEFT: bulletX -= 1; break;
+        case Direction::RIGHT: bulletX += 1; break;
+        default: break;
+        }
+
         Bullet newBullet(playerX, playerY, playerDirection, m_bulletSpeed);
         newBullet.SetActive(true);
 
         m_firedBullets.push_back(newBullet);
         m_lastFiredTime = std::chrono::steady_clock::now();
-        newBullet.Move();
 
         return true; // Fired
     }
@@ -54,9 +58,14 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
 
 
 
-std::vector<Bullet> Gun::getFiredBullets() const //I deleted const ref because I need to acces the last bullet in player class
+std::vector<Bullet> Gun::getFiredBullets() const
 {
     return m_firedBullets; 
+}
+
+std::vector<Bullet>& Gun::getFiredBullets()
+{
+    return m_firedBullets;
 }
 
 std::chrono::duration<float> Gun::getFiringRate() const
