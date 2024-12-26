@@ -29,20 +29,20 @@ int main()
 	Map map;
 	GameLogic game(map);
 	Routing routing( storage,game);
-	Player player("Test", 0, 0);
-	StunTrap stunTrap(1, 1, 3.0f);
+	//Player player("Test", 0, 0);
+	//StunTrap stunTrap(1, 1, 3.0f);
 
-	
-	stunTrap.ActivateEffect(player);
+	//
+	//stunTrap.ActivateEffect(player);
 
-	
-	player.move(Direction::UP);
+	//
+	//player.move(Direction::UP);
 
-	
-	player.UpdateStatus(1.0f);  // 1 second passed
-	player.move(Direction::UP); // Still immobilized
-	player.UpdateStatus(2.0f);  // 2 more seconds passed
-	player.move(Direction::UP); // Can move now
+	//
+	//player.UpdateStatus(1.0f);  // 1 second passed
+	//player.move(Direction::UP); // Still immobilized
+	//player.UpdateStatus(2.0f);  // 2 more seconds passed
+	//player.move(Direction::UP); // Can move now
 	routing.Run();
 
 	//storage.DisplayDatabaseContents();

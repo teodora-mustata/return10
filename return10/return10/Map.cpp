@@ -6,7 +6,6 @@ Map::Map() : m_height(40), m_width(40) //default dimensions
 	GenerateSpawnPoints();
 	GenerateWalls();
 	SetBombs();
-	GenerateRandomTrap();
 }
 
 std::vector<std::vector<CellType>>& Map::GetBoard() //here i put & jerry it solved the debug assertion failure for playerMove
@@ -104,30 +103,30 @@ void Map::SetBombs()
 
 std::optional<std::pair<char, bool>> Map::GetTrapInfo(int row, int col) const {
 	if (row < 0 || row >= m_height || col < 0 || col >= m_width) {
-		std::cout << "Invalid indices (" << row << ", " << col << ")\n";
+		//std::cout << "Invalid indices (" << row << ", " << col << ")\n";
 		return std::nullopt;
 	}
 
 	const auto& cell = m_board[row][col];
-	std::cout << "Checking cell at (" << row << ", " << col << ")\n";
+	//std::cout << "Checking cell at (" << row << ", " << col << ")\n";
 
 	if (std::holds_alternative<TeleportTrap>(cell)) {
 		const TeleportTrap& trap = std::get<TeleportTrap>(cell);
-		std::cout << "Found TeleportTrap, active: " << trap.IsActive() << '\n';
+		//std::cout << "Found TeleportTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('T', trap.IsActive());
 	}
 	else if (std::holds_alternative<DisableGunTrap>(cell)) {
 		const DisableGunTrap& trap = std::get<DisableGunTrap>(cell);
-		std::cout << "Found DisableGunTrap, active: " << trap.IsActive() << '\n';
+		//std::cout << "Found DisableGunTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('G', trap.IsActive());
 	}
 	else if (std::holds_alternative<StunTrap>(cell)) {
 		const StunTrap& trap = std::get<StunTrap>(cell);
-		std::cout << "Found StunTrap, active: " << trap.IsActive() << '\n';
+		//std::cout << "Found StunTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('S', trap.IsActive());
 	}
 
-	std::cout << "No trap found at (" << row << ", " << col << ")\n";
+	//std::cout << "No trap found at (" << row << ", " << col << ")\n";
 	return std::nullopt;
 }
 
@@ -146,68 +145,52 @@ void Map::GenerateRandomTrap() {
 	}
 	if (validCells.empty())
 		return;
-	for (const auto& cell : validCells) {
-		std::cout << "Valid cell for traps: (" << cell.i << ", " << cell.j << ")\n";
-	}
 
 	std::shuffle(validCells.begin(), validCells.end(), gen);
-	
-	// For Stefi: here you should also check what the difficulty is, and have different chances for the traps depending on the difficulty level
 
-	if (validCells.size() < 12&& m_difficulty==2)
-	{
-		std::cout << "Not enough valid cells for difficulty!\n";
-		return;
-	}
-	if (validCells.size() < 12 && m_difficulty == 3)
-	{
-		std::cout << "Not enough valid cells for difficulty!\n";
-		return;
-	}
+	int cellsWithTraps = validCells.size()/6; // 1/6 din toate celulele libere vor avea trape
+
+	int teleportTraps = 0, disableGunTraps = 0, stunTraps = 0;
+
 	switch (m_difficulty)
 	{
-	case(1):
-		break;
+	case (1):
+		return;
 	case(2):
-		for (int k = 0; k < 8; ++k)
-		{
-			m_board[validCells[k].i][validCells[k].j] = CellType(TeleportTrap(validCells[k + 1].i, validCells[k + 1].j, validCells));
-			++k;
-			std::cout << "Placed TeleportTrap at (" << validCells[k].i << ", " << validCells[k].j << ")\n";
-
-		}
-		for (int k = 8; k < 12; ++k)
-		{
-			m_board[validCells[k].i][validCells[k].j] = CellType(DisableGunTrap(validCells[k].i, validCells[k].j,3.0f));
-			std::cout << "Placed DisableGunTrap at (" << validCells[k].i << ", " << validCells[k].j << ")\n";
-
-		}
+		disableGunTraps = cellsWithTraps / 2; stunTraps = cellsWithTraps - disableGunTraps;
 		break;
-	case(3):
-		for (int k = 0; k < 8; ++k)
-		{
-			m_board[validCells[k].i][validCells[k].j] = CellType(TeleportTrap(validCells[k + 1].i, validCells[k + 1].j, validCells));
-			++k;
-			std::cout << "Placed TeleportTrap at (" << validCells[k].i << ", " << validCells[k].j << ")\n";
-
-		}
-		for (int k = 8; k < 12; ++k)
-		{
-			m_board[validCells[k].i][validCells[k].j] = CellType(DisableGunTrap(validCells[k].i, validCells[k].j, 3.0f));
-			std::cout << "Placed DisableGunTraptTrap at (" << validCells[k].i << ", " << validCells[k].j << ")\n";
-
-		}
-		for (int k = 12; k < 16; ++k)
-		{
-			m_board[validCells[k].i][validCells[k].j] = CellType(StunTrap(validCells[k].i, validCells[k].j, 3.0f));
-			std::cout << "Placed StunTrap at (" << validCells[k].i << ", " << validCells[k].j << ")\n";
-
-		}
-		break;
-	default:
+	case(3): 
+		disableGunTraps = cellsWithTraps / 3; stunTraps = cellsWithTraps / 3; teleportTraps = cellsWithTraps - teleportTraps - disableGunTraps;
 		break;
 	}
+
+	auto placeTrap = [&](int& count, auto trapCreator) {
+		for (int i = 0; i < count && !validCells.empty(); ++i) {
+			auto coord = validCells.back();
+			validCells.pop_back();
+			m_board[coord.i][coord.j] = CellType(trapCreator(coord));
+		}
+		};
+
+	placeTrap(teleportTraps, [&](const Coordinate& coord) {
+		return TeleportTrap(coord.i, coord.j, validCells);
+		});
+
+	placeTrap(disableGunTraps, [&](const Coordinate& coord) {
+		return DisableGunTrap(coord.i, coord.j, 3.0f);
+		});
+
+	placeTrap(stunTraps, [&](const Coordinate& coord) {
+		return StunTrap(coord.i, coord.j, 3.0f);
+		});
+
 }
+void Map::Initialize()
+{
+	if (m_difficulty != 0) GenerateRandomTrap();
+	else std::cout << "Difficulty is 0! \n";
+}
+
 std::vector<std::pair<int, int>> Map::GetSpawnPoints()
 {
 	return m_spawnPoints;

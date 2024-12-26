@@ -516,6 +516,8 @@ void Routing::SetDifficulty()
         }
 
         m_gameLogic.GetMap().SetDifficulty(requestedDifficulty);
+        m_gameLogic.GetMap().Initialize();
+
         res.code = 200;
         res.write("Difficulty set successfully.");
         res.end();

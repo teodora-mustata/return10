@@ -40,7 +40,7 @@ void MainMenu::display() {
 
                 int currentPlayers = gameInterface.addPlayerToGame(currentId);
 
-                while (currentPlayers < 2) //change to 4 later
+                while (currentPlayers < 1) //change to 4 later
                 {
                     std::cout << "Waiting for players";
                     std::cout << std::flush;
@@ -52,7 +52,7 @@ void MainMenu::display() {
                     std::cout << "No one joined. Exiting...\n";
                     break;
                 }
-                if (currentPlayers == 2)
+                if (currentPlayers == 1)
                 {
                     std::cout << "Game starting now!" << std::endl;
 
