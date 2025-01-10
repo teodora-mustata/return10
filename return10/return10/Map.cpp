@@ -58,12 +58,22 @@ void Map::GenerateWalls()
 				continue;
 			}
 
+
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
-				m_board[i][j] = Wall(i, j, true);
+				m_board[i][j] = Wall(i, j, true);//destructible
 			}
-			else if (random_value < destructible_wall_chance + indestructible_wall_chance) {
-				m_board[i][j] = Wall(i, j, false);
+			else if (random_value < destructible_wall_chance + indestructible_wall_chance) 
+			{
+				//no destructible walls on the side
+				if (i == 0 || i == m_height - 1 || j == 0 || j == m_width - 1) 
+				{
+					m_board[i][j] = Wall(i, j, true); // destructible	
+				}
+				else 
+				{
+					m_board[i][j] = Wall(i, j, false);//indestructible
+				}
 			}
 
 		}

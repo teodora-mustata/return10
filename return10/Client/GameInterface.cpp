@@ -37,7 +37,7 @@ void GameInterface::handleInput()
         default:
             std::cout << "Invalid command!" << std::endl;
             return;
-        }
+        }//ori s-a schimbat continutul ori pe server ceva nu e bine(debugging)
         sendCommandToServer(command);
     }
 }
