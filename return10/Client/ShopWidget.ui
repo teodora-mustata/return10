@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ShopWidget</class>
+	<widget class="QWidget" name="ShopWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Shop</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>==== Shop Menu ====</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyReloadSpeedButton">
+					<property name="text">
+						<string>Buy reload speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyBulletSpeedButton">
+					<property name="text">
+						<string>Buy bullet speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="goBackButton">
+					<property name="text">
+						<string>Go back to home page</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>
+
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ShopWidget</class>
+	<widget class="QWidget" name="ShopWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Shop</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>==== Shop Menu ====</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyReloadSpeedButton">
+					<property name="text">
+						<string>Buy reload speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyBulletSpeedButton">
+					<property name="text">
+						<string>Buy bullet speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="goBackButton">
+					<property name="text">
+						<string>Go back to home page</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>-->
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ShopWidget</class>
+	<widget class="QWidget" name="ShopWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Shop</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>==== Shop Menu ====</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyReloadSpeedButton">
+					<property name="text">
+						<string>Buy reload speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyBulletSpeedButton">
+					<property name="text">
+						<string>Buy bullet speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="goBackButton">
+					<property name="text">
+						<string>Go back to home page</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>-->
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ShopWidget</class>
+	<widget class="QWidget" name="ShopWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Shop</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>==== Shop Menu ====</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyReloadSpeedButton">
+					<property name="text">
+						<string>Buy reload speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyBulletSpeedButton">
+					<property name="text">
+						<string>Buy bullet speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="goBackButton">
+					<property name="text">
+						<string>Go back to home page</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>-->
+
+<!--<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ShopWidget</class>
+	<widget class="QWidget" name="ShopWidget">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>400</width>
+				<height>300</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Shop</string>
+		</property>
+		<layout class="QVBoxLayout" name="verticalLayout">
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>==== Shop Menu ====</string>
+					</property>
+					<property name="alignment">
+						<set>Qt::AlignCenter</set>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyReloadSpeedButton">
+					<property name="text">
+						<string>Buy reload speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="buyBulletSpeedButton">
+					<property name="text">
+						<string>Buy bullet speed upgrade</string>
+					</property>
+					<property name="sizePolicy">
+						<sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+							<horstretch>0</horstretch>
+							<verstretch>0</verstretch>
+						</sizepolicy>
+					</property>
+				</widget>
+			</item>
+			<item>
+				<widget class="QPushButton" name="goBackButton">
+					<property name="text">
+						<string>Go back to home page</string>
+					</property>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>-->
