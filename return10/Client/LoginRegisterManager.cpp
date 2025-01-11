@@ -12,7 +12,8 @@ LoginRegisterManager::LoginRegisterManager(QWidget* parent) : QWidget(parent) {
     stackedWidget->addWidget(registerWidget);
 
     layout->addWidget(stackedWidget);
-
+   /* Conecteaza semnalul switchToRegister din loginWidget la slotul showRegister.Cand se emite
+   semnalul switchToRegister, se va apela functia showRegister(), care va comuta la widgetul de inregistrare.*/
     connect(loginWidget, &LoginWidget::switchToRegister, this, &LoginRegisterManager::showRegister);
     connect(registerWidget, &RegisterWidget::switchToLogin, this, &LoginRegisterManager::showLogin);
 }

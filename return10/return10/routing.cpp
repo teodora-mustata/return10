@@ -314,7 +314,7 @@ void Routing::SetupGameRoute()
 
 void Routing::BuyReloadSpeedUpgrade() {
     
-    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>").methods("PUT"_method)
+    CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
         ([this](int userId) {
         try {
             //PlayerDAO player = getPlayerById(userId);
@@ -337,9 +337,9 @@ void Routing::BuyReloadSpeedUpgrade() {
                 return crow::response(400, "Reload speed is already at minimum value");
             }
 
-            if (player.GetScore() < upgradeCost) {
+            /*if (player.GetScore() < upgradeCost) {
                 return crow::response(400, "Not enough score to buy upgrade");
-            }
+            }*/
 
             player.SetScore(player.GetScore() - upgradeCost);
             gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
@@ -361,7 +361,7 @@ void Routing::BuyReloadSpeedUpgrade() {
 }
 
 void Routing::BuyBulletSpeedUpgrade() {
-    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>").methods("PUT"_method)
+    CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>")
         ([this](int userId) {
         try {
             PlayerDAO player = getPlayerById(userId);
@@ -377,9 +377,9 @@ void Routing::BuyBulletSpeedUpgrade() {
             const float maxBulletSpeed = 0.5; 
             const int requiredCrowns = 10; 
 
-            if (player.GetCrowns() < requiredCrowns) {
+            /*if (player.GetCrowns() < requiredCrowns) {
                 return crow::response(400, "Not enough crowns to upgrade bullet speed");
-            }
+            }*/
 
             if (gun.GetBulletSpeed() >= maxBulletSpeed) {
                 return crow::response(400, "Bullet speed is already at maximum value");

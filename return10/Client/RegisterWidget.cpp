@@ -67,19 +67,19 @@ void RegisterWidget::handleRegister() {
     //    return;
     //}
 
-    // Creeaz? un obiect JSON pentru request
+    // Creeaza un obiect JSON pentru request
     crow::json::wvalue jsonData;
     jsonData["username"] = username.toStdString();
     jsonData["password"] = password.toStdString();
 
-    // Trimite un POST request c?tre server
+    // Trimite un POST request catre server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/signup" },
         cpr::Header{ {"Content-Type", "application/json"} },
         cpr::Body{ jsonData.dump() }
     );
 
-    // Verific? r?spunsul serverului
+    // Verifica raspunsul serverului
     if (response.status_code == 201) {
         QMessageBox::information(this, "Registration Successful", "Account created successfully!");
         emit registerSuccessful();

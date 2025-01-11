@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <cpr/cpr.h>
 #include <crow/json.h>
-#include "UserSession.h"  // Pentru a seta userId, dac? e necesar
+#include "UserSession.h"  
 
 LoginWidget::LoginWidget(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);
@@ -44,40 +44,40 @@ void LoginWidget::handleLogin() {
         return;
     }
 
-    // Creeaz? un obiect JSON pentru request
+    // Creeaza un obiect JSON pentru request
     crow::json::wvalue jsonData;
     jsonData["username"] = username.toStdString();
     jsonData["password"] = password.toStdString();
 
-    // Trimite un POST request c?tre server
+    // Trimite un POST request catre server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/login" },
         cpr::Header{ {"Content-Type", "application/json"} },
         cpr::Body{ jsonData.dump() }
     );
 
-    // Verific? r?spunsul serverului
+    // Verifica raspunsul serverului
     if (response.status_code == 200) {
         auto responseJson = crow::json::load(response.text);
 
         if (responseJson.has("userId")) {
             int userId = responseJson["userId"].i();
-            UserSession::getInstance().setUserId(userId);  // Seteaz? userId în sesiune
+            UserSession::getInstance().setUserId(userId);  // Seteaza userId în sesiune
         }
 
     /*    QMessageBox::information(this, "Login Successful", "Welcome back!");
         emit loginSuccessful();*/
 
 
-        // Afi?eaz? mesaj de succes
+        // Afiseaza mesaj de succes
         QMessageBox::information(this, "Login Successful", "Welcome back!");
 
-        // Creeaz? ?i afi?eaz? fereastra MainMenu
-        MainMenuWidget* mainMenu = new MainMenuWidget();  // Creeaz? instan?a MainMenu
-        mainMenu->show();  // Afi?eaz? fereastra
+        // Creeaza si afiseaza fereastra MainMenu
+        MainMenuWidget* mainMenu = new MainMenuWidget();  
+        mainMenu->show();  // Afiaeaza fereastra
 
-        // Închide fereastra de login
-        this->close();  // Închide fereastra de login
+        // Inchide fereastra de login
+        this->close();  // Inchide fereastra de login
 
     }
     else if (response.status_code == 401) {

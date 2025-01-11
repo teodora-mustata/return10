@@ -8,6 +8,7 @@ class LoginWidget : public QWidget {
 public:
     explicit LoginWidget(QWidget* parent = nullptr);
 signals:
+    //Cred ca se creaza automat
     void loginSuccessful();
     void switchToRegister();
 private slots:
