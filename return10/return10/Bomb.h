@@ -8,12 +8,12 @@ class Bomb
 public:
 	Bomb(int x, int y);
 	~Bomb() = default;
-	int GetX();
-	int GetY();
-	bool IsActive();
-	std::list<std::pair<int,int>> CalculateEffectArea();
-	void Deactivate();
-	void Activate();
+	int getX();
+	int getY();
+	bool isActive();
+	std::list<std::pair<int,int>> calculateEffectArea();
+	void deactivate();
+	void activate();
 private:
 	int m_posX, m_posY;
 	bool m_isActive;

@@ -18,26 +18,31 @@ class GameLogic {
 public:
 public:
     GameLogic(Map& map);
-    void checkForTraps(Player& player);
+
     void initializePlayers();
     void initializeScores();
-    void ApplyDamage(Bomb bomb);
-    void ExplodeBomb(Bomb bomb);
     void addPlayer(Player player);
-    void updateBullets();
     std::vector<Player>& GetPlayers();
     void removePlayer(Player player);
+
+    void ApplyDamage(Bomb bomb);
+    void CheckForTraps(Player& player);
+    void ExplodeBomb(Bomb& bomb);
+    void UpdateBullets();
+  
     const Map& GetMap() const;
     Map& GetMap();
-    bool isRunning() const;
     bool checkPlayerCollision(Player& target, Bullet& bullet);
     bool checkWallCollision(Map& map, Bullet& bullet);
     std::vector<std::string> convertMapToString() const;
+
     void moveBullet(Map& map, Player& target, Gun* bullets);
     void movePlayer(Player *player, Direction direction);
-    bool WinCondition();
 
     void startGame();
+    bool isRunning() const;
+    bool WinCondition();
+
     void processInput(int playerId, const std::string& command);
     void setState(GameState state);
     GameState getState() const;

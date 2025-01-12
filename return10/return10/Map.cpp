@@ -68,11 +68,11 @@ void Map::GenerateWalls()
 				//no destructible walls on the side
 				if (i == 0 || i == m_height - 1 || j == 0 || j == m_width - 1) 
 				{
-					m_board[i][j] = Wall(i, j, true); // destructible	
+					m_board[i][j].emplace<Wall>(i, j, true);// destructible	
 				}
 				else 
 				{
-					m_board[i][j] = Wall(i, j, false);//indestructible
+					m_board[i][j].emplace<Wall>(i, j, false);	//indestructible
 				}
 			}
 
@@ -86,7 +86,7 @@ void Map::SetBombs()
 
 	for (int i = 0; i < m_height; ++i) {
 		for (int j = 0; j < m_width; ++j) {
-			if (auto* wall = std::get_if<Wall>(&m_board[i][j]); wall && wall->IsDestructible()) {
+			if (auto* wall = std::get_if<Wall>(&m_board[i][j]); wall && wall->isDestructible()) {
 				destructibleWalls.emplace_back(i, j);
 			}
 		}
@@ -98,14 +98,12 @@ void Map::SetBombs()
 
 	int bombsToPlace = std::min(bombs_count, static_cast<int>(destructibleWalls.size()));
 
-
 	for (int k = 0; k < bombsToPlace; ++k) {
 		int x = destructibleWalls[k].first;
 		int y = destructibleWalls[k].second;
-		if (auto wallPtr = std::get_if<Wall>(&m_board[x][y]))
-		{
-			Bomb* bomb = new Bomb(x, y);
-			wallPtr->SetContainedBomb(bomb);
+		if (auto wallPtr = std::get_if<Wall>(&m_board[x][y])) {
+			auto bomb = std::make_unique<Bomb>(x, y); 
+			wallPtr->setContainedBomb(std::move(bomb)); // Transfer ownership
 			m_bombs.emplace_back(x, y);
 		}
 	}
@@ -312,8 +310,8 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
 						os << "0 "; // Empty cell
 					}
 					else if constexpr (std::is_same_v<T, Wall>) {
-						if (arg.IsDestructible()) {
-							if (arg.GetContainedBomb() != nullptr) {
+						if (arg.isDestructible()) {
+							if (arg.getContainedBomb() != nullptr) {
 								os << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
 							}
 							else {

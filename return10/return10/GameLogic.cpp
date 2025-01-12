@@ -2,7 +2,7 @@
 
 GameLogic::GameLogic(Map& map) : map{ map } {}
 
-void GameLogic::checkForTraps(Player& player) {
+void GameLogic::CheckForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
     auto& cell = map.GetCellType(pos.i, pos.j);
 
@@ -51,14 +51,14 @@ void GameLogic::startGame()
     startTime = std::chrono::steady_clock::now();
     while (gameRunning)
     {
-        updateBullets();
+        UpdateBullets();
         if (WinCondition() == true) gameRunning = false;
     }
 }
 
 void GameLogic::ApplyDamage(Bomb bomb)
 {
-    std::list<std::pair<int, int>> area_of_effect = bomb.CalculateEffectArea();
+    std::list<std::pair<int, int>> area_of_effect = bomb.calculateEffectArea();
     for (auto coord : area_of_effect)
     {
         int x = coord.first;
@@ -76,24 +76,25 @@ void GameLogic::ApplyDamage(Bomb bomb)
         }
 
         auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
-        if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->IsDestructible())
+        if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->isDestructible())
         {
             map.SetCellType(x, y, std::monostate{});
         }
     }
 }
 
-void GameLogic::ExplodeBomb(Bomb bomb)
+void GameLogic::ExplodeBomb(Bomb& bomb)
 {
-    if (bomb.IsActive()) {
-        std::cout << "Bomb exploded at (" << bomb.GetX() << ", " << bomb.GetY() << ")!" << std::endl;
+    if (bomb.isActive()) {
+        std::cout << "Bomb exploded at (" << bomb.getX() << ", " << bomb.getY() << ")!" << std::endl;
         ApplyDamage(bomb);
-        bomb.Deactivate();
+        bomb.deactivate();
     }
     else {
         std::cout << "Bomb is not active and cannot explode." << std::endl;
     }
 }
+
 
 void GameLogic::addPlayer(Player player)
 {
@@ -118,23 +119,48 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
 }
 
 bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
+
     CellType cell = map.GetCellType(bullet.GetX(), bullet.GetY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
-        if (wall->IsDestructible()) {
-            if (auto* bomb = wall->GetContainedBomb()) {
-                if (bomb->IsActive()) {
+        std::cout << "Wall detected at position (" << wall->getX() << ", "
+            << wall->getY() << "). IsDestructible: "
+            << (wall->isDestructible() ? "Yes" : "No") << std::endl;
+
+        if (wall->isDestructible()) {
+            if (auto* bomb = wall->getContainedBomb()) {
+                std::cout << "Bomb found in wall at (" << bomb->getX() << ", "
+                    << bomb->getY() << "). IsActive: "
+                    << (bomb->isActive() ? "Yes" : "No") << std::endl;
+
+                if (bomb->isActive()) {
+                    std::cout << "Bomb is active and will now explode." << std::endl;
                     ExplodeBomb(*bomb);
                 }
+                else {
+                    std::cout << "Bomb is inactive, no explosion." << std::endl;
+                }
             }
+            else {
+                std::cout << "No bomb contained in this destructible wall." << std::endl;
+            }
+
+            std::cout << "Destroying wall and replacing with empty cell." << std::endl;
             map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});
             bullet.Deactivate();
+            std::cout << "Bullet deactivated after hitting a destructible wall." << std::endl;
             return true;
         }
         else {
+            std::cout << "Wall is indestructible. Bullet deactivated." << std::endl;
             bullet.Deactivate();
             return true;
         }
     }
+    else {
+        std::cout << "No wall detected at bullet position ("
+            << bullet.GetX() << ", " << bullet.GetY() << ")." << std::endl;
+    }
+
     return false;
 }
 
@@ -210,10 +236,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
                 else if (std::holds_alternative<Wall>(cell)) {
                     const Wall& wall = std::get<Wall>(cell);
 
-                    if (wall.IsDestructible() == false) {
+                    if (wall.isDestructible() == false) {
                         rowStr.push_back('I');
                     }
-                    else if (wall.IsDestructible() && wall.GetContainedBomb() != nullptr) {
+                    else if (wall.isDestructible() && wall.getContainedBomb() != nullptr) {
                         rowStr.push_back('B');
                     }
                     else {
@@ -232,7 +258,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
 }
 
 
-void GameLogic::updateBullets() {
+void GameLogic::UpdateBullets() {
     for (auto& player : m_players) {
         // Parcurgem fiecare glonț tras de jucătorul curent
         auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului

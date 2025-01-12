@@ -14,8 +14,8 @@ std::string ConvertCellToString(const CellType& cell) {
             return "0";
         }
         else if constexpr (std::is_same_v<T, Wall>) {
-            if (arg.IsDestructible()) {
-                if (arg.GetContainedBomb() != nullptr) {
+            if (arg.isDestructible()) {
+                if (arg.getContainedBomb() != nullptr) {
                     return "DB";
                 }
                 else {
