@@ -67,7 +67,6 @@ PlayerDAO GameStorage::GetPlayerByID(int playerId)
 
 void GameStorage::UpdatePlayerDAO(const PlayerDAO& player) {
     try {
-        
         m_db.update(player); // Actualizează jucătorul în baza de date
     }
     catch (const std::exception& e) {

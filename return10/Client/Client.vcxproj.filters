@@ -76,6 +76,9 @@
     <ClCompile Include="LeaderboardWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ShopWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -119,6 +122,9 @@
     <QtMoc Include="LeaderboardWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ShopWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="LoginWidget.ui">
@@ -136,5 +142,11 @@
     <QtUic Include="LeaderboardWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="ShopWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
