@@ -5,7 +5,7 @@
 TeleportTrap::TeleportTrap(int x, int y, const std::vector<Coordinate>& validCells)
     : Trap(x, y), m_validCells(validCells) {}
 
-void TeleportTrap::ActivateEffect(Player& player) {
+void TeleportTrap::activateEffect(Player& player) {
     if (m_validCells.empty()) {
         std::cout << "No valid cells for teleportation!\n";
         return;

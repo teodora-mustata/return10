@@ -8,7 +8,7 @@ class TeleportTrap : public Trap {
 public:
     TeleportTrap(int x, int y, const std::vector<Coordinate>& validCells);
 
-    void ActivateEffect(Player& player) override;
+    void activateEffect(Player& player) override;
 
 private:
     std::vector<Coordinate> m_validCells;

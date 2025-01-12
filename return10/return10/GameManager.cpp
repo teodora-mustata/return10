@@ -72,7 +72,7 @@ void GameManager::endGame(int gameId)
 {
     if (m_activeGames[gameId]->isRunning() == false) //game is over
     {
-        for (auto player : m_activeGames[gameId]->GetPlayers())
+        for (auto player : m_activeGames[gameId]->getPlayers())
         {
             int id = player.GetId();
             removePlayerFromGame(id);
@@ -88,7 +88,7 @@ Player GameManager::getPlayerFromID(int id)
 
     Gun player_gun;
     player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-    player_gun.SetBulletSpeed(gun_data.GetBulletSpeed());
+    player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
 
     Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
     return new_player;

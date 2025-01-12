@@ -2,9 +2,9 @@
 
 GameLogic::GameLogic(Map& map) : map{ map } {}
 
-void GameLogic::CheckForTraps(Player& player) {
+void GameLogic::checkForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
-    auto& cell = map.GetCellType(pos.i, pos.j);
+    auto& cell = map.getCellType(pos.i, pos.j);
 
     // Use std::visit to handle the cell type
     std::visit(
@@ -12,8 +12,8 @@ void GameLogic::CheckForTraps(Player& player) {
             using T = std::decay_t<decltype(cellType)>;
             if constexpr (std::is_base_of_v<Trap, T>) {
                 // If the cell is a Trap or derived from Trap, activate it
-                cellType.ActivateEffect(player);
-                map.SetCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
+                cellType.activateEffect(player);
+                map.setCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
             }
             
         },
@@ -23,7 +23,7 @@ void GameLogic::CheckForTraps(Player& player) {
 
 void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 {
-    auto spawnPoints = map.GetSpawnPoints();
+    auto spawnPoints = map.getSpawnPoints();
     int numPlayers = m_players.size();
 
     for (int i = 0; i < numPlayers; ++i) {
@@ -40,7 +40,7 @@ void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 
 void GameLogic::initializeScores()
 {
-    for (Player player : GetPlayers())
+    for (Player player : getPlayers())
     {
         player.setInitialScore();
     }
@@ -51,12 +51,12 @@ void GameLogic::startGame()
     startTime = std::chrono::steady_clock::now();
     while (gameRunning)
     {
-        UpdateBullets();
-        if (WinCondition() == true) gameRunning = false;
+        updateBullets();
+        if (winCondition() == true) gameRunning = false;
     }
 }
 
-void GameLogic::ApplyDamage(Bomb bomb)
+void GameLogic::applyDamage(Bomb bomb)
 {
     std::list<std::pair<int, int>> area_of_effect = bomb.calculateEffectArea();
     for (auto coord : area_of_effect)
@@ -64,7 +64,7 @@ void GameLogic::ApplyDamage(Bomb bomb)
         int x = coord.first;
         int y = coord.second;
 
-        for (Player player : GetPlayers())
+        for (Player player : getPlayers())
         {
             int playerXCoord = player.GetPosition().i;
             int playerYCoord = player.GetPosition().j;
@@ -75,19 +75,19 @@ void GameLogic::ApplyDamage(Bomb bomb)
             }
         }
 
-        auto& celltype = map.GetCellType(x, y); // Observă folosirea lui `auto&`!
+        auto& celltype = map.getCellType(x, y); // Observă folosirea lui `auto&`!
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->isDestructible())
         {
-            map.SetCellType(x, y, std::monostate{});
+            map.setCellType(x, y, std::monostate{});
         }
     }
 }
 
-void GameLogic::ExplodeBomb(Bomb& bomb)
+void GameLogic::explodeBomb(Bomb& bomb)
 {
     if (bomb.isActive()) {
         std::cout << "Bomb exploded at (" << bomb.getX() << ", " << bomb.getY() << ")!" << std::endl;
-        ApplyDamage(bomb);
+        applyDamage(bomb);
         bomb.deactivate();
     }
     else {
@@ -107,9 +107,9 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().i;
     int targetY = target.GetPosition().j;
 
-    if (bullet.GetX() == targetX && bullet.GetY() == targetY && target.GetLives() > 1) {
+    if (bullet.getX() == targetX && bullet.getY() == targetY && target.GetLives() > 1) {
         target.resetPosition();
-        bullet.Deactivate();
+        bullet.deactivate();
         target.loseLife();
         return true;
     }
@@ -120,7 +120,7 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
 
 bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
 
-    CellType cell = map.GetCellType(bullet.GetX(), bullet.GetY());
+    CellType cell = map.getCellType(bullet.getX(), bullet.getY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         std::cout << "Wall detected at position (" << wall->getX() << ", "
             << wall->getY() << "). IsDestructible: "
@@ -134,7 +134,7 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
 
                 if (bomb->isActive()) {
                     std::cout << "Bomb is active and will now explode." << std::endl;
-                    ExplodeBomb(*bomb);
+                    explodeBomb(*bomb);
                 }
                 else {
                     std::cout << "Bomb is inactive, no explosion." << std::endl;
@@ -145,20 +145,20 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
             }
 
             std::cout << "Destroying wall and replacing with empty cell." << std::endl;
-            map.SetCellType(bullet.GetX(), bullet.GetY(), std::monostate{});
-            bullet.Deactivate();
+            map.setCellType(bullet.getX(), bullet.getY(), std::monostate{});
+            bullet.deactivate();
             std::cout << "Bullet deactivated after hitting a destructible wall." << std::endl;
             return true;
         }
         else {
             std::cout << "Wall is indestructible. Bullet deactivated." << std::endl;
-            bullet.Deactivate();
+            bullet.deactivate();
             return true;
         }
     }
     else {
         std::cout << "No wall detected at bullet position ("
-            << bullet.GetX() << ", " << bullet.GetY() << ")." << std::endl;
+            << bullet.getX() << ", " << bullet.getY() << ")." << std::endl;
     }
 
     return false;
@@ -168,10 +168,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
 {
     std::vector<std::string> charMap;
 
-    for (int rowIndex = 0; rowIndex < map.GetDimensions().first; ++rowIndex) {
+    for (int rowIndex = 0; rowIndex < map.getDimensions().first; ++rowIndex) {
         std::string rowStr;
 
-        for (int colIndex = 0; colIndex < map.GetDimensions().second; ++colIndex) {
+        for (int colIndex = 0; colIndex < map.getDimensions().second; ++colIndex) {
             bool cellOverridden = false;
 
 
@@ -186,7 +186,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
                 if (!cellOverridden)
                 {
                     for (const auto& bullet : player.getGun().getFiredBullets()) {
-                        if (bullet.GetX() == rowIndex && bullet.GetY() == colIndex) {
+                        if (bullet.getX() == rowIndex && bullet.getY() == colIndex) {
                             rowStr.push_back('*');
                             cellOverridden = true;
                             break;
@@ -198,7 +198,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
           
             if (!cellOverridden) {
-                auto trapInfo = map.GetTrapInfo(rowIndex, colIndex);
+                auto trapInfo = map.getTrapInfo(rowIndex, colIndex);
                 
                 if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
                     //std::cout << trapInfo->first << ' ' << trapInfo->second;
@@ -229,7 +229,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
             }
 
             if (!cellOverridden) {
-                const auto& cell = map.GetCellType(rowIndex, colIndex);
+                const auto& cell = map.getCellType(rowIndex, colIndex);
                 if (std::holds_alternative<std::monostate>(cell)) {
                     rowStr.push_back('0');
                 }
@@ -258,16 +258,16 @@ std::vector<std::string> GameLogic::convertMapToString() const
 }
 
 
-void GameLogic::UpdateBullets() {
+void GameLogic::updateBullets() {
     for (auto& player : m_players) {
         // Parcurgem fiecare glonț tras de jucătorul curent
         auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
         for (size_t i = 0; i < bullets.size(); ++i) {
             auto& bullet = bullets[i];
 
-            if (!bullet.IsActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
+            if (!bullet.isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
 
-            bullet.Move(); // Mutăm glonțul pe hartă
+            bullet.move(); // Mutăm glonțul pe hartă
 
             // Verificăm coliziunea cu zidurile
             if (checkWallCollision(map, bullet)) {
@@ -284,10 +284,10 @@ void GameLogic::UpdateBullets() {
             // Verificăm coliziunea între gloanțele diferitelor jucători
             for (size_t j = i + 1; j < bullets.size(); ++j) {
                 auto& otherBullet = bullets[j];
-                if (bullet.GetX() == otherBullet.GetX() && bullet.GetY() == otherBullet.GetY()) {
+                if (bullet.getX() == otherBullet.getX() && bullet.getY() == otherBullet.getY()) {
                     // Dacă două gloanțe se întâlnesc, le anulam
-                    bullet.Deactivate();
-                    otherBullet.Deactivate();
+                    bullet.deactivate();
+                    otherBullet.deactivate();
                 }
             }
         }
@@ -295,7 +295,7 @@ void GameLogic::UpdateBullets() {
 }
 
 
-std::vector<Player>& GameLogic::GetPlayers()
+std::vector<Player>& GameLogic::getPlayers()
 {
     return m_players;
 }
@@ -334,12 +334,12 @@ void GameLogic::moveBullet(Map& map, Player& target, Gun* bullets)
 {
     auto firedBullets = bullets->getFiredBullets(); // Reference to the vector of bullets
     for (auto currentBullet = firedBullets.begin(); currentBullet != firedBullets.end(); ) {
-        currentBullet->Move(); // Update the position of the current bullet
+        currentBullet->move(); // Update the position of the current bullet
 
         //checkPlayerCollision(target, *currentBullet); // Check for collisions with the player
         //checkWallCollision(map, *currentBullet);      // Check for collisions with walls
 
-        if (!currentBullet->IsActive()) {
+        if (!currentBullet->isActive()) {
             // Remove inactive bullets and update iterator
             currentBullet = firedBullets.erase(currentBullet);
         }
@@ -371,7 +371,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
     case Direction::RIGHT: newY++; break;
     }
 
-    auto dimensions = map.GetDimensions();
+    auto dimensions = map.getDimensions();
     std::cout << "Attempting to move to: (" << newX << ", " << newY << ")\n";
     std::cout << "Map dimensions: (" << dimensions.first << ", " << dimensions.second << ")\n";
 
@@ -380,7 +380,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         return;
     }
 
-    if (std::holds_alternative<Wall>(map.GetBoard()[newX][newY]))
+    if (std::holds_alternative<Wall>(map.getBoard()[newX][newY]))
     {
         std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
         return;
@@ -391,7 +391,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 }
 
 
-bool GameLogic::WinCondition()
+bool GameLogic::winCondition()
 {
     int aliveCount = 0;
 

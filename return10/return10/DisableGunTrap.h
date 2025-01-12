@@ -6,7 +6,7 @@
 class DisableGunTrap : public Trap {
 public:
     DisableGunTrap(int x, int y, float duration);
-    void ActivateEffect(Player& player) override;
+    void activateEffect(Player& player) override;
 
 private:
     std::chrono::duration<float> m_duration;

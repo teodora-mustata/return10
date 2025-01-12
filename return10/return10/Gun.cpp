@@ -9,18 +9,18 @@ bool Gun::canFire() const
     return std::chrono::duration<float>(now - m_lastFiredTime) >= m_firingRate;
 }
 
-void Gun::Jam(std::chrono::duration<float> duration) {
+void Gun::jam(std::chrono::duration<float> duration) {
     m_isJammed = true;
     m_jammedEndTime = std::chrono::steady_clock::now() + std::chrono::duration_cast<std::chrono::steady_clock::duration>(duration);
 }
 
-void Gun::UpdateJammed() {
+void Gun::updateJammed() {
     if (m_isJammed && std::chrono::steady_clock::now() >= m_jammedEndTime) {
         m_isJammed = false;
     }
 }
 
-bool Gun::IsJammed() const {
+bool Gun::isJammed() const {
     return m_isJammed;
 }
 
@@ -46,7 +46,7 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
         }
 
         Bullet newBullet(playerX, playerY, playerDirection, m_bulletSpeed);
-        newBullet.SetActive(true);
+        newBullet.setActive(true);
 
         m_firedBullets.push_back(newBullet);
         m_lastFiredTime = std::chrono::steady_clock::now();
@@ -86,7 +86,7 @@ float Gun::GetBulletSpeed() const
     return m_bulletSpeed;
 }
 
-void Gun::SetBulletSpeed(float newBulletSpeed)
+void Gun::setBulletSpeed(float newBulletSpeed)
 {
     if (newBulletSpeed <= 0) {
         throw std::invalid_argument("Bullet speed must be > 0.");

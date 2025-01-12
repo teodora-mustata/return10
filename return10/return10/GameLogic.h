@@ -22,16 +22,17 @@ public:
     void initializePlayers();
     void initializeScores();
     void addPlayer(Player player);
-    std::vector<Player>& GetPlayers();
+    std::vector<Player>& getPlayers();
     void removePlayer(Player player);
 
-    void ApplyDamage(Bomb bomb);
-    void CheckForTraps(Player& player);
-    void ExplodeBomb(Bomb& bomb);
-    void UpdateBullets();
+    void applyDamage(Bomb bomb);
+    void checkForTraps(Player& player);
+    void explodeBomb(Bomb& bomb);
+    void updateBullets();
   
     const Map& GetMap() const;
     Map& GetMap();
+
     bool checkPlayerCollision(Player& target, Bullet& bullet);
     bool checkWallCollision(Map& map, Bullet& bullet);
     std::vector<std::string> convertMapToString() const;
@@ -41,7 +42,7 @@ public:
 
     void startGame();
     bool isRunning() const;
-    bool WinCondition();
+    bool winCondition();
 
     void processInput(int playerId, const std::string& command);
     void setState(GameState state);

@@ -2,18 +2,18 @@
 
 Map::Map() : m_height(40), m_width(40) //default dimensions
 {
-	ResizeMap();
-	GenerateSpawnPoints();
-	GenerateWalls();
-	SetBombs();
+	resizeMap();
+	generateSpawnPoints();
+	generateWalls();
+	setBombs();
 }
 
-std::vector<std::vector<CellType>>& Map::GetBoard() //here i put & jerry it solved the debug assertion failure for playerMove
+std::vector<std::vector<CellType>>& Map::getBoard() //here i put & jerry it solved the debug assertion failure for playerMove
 {
 	return this->m_board;
 }
 
-void Map::ResizeMap()
+void Map::resizeMap()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -27,12 +27,12 @@ void Map::ResizeMap()
 
 	for (int i = 0; i < m_height; i++) {
 		for (int j = 0; j < m_width; j++) {
-			SetCellType(i, j, std::monostate{});
+			setCellType(i, j, std::monostate{});
 		}
 	}
 }
 
-void Map::GenerateSpawnPoints()
+void Map::generateSpawnPoints()
 {
 	std::vector<std::pair<int, int>> temp = { {0, 0}, {0, m_width - 1}, {m_height - 1, 0}, {m_height - 1, m_width - 1} };
 	std::random_device rd;
@@ -45,7 +45,7 @@ void Map::GenerateSpawnPoints()
 	}
 }
 
-void Map::GenerateWalls()
+void Map::generateWalls()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -80,7 +80,7 @@ void Map::GenerateWalls()
 	}
 }
 
-void Map::SetBombs()
+void Map::setBombs()
 {
 	std::vector<std::pair<int, int>> destructibleWalls;
 
@@ -109,7 +109,7 @@ void Map::SetBombs()
 	}
 }
 
-std::optional<std::pair<char, bool>> Map::GetTrapInfo(int row, int col) const {
+std::optional<std::pair<char, bool>> Map::getTrapInfo(int row, int col) const {
 	if (row < 0 || row >= m_height || col < 0 || col >= m_width) {
 		//std::cout << "Invalid indices (" << row << ", " << col << ")\n";
 		return std::nullopt;
@@ -140,7 +140,7 @@ std::optional<std::pair<char, bool>> Map::GetTrapInfo(int row, int col) const {
 
 
 
-void Map::GenerateRandomTrap() {
+void Map::generateRandomTrap() {
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::vector<Coordinate> validCells;
@@ -193,48 +193,48 @@ void Map::GenerateRandomTrap() {
 		});
 
 }
-void Map::Initialize()
+void Map::initialize()
 {
-	if (m_difficulty != 0) GenerateRandomTrap();
+	if (m_difficulty != 0) generateRandomTrap();
 	else std::cout << "Difficulty is 0! \n";
 }
 
-std::vector<std::pair<int, int>> Map::GetSpawnPoints()
+std::vector<std::pair<int, int>> Map::getSpawnPoints()
 {
 	return m_spawnPoints;
 }
 
-int Map::GetHeight()
+int Map::getHeight()
 {
 	return m_height;
 }
-int Map::GetWidth()
+int Map::getWidth()
 {
 	return m_width;
 }
 
-CellType& Map::GetCellType(int x, int y)
+CellType& Map::getCellType(int x, int y)
 {
 	return m_board[x][y];
 }
 
-const CellType& Map::GetCellType(int x, int y) const
+const CellType& Map::getCellType(int x, int y) const
 {
 	return m_board[x][y];
 }
 
-void Map::SetCellType(int x, int y, CellType type)
+void Map::setCellType(int x, int y, CellType type)
 {
 	m_board[x][y] = type;
 }
 
-void Map::SetDifficulty(int difficulty)
+void Map::setDifficulty(int difficulty)
 {
 	m_difficulty = difficulty;
 }
 
 
-void Map::BreakWall(int x, int y)
+void Map::breakWall(int x, int y)
 {
 	if (std::holds_alternative<Wall>(m_board[x][y]))
 	{
@@ -244,13 +244,13 @@ void Map::BreakWall(int x, int y)
 	}
 }
 
-std::pair<int, int> Map::GetDimensions()
+std::pair<int, int> Map::getDimensions()
 {
 	std::pair<int, int> dim(m_height, m_width);
 	return dim;
 }
 
-int Map::GetDifficulty()
+int Map::getDifficulty()
 {
 	return m_difficulty;
 }
