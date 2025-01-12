@@ -8,19 +8,19 @@ class Bullet
 {
 public:
     Bullet(int startX, int startY, Direction dir, float bulletSpeed);
-    void Move();
-    void Deactivate();
-    int GetX() const;
-    int GetY() const;
-    Direction GetDirection() const;
-    bool IsActive() const;
+    void move();
+    void deactivate();
+    int getX() const;
+    int getY() const;
+    Direction getDirection() const;
+    bool isActive() const;
 
-    // Setters
-    void SetX(int x);
-    void SetY(int y);
-    void SetDirection(Direction direction);
-    void SetSpeed(float speed);
-    void SetActive(bool active);
+    
+    void setX(int x);
+    void setY(int y);
+    void setDirection(Direction direction);
+    void setSpeed(float speed);
+    void setActive(bool active);
 
 private:
     int m_x;

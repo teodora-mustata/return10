@@ -16,29 +16,27 @@ public:
 	Map();
 	~Map() = default;
 	friend std::ostream& operator<<(std::ostream& os, const Map& map);
-	void ResizeMap();
-	void GenerateSpawnPoints();
-	void GenerateWalls();
-	void SetBombs();
-	std::optional<std::pair<char, bool>> GetTrapInfo(int row, int col) const;
-	void GenerateRandomTrap();
-	void Initialize();
+	void initialize();
+	void resizeMap();
+	void generateSpawnPoints();
+	void generateWalls();
+	void breakWall(int x, int y);
+	void setBombs();
 
+	std::optional<std::pair<char, bool>> getTrapInfo(int row, int col) const;
+	void generateRandomTrap();
 
-	int GetHeight();
-	int GetWidth();
-	std::vector<std::vector<CellType>>& GetBoard(); // here put & jerry it solved the debug assertion failre for playerMove
-	std::vector<std::pair<int, int>> GetSpawnPoints();
-	CellType& GetCellType(int x, int y); // pentru a modifica celula
-	const CellType& GetCellType(int x, int y) const; // read only
-	std::pair<int, int> GetDimensions();
-	int GetDifficulty();
+	int getHeight();
+	int getWidth();
+	std::vector<std::vector<CellType>>& getBoard(); // here put & jerry it solved the debug assertion failre for playerMove
+	std::vector<std::pair<int, int>> getSpawnPoints();
+	CellType& getCellType(int x, int y); // pentru a modifica celula
+	const CellType& getCellType(int x, int y) const; // read only
+	std::pair<int, int> getDimensions();
+	int getDifficulty();
 
-	void SetCellType(int x, int y, CellType type);
-	void SetDifficulty(int difficulty);
-
-	void BreakWall(int x, int y);
-
+	void setCellType(int x, int y, CellType type);
+	void setDifficulty(int difficulty);
 
 private:
 	// dimensions

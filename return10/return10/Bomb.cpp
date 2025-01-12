@@ -3,22 +3,22 @@
 
 Bomb::Bomb(int x, int y) : m_posX(x), m_posY(y), m_isActive(false) {}
 
-int Bomb::GetX()
+int Bomb::getX()
 {
     return m_posX;
 }
 
-int Bomb::GetY()
+int Bomb::getY()
 {
     return m_posY;
 }
 
-bool Bomb::IsActive()
+bool Bomb::isActive()
 {
     return m_isActive;
 }
 
-std::list<std::pair<int, int>> Bomb::CalculateEffectArea()
+std::list<std::pair<int, int>> Bomb::calculateEffectArea()
 {
     std::list<std::pair<int, int>> area_of_effect;
     for (int x = m_posX - m_radius; x <= m_posX + m_radius; ++x)
@@ -27,13 +27,13 @@ std::list<std::pair<int, int>> Bomb::CalculateEffectArea()
     return area_of_effect;
 }
 
-void Bomb::Deactivate()
+void Bomb::deactivate()
 {
 	m_isActive = false;
 	std::cout << "Bomb deactivated." << std::endl;
 }
 
-void Bomb::Activate()
+void Bomb::activate()
 {
 	m_isActive = true;
 	std::cout << "Bomb activated at (" << m_posX << ", " << m_posY << ")." << std::endl;

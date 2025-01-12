@@ -5,7 +5,7 @@ Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
 {
 }
 
-void Bullet::Move() {
+void Bullet::move() {
     switch (m_direction) {
     case Direction::UP:
         m_y -= 1;
@@ -22,7 +22,7 @@ void Bullet::Move() {
     }
 }
 
-void Bullet::Deactivate() {
+void Bullet::deactivate() {
     m_active = false;
 }
 
@@ -43,34 +43,34 @@ void Bullet::Deactivate() {
 //}
 
 
-int Bullet::GetX() const
+int Bullet::getX() const
 {
     return m_x;
 }
-int Bullet::GetY() const
+int Bullet::getY() const
 { 
     return m_y; 
 }
-Direction Bullet::GetDirection() const {
+Direction Bullet::getDirection() const {
     return m_direction;
 }
 //float Bullet::getSpeed() const { return m_speed; }
-bool Bullet::IsActive() const { 
+bool Bullet::isActive() const { 
     return m_active; 
 }
-void Bullet::SetX(int x)
+void Bullet::setX(int x)
 {
     m_x = x;
 }
-void Bullet::SetY(int y) { 
+void Bullet::setY(int y) { 
     m_y = y; 
 }
-void Bullet::SetDirection(Direction direction) { 
+void Bullet::setDirection(Direction direction) { 
     m_direction = direction; 
 }
-void Bullet::SetSpeed(float speed) { 
+void Bullet::setSpeed(float speed) { 
     m_speed = speed; 
 }
-void Bullet::SetActive(bool active) { 
+void Bullet::setActive(bool active) { 
     m_active = active; 
 }

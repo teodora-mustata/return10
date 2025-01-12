@@ -11,7 +11,7 @@ public:
     bool IsActive() const;
     void SetState(bool isActive);
 
-    virtual void ActivateEffect(Player& player) = 0;
+    virtual void activateEffect(Player& player) = 0;
 
 protected:
     std::pair<int, int> m_coordinates;

@@ -199,7 +199,7 @@ void Player::UpdateStatus(float deltaTime) {
 	}
 
 	
-	m_gun.UpdateJammed();
+	m_gun.updateJammed();
 }
 
 bool Player::IsImmobilized() const {

@@ -14,8 +14,8 @@ std::string ConvertCellToString(const CellType& cell) {
             return "0";
         }
         else if constexpr (std::is_same_v<T, Wall>) {
-            if (arg.IsDestructible()) {
-                if (arg.GetContainedBomb() != nullptr) {
+            if (arg.isDestructible()) {
+                if (arg.getContainedBomb() != nullptr) {
                     return "DB";
                 }
                 else {
@@ -429,7 +429,7 @@ void Routing::AddPlayerToGame()
         m_loggedInPlayers.push_back(player_id);
 
 
-        auto& players = m_gameLogic.GetPlayers();
+        auto& players = m_gameLogic.getPlayers();
 
         if (players.size() < 4) {
 
@@ -449,7 +449,7 @@ void Routing::AddPlayerToGame()
 
             Gun player_gun;
             player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-            player_gun.SetBulletSpeed(gun_data.GetBulletSpeed());
+            player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
 
             Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
 
@@ -508,7 +508,7 @@ void Routing::SetDifficulty()
         }
 
         int requestedDifficulty = jsonData["difficulty"].i();
-        int currentDifficulty = m_gameLogic.GetMap().GetDifficulty();
+        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
 
         if (currentDifficulty != 0) {
             res.code = 403; // Forbidden
@@ -517,8 +517,8 @@ void Routing::SetDifficulty()
             return;
         }
 
-        m_gameLogic.GetMap().SetDifficulty(requestedDifficulty);
-        m_gameLogic.GetMap().Initialize();
+        m_gameLogic.GetMap().setDifficulty(requestedDifficulty);
+        m_gameLogic.GetMap().initialize();
 
         res.code = 200;
         res.write("Difficulty set successfully.");
@@ -527,7 +527,7 @@ void Routing::SetDifficulty()
 
     CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
         ([&](const crow::request& req, crow::response& res) {
-        int currentDifficulty = m_gameLogic.GetMap().GetDifficulty();
+        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
         crow::json::wvalue jsonResponse;
         jsonResponse["difficulty"] = currentDifficulty;
 
@@ -552,12 +552,12 @@ void Routing::HandlePlayerCommand()
 
        
         auto it = std::find_if(
-            m_gameLogic.GetPlayers().begin(),
-            m_gameLogic.GetPlayers().end(),
+            m_gameLogic.getPlayers().begin(),
+            m_gameLogic.getPlayers().end(),
             [id](const Player& player) { return player.GetId() == id; }
         );
 
-        if (it == m_gameLogic.GetPlayers().end()) {
+        if (it == m_gameLogic.getPlayers().end()) {
             return crow::response(404, "Player not found");
         }
 

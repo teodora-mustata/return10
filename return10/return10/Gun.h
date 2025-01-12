@@ -20,12 +20,12 @@ public:
     float GetBulletSpeed() const;
     float GetFiringRate()const;
 
-    void SetBulletSpeed(float newBulletSpeed);
+    void setBulletSpeed(float newBulletSpeed);
     void setFiringRate(std::chrono::duration<float> newRate);
 
-    void Jam(std::chrono::duration<float> duration);
-    void UpdateJammed();
-    bool IsJammed() const;
+    void jam(std::chrono::duration<float> duration);
+    void updateJammed();
+    bool isJammed() const;
 
 private:
     std::chrono::duration<float> m_firingRate = std::chrono::seconds(4);
