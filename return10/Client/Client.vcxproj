@@ -103,22 +103,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="LeaderboardWidget.cpp" />
-    <ClCompile Include="Login.cpp" />
     <ClCompile Include="LoginRegisterManager.cpp" />
     <ClCompile Include="LoginWidget.cpp" />
-    <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainMenuWidget.cpp" />
     <ClCompile Include="RegisterWidget.cpp" />
-    <ClCompile Include="ShopMenu.cpp" />
     <ClCompile Include="ShopWidget.cpp" />
-    <ClCompile Include="source.cpp" />
     <QtRcc Include="Client.qrc" />
     <QtUic Include="Client.ui" />
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="GameInterface.cpp" />
-    <ClCompile Include="Leaderboard.cpp" />
-    <ClCompile Include="LoginMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="LeaderboardWidget.ui" />
     <QtUic Include="LoginRegisterManager.ui" />
@@ -134,17 +128,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameInterface.h" />
-    <ClInclude Include="Leaderboard.h" />
     <QtMoc Include="LeaderboardWidget.h" />
-    <ClInclude Include="Login.h" />
-    <ClInclude Include="LoginMenu.h" />
     <QtMoc Include="LoginWidget.h" />
     <QtMoc Include="LoginRegisterManager.h" />
-    <ClInclude Include="MainMenu.h" />
     <QtMoc Include="MainMenuWidget.h" />
-    <ClInclude Include="Menu.h" />
     <QtMoc Include="RegisterWidget.h" />
-    <ClInclude Include="ShopMenu.h" />
     <QtMoc Include="ShopWidget.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>

@@ -4,7 +4,7 @@
 //widget dintr - o lista de widgeturi.Este util cand vrei sa afisezi mai multe widgeturi si sa comuti între ele.
 #include <QStackedWidget>
 #include "LoginWidget.h"
-#include "RegisterWidget.h"
+#include "RegisterWidget.h"//ca aici rezolv clasele de Main menu widget, sa sterg
 
 class LoginRegisterManager : public QWidget {
     Q_OBJECT

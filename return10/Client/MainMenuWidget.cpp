@@ -1,3 +1,78 @@
+#include "MainMenuWidget.h"
+#include <QApplication>
+
+MainMenuWidget::MainMenuWidget(QWidget* parent)
+    : QWidget(parent) {
+    setupUI();
+    this->setWindowTitle("Battle City");
+}
+
+MainMenuWidget::~MainMenuWidget() {
+    // Destructor logic if needed
+}
+
+void MainMenuWidget::setupUI() {
+    stackedWidget = new QStackedWidget(this);
+
+    // Set up main menu layout
+    QWidget* mainMenuWidget = new QWidget(this);
+    QVBoxLayout* mainMenuLayout = new QVBoxLayout(mainMenuWidget);
+
+    titleLabel = new QLabel("Battle City", this);
+    titleLabel->setAlignment(Qt::AlignCenter);
+    mainMenuLayout->addWidget(titleLabel);
+
+    startGameButton = new QPushButton("Start Game", this);
+    mainMenuLayout->addWidget(startGameButton);
+    connect(startGameButton, &QPushButton::clicked, this, &MainMenuWidget::on_startGameButton_clicked);
+
+    shopButton = new QPushButton("Shop", this);
+    mainMenuLayout->addWidget(shopButton);
+    connect(shopButton, &QPushButton::clicked, this, &MainMenuWidget::on_shopButton_clicked);
+
+    leaderboardButton = new QPushButton("Leaderboard", this);
+    mainMenuLayout->addWidget(leaderboardButton);
+    connect(leaderboardButton, &QPushButton::clicked, this, &MainMenuWidget::on_leaderboardButton_clicked);
+
+    exitButton = new QPushButton("Exit", this);
+    mainMenuLayout->addWidget(exitButton);
+    connect(exitButton, &QPushButton::clicked, this, &MainMenuWidget::on_exitButton_clicked);
+
+    mainMenuWidget->setLayout(mainMenuLayout);
+    stackedWidget->addWidget(mainMenuWidget);
+
+    // Create instances of ShopWidget and LeaderboardWidget and add them to the stacked widget
+    shopPage = new ShopWidget(nullptr, this);
+    leaderboardPage = new LeaderboardWidget(nullptr, this);
+
+    stackedWidget->addWidget(shopPage);
+    stackedWidget->addWidget(leaderboardPage);
+
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(stackedWidget);
+    setLayout(mainLayout);
+}
+
+void MainMenuWidget::on_startGameButton_clicked() {
+    // Start game logic here
+}
+
+void MainMenuWidget::on_shopButton_clicked() {
+    stackedWidget->setCurrentWidget(shopPage);
+}
+
+void MainMenuWidget::on_leaderboardButton_clicked() {
+    stackedWidget->setCurrentWidget(leaderboardPage);
+}
+
+void MainMenuWidget::on_exitButton_clicked() {
+    QApplication::quit();
+}
+
+void MainMenuWidget::showMainMenu() {
+    stackedWidget->setCurrentIndex(0);
+}
+
 ////// MainMenuWidget.cpp
 ////#include "MainMenuWidget.h"
 //////#include "ui_MainMenuWidget.h
@@ -255,77 +330,3 @@
 //    QApplication::quit();
 //}
 
-#include "MainMenuWidget.h"
-#include <QApplication>
-
-MainMenuWidget::MainMenuWidget(QWidget* parent)
-    : QWidget(parent) {
-    setupUI();
-    this->setWindowTitle("Battle City");
-}
-
-MainMenuWidget::~MainMenuWidget() {
-    // Destructor logic if needed
-}
-
-void MainMenuWidget::setupUI() {
-    stackedWidget = new QStackedWidget(this);
-
-    // Set up main menu layout
-    QWidget* mainMenuWidget = new QWidget(this);
-    QVBoxLayout* mainMenuLayout = new QVBoxLayout(mainMenuWidget);
-
-    titleLabel = new QLabel("Battle City", this);
-    titleLabel->setAlignment(Qt::AlignCenter);
-    mainMenuLayout->addWidget(titleLabel);
-
-    startGameButton = new QPushButton("Start Game", this);
-    mainMenuLayout->addWidget(startGameButton);
-    connect(startGameButton, &QPushButton::clicked, this, &MainMenuWidget::on_startGameButton_clicked);
-
-    shopButton = new QPushButton("Shop", this);
-    mainMenuLayout->addWidget(shopButton);
-    connect(shopButton, &QPushButton::clicked, this, &MainMenuWidget::on_shopButton_clicked);
-
-    leaderboardButton = new QPushButton("Leaderboard", this);
-    mainMenuLayout->addWidget(leaderboardButton);
-    connect(leaderboardButton, &QPushButton::clicked, this, &MainMenuWidget::on_leaderboardButton_clicked);
-
-    exitButton = new QPushButton("Exit", this);
-    mainMenuLayout->addWidget(exitButton);
-    connect(exitButton, &QPushButton::clicked, this, &MainMenuWidget::on_exitButton_clicked);
-
-    mainMenuWidget->setLayout(mainMenuLayout);
-    stackedWidget->addWidget(mainMenuWidget);
-
-    // Create instances of ShopWidget and LeaderboardWidget and add them to the stacked widget
-    shopPage = new ShopWidget(nullptr, this);
-    leaderboardPage = new LeaderboardWidget(nullptr, this);
-
-    stackedWidget->addWidget(shopPage);
-    stackedWidget->addWidget(leaderboardPage);
-
-    QVBoxLayout* mainLayout = new QVBoxLayout(this);
-    mainLayout->addWidget(stackedWidget);
-    setLayout(mainLayout);
-}
-
-void MainMenuWidget::on_startGameButton_clicked() {
-    // Start game logic here
-}
-
-void MainMenuWidget::on_shopButton_clicked() {
-    stackedWidget->setCurrentWidget(shopPage);
-}
-
-void MainMenuWidget::on_leaderboardButton_clicked() {
-    stackedWidget->setCurrentWidget(leaderboardPage);
-}
-
-void MainMenuWidget::on_exitButton_clicked() {
-    QApplication::quit();
-}
-
-void MainMenuWidget::showMainMenu() {
-    stackedWidget->setCurrentIndex(0);
-}
