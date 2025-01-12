@@ -79,16 +79,17 @@ void StartGameWidget::on_hardModeButton_clicked()
 
 void StartGameWidget::on_readyToPlayButton_clicked()
 {
+   
+}
+
+void StartGameWidget::on_goBackButton_clicked()
+{
     if (mainMenuWidget) {
         mainMenuWidget->stackedWidget->setCurrentIndex(0);
     }
     else {
         QMessageBox::information(this, "Home", "Main menu is not available.");
     }
-}
-
-void StartGameWidget::on_goBackButton_clicked()
-{
 }
 
 void StartGameWidget::on_quitGame_clicked()
@@ -116,4 +117,12 @@ bool StartGameWidget::sendDifficultyToServer(int difficulty) {
         std::cout << "Couldn't send difficulty to server. Try again.\n";
     }
     return false;
+}
+
+void StartGameWidget::checkCurrentDifficulty()
+{
+}
+
+void StartGameWidget::startServerGame()
+{
 }
