@@ -7,6 +7,7 @@
 #include <QStackedWidget>
 
 // Forward declarations
+class StartGameWidget;
 class ShopWidget;
 class LeaderboardWidget;
 
@@ -32,7 +33,8 @@ private:
     QPushButton* exitButton;
     QLabel* titleLabel;
     QVBoxLayout* layout;
-
+    
+    StartGameWidget* startGamePage;
     ShopWidget* shopPage;
     LeaderboardWidget* leaderboardPage;
 

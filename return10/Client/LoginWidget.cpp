@@ -1,11 +1,6 @@
 #include "LoginWidget.h"
-#include "MainMenuWidget.h"
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QMessageBox>
-#include <cpr/cpr.h>
-#include <crow/json.h>
-#include "UserSession.h"  
+
+
 
 LoginWidget::LoginWidget(QWidget* parent) : QWidget(parent) {
     QVBoxLayout* layout = new QVBoxLayout(this);

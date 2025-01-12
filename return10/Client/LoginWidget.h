@@ -2,6 +2,14 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include<crow/json.h>
+#include<cpr/cpr.h>
+#include<qlabel.h>
+#include<qmessagebox.h>
+#include<QVBoxLayout>
+#include"UserSession.h"
+
+#include"MainMenuWidget.h"
 
 class LoginWidget : public QWidget {
     Q_OBJECT

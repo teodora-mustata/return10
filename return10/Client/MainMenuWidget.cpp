@@ -334,6 +334,7 @@
 #include "MainMenuWidget.h"
 #include "ShopWidget.h"
 #include "LeaderboardWidget.h"
+#include "StartGameWidget.h"
 #include <QApplication>
 
 MainMenuWidget::MainMenuWidget(QWidget* parent)
@@ -377,9 +378,11 @@ void MainMenuWidget::setupUI() {
     stackedWidget->addWidget(mainMenuWidget);
 
     // Create instances of ShopWidget and LeaderboardWidget and add them to the stacked widget
+    startGamePage = new StartGameWidget(nullptr, this);
     shopPage = new ShopWidget(nullptr, this);
     leaderboardPage = new LeaderboardWidget(nullptr, this);
 
+    stackedWidget->addWidget(startGamePage);
     stackedWidget->addWidget(shopPage);
     stackedWidget->addWidget(leaderboardPage);
 
@@ -389,7 +392,7 @@ void MainMenuWidget::setupUI() {
 }
 
 void MainMenuWidget::on_startGameButton_clicked() {
-    // Start game logic here
+    stackedWidget->setCurrentWidget(startGamePage);
 }
 
 void MainMenuWidget::on_shopButton_clicked() {
