@@ -34,14 +34,17 @@ void StartGameWidget::setupUI() {
     difficultyLayout->addWidget(hardModeButton);
     connect(hardModeButton, &QPushButton::clicked, this, &StartGameWidget::on_hardModeButton_clicked);
 
+    readyToPlayButton = new QPushButton("Ready", chooseGameDificulty);
+    difficultyLayout->addWidget(readyToPlayButton);
+    connect(readyToPlayButton, &QPushButton::clicked, this, &StartGameWidget::on_readyToPlayButton_clicked);
+
     goBackButton = new QPushButton("Go Back", chooseGameDificulty);
     difficultyLayout->addWidget(goBackButton);
     connect(goBackButton, &QPushButton::clicked, this, &StartGameWidget::on_goBackButton_clicked);
 
     chooseGameDificulty->setLayout(difficultyLayout);
-
-
-
+   
+    
 
     // Add pages to stackedWidget
     stackedWidget->addWidget(chooseGameDificulty);
@@ -56,30 +59,30 @@ void StartGameWidget::setupUI() {
 void StartGameWidget::on_easyModeButton_clicked()
 {
     selectedDifficulty = 1;
-    if (sendDifficultyToServer(selectedDifficulty)) {
-        stackedWidget->setCurrentWidget(readyToPlayPage);
-    }
+    //if (sendDifficultyToServer(selectedDifficulty)) {
+    //    stackedWidget->setCurrentWidget(/*Take me to game board*/);
+    //}
 }
 
 void StartGameWidget::on_mediumModeButton_clicked()
 {
     selectedDifficulty = 2;
-    if (sendDifficultyToServer(selectedDifficulty)) {
-        stackedWidget->setCurrentWidget(readyToPlayPage);
-    }
+    //if (sendDifficultyToServer(selectedDifficulty)) {
+    //    stackedWidget->setCurrentWidget(/*Take me to game board*/);
+    //}
 }
 
 void StartGameWidget::on_hardModeButton_clicked()
 {
     selectedDifficulty = 3;
-    if (sendDifficultyToServer(selectedDifficulty)) {
-        stackedWidget->setCurrentWidget(readyToPlayPage);
-    }
+    //if (sendDifficultyToServer(selectedDifficulty)) {
+    //    stackedWidget->setCurrentWidget(/*Take me to game board*/);
+    //}
 }
 
 void StartGameWidget::on_readyToPlayButton_clicked()
 {
-   
+   /*IF DIFICULTY==0 ->DON'T START*/
 }
 
 void StartGameWidget::on_goBackButton_clicked()
@@ -92,9 +95,6 @@ void StartGameWidget::on_goBackButton_clicked()
     }
 }
 
-void StartGameWidget::on_quitGame_clicked()
-{
-}
 
 bool StartGameWidget::sendDifficultyToServer(int difficulty) {
     crow::json::wvalue jsonData;
@@ -108,6 +108,7 @@ bool StartGameWidget::sendDifficultyToServer(int difficulty) {
 
     if (response.status_code == 200) {
         std::cout << "Difficulty set successfully!\n";
+
         return true;
     }
     else if (response.status_code == 403) {
@@ -119,9 +120,6 @@ bool StartGameWidget::sendDifficultyToServer(int difficulty) {
     return false;
 }
 
-void StartGameWidget::checkCurrentDifficulty()
-{
-}
 
 void StartGameWidget::startServerGame()
 {

@@ -27,21 +27,18 @@ private slots:
     void on_hardModeButton_clicked();
     void on_readyToPlayButton_clicked();
     void on_goBackButton_clicked();
-    void on_quitGame_clicked();
 
 private:
 
     QStackedWidget* stackedWidget; // Widget pentru gestionarea mai multor pagini
     QWidget* chooseGameDificulty; // Pagina cu dificultăți
-    QWidget* readyToPlayPage;      // Pagina Ready to Play
+  
 
     QPushButton* easyModeButton;
     QPushButton* mediumModeButton;
     QPushButton* hardModeButton;
     QPushButton* goBackButton;
-
     QPushButton* readyToPlayButton;
-    QPushButton* quitGameButton;
 
     QLabel* titleLabel;
     QVBoxLayout* layout;
@@ -50,12 +47,9 @@ private:
 
     int selectedDifficulty;
     bool sendDifficultyToServer(int difficulty);
-    void checkCurrentDifficulty();
+  
     void startServerGame();
-  /*  void easyModeButton();
-    void mediumModeButton();
-    void hardModeButton();
-    void readyToPlayButton();*/
+
 
     void setupUI();
 };
