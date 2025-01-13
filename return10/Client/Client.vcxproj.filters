@@ -61,7 +61,7 @@
     <ClCompile Include="ShopWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StartGameWidget.cpp">
+    <ClCompile Include="ChooseGameDificulty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <QtMoc Include="ShopWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="StartGameWidget.h">
+    <QtMoc Include="ChooseGameDificulty.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -116,9 +116,6 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ChooseGameDificulty.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="StartGameWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

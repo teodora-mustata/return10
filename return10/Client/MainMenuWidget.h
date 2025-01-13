@@ -7,7 +7,7 @@
 #include <QStackedWidget>
 
 // Forward declarations
-class StartGameWidget;
+class ChooseGameDificulty;
 class ShopWidget;
 class LeaderboardWidget;
 
@@ -20,21 +20,21 @@ public:
     QStackedWidget* stackedWidget;
 
 private slots:
-    void on_startGameButton_clicked();
+    void on_chooseGameDificultyButton_clicked();
     void on_shopButton_clicked();
     void on_leaderboardButton_clicked();
     void on_exitButton_clicked();
     void showMainMenu();
 
 private:
-    QPushButton* startGameButton;
+    QPushButton* chooseGameDificultyButton;
     QPushButton* shopButton;
     QPushButton* leaderboardButton;
     QPushButton* exitButton;
     QLabel* titleLabel;
     QVBoxLayout* layout;
     
-    StartGameWidget* startGamePage;
+    ChooseGameDificulty* chooseGameDificultyPage;
     ShopWidget* shopPage;
     LeaderboardWidget* leaderboardPage;
 

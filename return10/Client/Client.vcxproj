@@ -102,13 +102,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChooseGameDificulty.cpp" />
     <ClCompile Include="LeaderboardWidget.cpp" />
     <ClCompile Include="LoginRegisterManager.cpp" />
     <ClCompile Include="LoginWidget.cpp" />
     <ClCompile Include="MainMenuWidget.cpp" />
     <ClCompile Include="RegisterWidget.cpp" />
     <ClCompile Include="ShopWidget.cpp" />
-    <ClCompile Include="StartGameWidget.cpp" />
     <QtRcc Include="Client.qrc" />
     <QtUic Include="ChooseGameDificulty.ui" />
     <QtUic Include="Client.ui" />
@@ -122,7 +122,6 @@
     <QtUic Include="MainMenuWidget.ui" />
     <QtUic Include="RegisterWidget.ui" />
     <QtUic Include="ShopWidget.ui" />
-    <QtUic Include="StartGameWidget.ui" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Validator\Validator.vcxproj">
@@ -130,6 +129,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="ChooseGameDificulty.h" />
     <ClInclude Include="GameInterface.h" />
     <QtMoc Include="LeaderboardWidget.h" />
     <QtMoc Include="LoginWidget.h" />
@@ -137,7 +137,6 @@
     <QtMoc Include="MainMenuWidget.h" />
     <QtMoc Include="RegisterWidget.h" />
     <QtMoc Include="ShopWidget.h" />
-    <QtMoc Include="StartGameWidget.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

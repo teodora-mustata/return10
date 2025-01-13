@@ -334,7 +334,7 @@
 #include "MainMenuWidget.h"
 #include "ShopWidget.h"
 #include "LeaderboardWidget.h"
-#include "StartGameWidget.h"
+#include "ChooseGameDificulty.h"
 #include <QApplication>
 
 MainMenuWidget::MainMenuWidget(QWidget* parent)
@@ -358,9 +358,9 @@ void MainMenuWidget::setupUI() {
     titleLabel->setAlignment(Qt::AlignCenter);
     mainMenuLayout->addWidget(titleLabel);
 
-    startGameButton = new QPushButton("Start Game", this);
-    mainMenuLayout->addWidget(startGameButton);
-    connect(startGameButton, &QPushButton::clicked, this, &MainMenuWidget::on_startGameButton_clicked);
+    chooseGameDificultyButton = new QPushButton("Start Game", this);
+    mainMenuLayout->addWidget(chooseGameDificultyButton);
+    connect(chooseGameDificultyButton, &QPushButton::clicked, this, &MainMenuWidget::on_chooseGameDificultyButton_clicked);
 
     shopButton = new QPushButton("Shop", this);
     mainMenuLayout->addWidget(shopButton);
@@ -378,11 +378,11 @@ void MainMenuWidget::setupUI() {
     stackedWidget->addWidget(mainMenuWidget);
 
     // Create instances of ShopWidget and LeaderboardWidget and add them to the stacked widget
-    startGamePage = new StartGameWidget(nullptr, this);
+    chooseGameDificultyPage = new ChooseGameDificulty(nullptr, this);
     shopPage = new ShopWidget(nullptr, this);
     leaderboardPage = new LeaderboardWidget(nullptr, this);
 
-    stackedWidget->addWidget(startGamePage);
+    stackedWidget->addWidget(chooseGameDificultyPage);
     stackedWidget->addWidget(shopPage);
     stackedWidget->addWidget(leaderboardPage);
 
@@ -391,8 +391,8 @@ void MainMenuWidget::setupUI() {
     setLayout(mainLayout);
 }
 
-void MainMenuWidget::on_startGameButton_clicked() {
-    stackedWidget->setCurrentWidget(startGamePage);
+void MainMenuWidget::on_chooseGameDificultyButton_clicked() {
+    stackedWidget->setCurrentWidget(chooseGameDificultyPage);
 }
 
 void MainMenuWidget::on_shopButton_clicked() {
