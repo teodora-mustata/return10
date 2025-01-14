@@ -42,7 +42,7 @@ void Routing::Run() {
     BuyReloadSpeedUpgrade();
     BuyBulletSpeedUpgrade();
     SetupGameRoute();
-    //GetActivePlayers();
+    getActivePlayers();
     SetDifficulty();
     AddPlayerToGame();
     HandlePlayerCommand();
@@ -457,9 +457,9 @@ void Routing::AddPlayerToGame()
 
             //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
 
-            crow::json::wvalue response;
+            /*crow::json::wvalue response;
             response["current_players"] = players.size();
-            res.body = response.dump();
+            res.body = response.dump();*/
             res.code = 200;
         }
         else {
@@ -600,5 +600,40 @@ void Routing::StartGame()
                 m_gameLogic.startGame();
                 return crow::response(200);
             });
+}
+
+//int GameInterface::getActivePlayers()
+//{
+//    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/get_active_players" });
+//
+//    if (response.status_code == 200) {
+//        auto jsonResponse = crow::json::load(response.text);
+//        if (jsonResponse) {
+//            return jsonResponse["active_players"].i();
+//        }
+//    }
+//    return -1;
+//}
+//
+//CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
+//([&](const crow::request& req, crow::response& res) {
+//    int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
+//    crow::json::wvalue jsonResponse;
+//    jsonResponse["difficulty"] = currentDifficulty;
+//
+//    res.code = 200;
+//    res.write(jsonResponse.dump());
+//    res.end();
+//    });
+
+void Routing::getActivePlayers()
+{
+    CROW_ROUTE(m_app, "/get_active_players").methods("GET"_method)([this](const crow::request& req)
+        {
+            int players = m_gameLogic.getPlayers().size();
+            crow::json::wvalue jsonResponse;
+            jsonResponse["active_players"] = players;
+            return crow::response{ jsonResponse };
+        });
 }
 

@@ -118,7 +118,7 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
 }
 
 
-int GameInterface::addPlayerToGame(int playerID)
+void GameInterface::addPlayerToGame(int playerID)
 {
     crow::json::wvalue jsonData;
     jsonData["player_id"] = playerID;
@@ -130,22 +130,11 @@ int GameInterface::addPlayerToGame(int playerID)
     );
   
     if (r.status_code == 200) {
-        
-        crow::json::rvalue responseData = crow::json::load(r.text);
-
-        if (responseData.has("current_players")) {
-            currentPlayers = responseData["current_players"].i();
-            std::cout << "Player with ID " << playerID << " joined!\n";
-            std::cout << "There are currently " << currentPlayers << "/4 players in the game.\n";
-        }
-        else {
-            std::cerr << "Failed to retrieve current players count from server.\n";
-        }
+        std::cerr << "Player added successfully!\n";
     }
     else {
         std::cerr << "Failed to add player to game. Status code: " << r.status_code << std::endl;
     }
-    return currentPlayers;
 }
 
 void GameInterface::startGame() {
@@ -189,6 +178,19 @@ void GameInterface::startGame() {
 
         //std::cout << "\033[2J\033[1;1H"; 
     }
+}
+
+int GameInterface::getActivePlayers()
+{
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/get_active_players" });
+
+    if (response.status_code == 200) {
+        auto jsonResponse = crow::json::load(response.text);
+        if (jsonResponse) {
+            return jsonResponse["active_players"].i();
+        }
+    }
+    return -1;
 }
 
 //void GameInterface::startGame() {
@@ -237,20 +239,6 @@ void GameInterface::startGame() {
 //
 //    isRunning = false;
 //    inputThread.join();
-//}
-
-
-//int GameInterface::getActivePlayers()
-//{
-//    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/get_active_players" });
-//
-//    if (response.status_code == 200) {
-//        auto jsonResponse = crow::json::load(response.text);
-//        if (jsonResponse) {
-//            return jsonResponse["active_players"].i();
-//        }
-//    }
-//    return -1;
 //}
 
 //void GameInterface::displayStatus() {

@@ -38,19 +38,42 @@ void MainMenu::display() {
                 GameInterface gameInterface;
                 int currentId = UserSession::getInstance().getUserId();
 
-                int currentPlayers = gameInterface.addPlayerToGame(currentId);
+                gameInterface.addPlayerToGame(currentId);
+                int currentPlayers = gameInterface.getActivePlayers();
+                std::cout << "There are currently " << currentPlayers << "/4 players in the game!\n";
 
-                while (currentPlayers < 2) //change to 4 later
+
+                //while (currentPlayers < 2) //change to 4 later
+                //{
+                //    std::cout << "Waiting for players";
+                //    std::cout << std::flush;
+
+                //    for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
+                //        std::cout << "." << std::flush;
+                //        std::this_thread::sleep_for(std::chrono::seconds(1));
+                //    }
+                //    std::cout << "No one joined. Exiting...\n";
+                //    break;
+                //}
+                while (currentPlayers < 2) // change to 4 later
                 {
                     std::cout << "Waiting for players";
                     std::cout << std::flush;
 
-                    for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
+                    for (int i = 0; i < 60; ++i) 
+                    {
+                        currentPlayers = gameInterface.getActivePlayers();
                         std::cout << "." << std::flush;
                         std::this_thread::sleep_for(std::chrono::seconds(1));
+                        if (currentPlayers >= 2) {
+                            std::cout << "\nPlayer joined! Currently " << currentPlayers << "/4 players in the game.\n";
+                            break;
+                        }
                     }
-                    std::cout << "No one joined. Exiting...\n";
-                    break;
+                    if (currentPlayers < 2) {
+                        std::cout << "\nNo one joined. Exiting...\n";
+                        break;
+                    }
                 }
                 if (currentPlayers == 2)
                 {
