@@ -451,7 +451,11 @@ void Routing::AddPlayerToGame()
             player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
             player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
 
-            Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
+            Coordinate spawnpoint;
+            spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
+            spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
+
+            Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
 
             m_gameLogic.addPlayer(new_player);
 

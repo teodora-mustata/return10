@@ -41,7 +41,7 @@ void Map::generateSpawnPoints()
 
 	for (const auto& point : temp) {
 		m_spawnPoints.push_back(point);
-		std::cout << point.first << " " << point.second << "\n";
+		//std::cout << point.first << " " << point.second << "\n";
 	}
 }
 
@@ -253,6 +253,20 @@ std::pair<int, int> Map::getDimensions()
 int Map::getDifficulty()
 {
 	return m_difficulty;
+}
+
+std::pair<int, int> Map::getRandomSpawnPoint()
+{
+	std::cout << "Available spawn points: " << m_spawnPoints.size() << "\n";
+	if (m_spawnPoints.empty()) {
+		std::cout << "No available spawnpoints!\n";
+		return { 0, 0 };
+	}
+
+	std::pair<int, int> selectedSpawnPoint = m_spawnPoints.back();
+	std::cout << "Selected spawn point: " << selectedSpawnPoint.first << " " << selectedSpawnPoint.second << "\n";
+	m_spawnPoints.pop_back();
+	return selectedSpawnPoint;
 }
 
 //std::ostream& operator<<(std::ostream& os, const Map& map) {

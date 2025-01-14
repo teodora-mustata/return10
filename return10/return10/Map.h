@@ -34,6 +34,7 @@ public:
 	const CellType& getCellType(int x, int y) const; // read only
 	std::pair<int, int> getDimensions();
 	int getDifficulty();
+	std::pair<int, int> getRandomSpawnPoint();
 
 	void setCellType(int x, int y, CellType type);
 	void setDifficulty(int difficulty);

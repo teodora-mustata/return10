@@ -9,6 +9,7 @@ class Player
 {
 public:
 	Player(std::string name, int startX, int startY);
+	Player(int id, std::string name, int score, int crowns, Gun gun, Coordinate spawnpoint);
 	Player(int id, std::string name, int score, int crowns, Gun gun);
 	Player() = default;
 	~Player();
@@ -28,6 +29,7 @@ public:
 	Gun getGun() const;
 	int GetId() const;
 	Direction GetFacingDirection();
+	Coordinate getInitialPosition() const;
 
 	//Updates for player
 	void addScore(int acumulated_points);

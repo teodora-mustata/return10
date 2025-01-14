@@ -386,6 +386,13 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         return;
     }
 
+    for (const auto& player : m_players) {
+        if (player.GetPosition().i == newX && player.GetPosition().j == newY) {
+            std::cout << "Hit a player at (" << newX << ", " << newY << "). Movement aborted.\n";
+            return;
+        }
+    }
+
     player->move(direction);
     std::cout << "Player moved successfully.\n";
 }

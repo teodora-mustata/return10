@@ -41,20 +41,6 @@ void MainMenu::display() {
                 gameInterface.addPlayerToGame(currentId);
                 int currentPlayers = gameInterface.getActivePlayers();
                 std::cout << "There are currently " << currentPlayers << "/4 players in the game!\n";
-
-
-                //while (currentPlayers < 2) //change to 4 later
-                //{
-                //    std::cout << "Waiting for players";
-                //    std::cout << std::flush;
-
-                //    for (int i = 0; i < 60; ++i) {  // asteptam 60 de secunde pentru a intra playerii
-                //        std::cout << "." << std::flush;
-                //        std::this_thread::sleep_for(std::chrono::seconds(1));
-                //    }
-                //    std::cout << "No one joined. Exiting...\n";
-                //    break;
-                //}
                 while (currentPlayers < 2) // change to 4 later
                 {
                     std::cout << "Waiting for players";

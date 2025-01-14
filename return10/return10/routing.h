@@ -23,7 +23,6 @@ public:
 	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
 	void AddPlayerToGame();
-	void GetActivePlayers();
 	void SetDifficulty();
 	void HandlePlayerCommand();
 	void StartGame();
