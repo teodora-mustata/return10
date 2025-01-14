@@ -626,7 +626,7 @@ void ShopWidget::on_goBackButton_clicked() {
 void ShopWidget::buyReloadSpeedUpgrade() {
     int userId = UserSession::getInstance().getUserId();
 
-    auto response = cpr::Get(cpr::Url{
+    auto response = cpr::Post(cpr::Url{
         "http://localhost:18080/upgrade/reload_speed/" + std::to_string(userId)
         });
 
@@ -662,7 +662,7 @@ void ShopWidget::buyReloadSpeedUpgrade() {
 void ShopWidget::buyBulletSpeedUpgrade() {
     int userId = UserSession::getInstance().getUserId();
 
-    auto response = cpr::Get(cpr::Url{
+    auto response = cpr::Post(cpr::Url{
         "http://localhost:18080/upgrade/bullet_speed/" + std::to_string(userId)
         });
 
