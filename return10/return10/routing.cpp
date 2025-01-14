@@ -3,7 +3,7 @@
 
 
 
-Routing::Routing(GameStorage& storage,GameLogic& gameLogic):m_storage(storage),m_gameLogic(gameLogic)
+Routing::Routing(GameStorage& storage, GameLogic& gameLogic) :m_storage(storage), m_gameLogic(gameLogic)
 {
 }
 
@@ -30,7 +30,7 @@ std::string ConvertCellToString(const CellType& cell) {
         }, cell);
 }
 
-Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic):m_app(app), m_storage(storage), m_gameLogic(gameLogic)
+Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic) :m_app(app), m_storage(storage), m_gameLogic(gameLogic)
 {
 }
 
@@ -56,7 +56,7 @@ void Routing::GetTheBestPlayersByScore() {
             auto players = m_storage.GetPlayersDAO();
 
             std::sort(players.begin(), players.end(), [](const PlayerDAO& a, const PlayerDAO& b) {
-                return a.GetScore() > b.GetScore(); 
+                return a.GetScore() > b.GetScore();
                 });
 
             crow::json::wvalue res;
@@ -69,7 +69,7 @@ void Routing::GetTheBestPlayersByScore() {
                     crow::json::wvalue playerJson;
                     playerJson["rank"] = i + 1;
                     playerJson["name"] = players[i].GetName();
-                    playerJson["score"] = players[i].GetScore(); 
+                    playerJson["score"] = players[i].GetScore();
                     topPlayers.push_back(std::move(playerJson));
                 }
                 if (players[i].GetId() == userId) {
@@ -218,7 +218,7 @@ void Routing::SetupLoginRoutes()
             res["score"] = user.GetScore();
             res["crowns"] = user.GetCrowns();
             res["gunDetails"] = std::move(gunDetails);
-            res["userId"] = user.GetId(); 
+            res["userId"] = user.GetId();
             //CROW_LOG_INFO << "Response JSON: " << res.dump();
             return crow::response(200, res);
         }
@@ -276,7 +276,7 @@ void Routing::SetupLoginRoutes()
         });
 }
 
-void Routing::sendMap(crow::response& res) 
+void Routing::sendMap(crow::response& res)
 {
     std::vector<std::string> map = m_gameLogic.convertMapToString();
 
@@ -291,21 +291,21 @@ void Routing::sendMap(crow::response& res)
 
     crow::json::wvalue mapJson;
 
-    crow::json::wvalue::list mapArray; 
+    crow::json::wvalue::list mapArray;
     for (const auto& line : map) {
-        mapArray.push_back(line); 
+        mapArray.push_back(line);
     }
     mapJson["map"] = std::move(mapArray);
     res.set_header("Content-Type", "application/json");
-    res.write(mapJson.dump()); 
+    res.write(mapJson.dump());
 }
 
-void Routing::SetupGameRoute() 
+void Routing::SetupGameRoute()
 {
     // Rută pentru a trimite harta
     CROW_ROUTE(m_app, "/map")
         .methods(crow::HTTPMethod::POST)([this](const crow::request&, crow::response& res) {
-        sendMap(res); 
+        sendMap(res);
         res.end();
             });
 
@@ -313,33 +313,48 @@ void Routing::SetupGameRoute()
 
 
 void Routing::BuyReloadSpeedUpgrade() {
-    
+
     CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
         ([this](int userId) {
         try {
             //PlayerDAO player = getPlayerById(userId);
             PlayerDAO player = m_storage.GetPlayerByID(userId);
-           
-            if (player.GetId() == 0) { 
-                return crow::response(404, "User not found");
+
+            if (player.GetId() == 0) {
+                crow::json::wvalue res;
+                res["error"] = "User not found";
+                return crow::response(404, res);
             }
 
             //GunDAO gun = getGunById(player.GetGunId());
             GunDAO gun = m_storage.GetGunById(player.GetGunId());
-            if (gun.GetId() == 0) { 
-                return crow::response(404, "Gun not found for this player");
+            if (gun.GetId() == 0) {
+                crow::json::wvalue res;
+                res["error"] = "Gun not found for this player";
+                return crow::response(404, res);
             }
 
-            const int upgradeCost = 500;     
+
+
+            const int upgradeCost = 500;
             const double minReloadSpeed = 0.25;
 
+            //if (gun.GetFireRate() <= minReloadSpeed) {
+            //    return crow::response(400, "Reload speed is already at minimum value");
+            //}
+
             if (gun.GetFireRate() <= minReloadSpeed) {
-                return crow::response(400, "Reload speed is already at minimum value");
+                crow::json::wvalue res;
+                res["error"] = "Reload speed is already at minimum value";
+                return crow::response(400, res);
             }
 
-            /*if (player.GetScore() < upgradeCost) {
-                return crow::response(400, "Not enough score to buy upgrade");
-            }*/
+
+            if (player.GetScore() < upgradeCost) {
+                crow::json::wvalue res;
+                res["error"] = "Not enough score to buy upgrade";
+                return crow::response(400, res);
+            }
 
             player.SetScore(player.GetScore() - upgradeCost);
             gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
@@ -355,7 +370,9 @@ void Routing::BuyReloadSpeedUpgrade() {
             return crow::response(200, res);
         }
         catch (const std::exception& e) {
-            return crow::response(500, std::string("Database error: ") + e.what());
+            crow::json::wvalue res;
+            res["error"] = std::string("Database error: ") + e.what();
+            return crow::response(500, res);
         }
             });
 }
@@ -365,25 +382,35 @@ void Routing::BuyBulletSpeedUpgrade() {
         ([this](int userId) {
         try {
             PlayerDAO player = getPlayerById(userId);
-            if (player.GetId() == 0) { 
-                return crow::response(404, "User not found");
+            if (player.GetId() == 0) {
+                crow::json::wvalue res;
+                res["error"] = "User not found";
+                return crow::response(404, res);
             }
 
             GunDAO gun = getGunById(player.GetGunId());
-            if (gun.GetId() == 0) { 
-                return crow::response(404, "Gun not found for this player");
+            if (gun.GetId() == 0) {
+                crow::json::wvalue res;
+                res["error"] = "Gun not found for this player";
+                return crow::response(404, res);
             }
 
-            const float maxBulletSpeed = 0.5; 
-            const int requiredCrowns = 10; 
-
-            /*if (player.GetCrowns() < requiredCrowns) {
-                return crow::response(400, "Not enough crowns to upgrade bullet speed");
-            }*/
+            const float maxBulletSpeed = 0.5;
+            const int requiredCrowns = 10;
 
             if (gun.GetBulletSpeed() >= maxBulletSpeed) {
-                return crow::response(400, "Bullet speed is already at maximum value");
+                crow::json::wvalue res;
+                res["error"] = "Bullet speed is already at maximum value";
+                return crow::response(400, res);
             }
+
+
+            if (player.GetCrowns() < requiredCrowns) {
+                crow::json::wvalue res;
+                res["error"] = "Not enough crowns to upgrade bullet speed";
+                return crow::response(400, res);
+            }
+
 
             gun.SetBulletSpeed(maxBulletSpeed);
 
@@ -392,91 +419,92 @@ void Routing::BuyBulletSpeedUpgrade() {
             crow::json::wvalue res;
             res["message"] = "Bullet speed upgrade applied successfully!";
             res["newBulletSpeed"] = gun.GetBulletSpeed();
-            res["remainingCrowns"] = player.GetCrowns(); 
+            res["remainingCrowns"] = player.GetCrowns();
 
             return crow::response(200, res);
         }
         catch (const std::exception& e) {
-            return crow::response(500, std::string("Database error: ") + e.what());
+            crow::json::wvalue res;
+            res["error"] = std::string("Database error: ") + e.what();
+            return crow::response(500, res);
         }
             });
 }
-
 void Routing::AddPlayerToGame()
 {
     CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
-   
-    try {
-        auto jsonBody = crow::json::load(req.body);
-        if (!jsonBody || !jsonBody.has("player_id")) {
-            res.code = 400;
-            res.body = "Invalid request! Missing or incorrect 'player_id'.";
-            res.end();
-            return;
-        }
 
-        int player_id = jsonBody["player_id"].i();
+        try {
+            auto jsonBody = crow::json::load(req.body);
+            if (!jsonBody || !jsonBody.has("player_id")) {
+                res.code = 400;
+                res.body = "Invalid request! Missing or incorrect 'player_id'.";
+                res.end();
+                return;
+            }
 
-        PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
+            int player_id = jsonBody["player_id"].i();
 
-        if (player_data.GetId() == 0) {
-            res.code = 404;
-            res.body = "Player not found!";
-            res.end();
-            return;
-        }
-
-        m_loggedInPlayers.push_back(player_id);
-
-
-        auto& players = m_gameLogic.getPlayers();
-
-        if (players.size() < 4) {
+            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
 
             if (player_data.GetId() == 0) {
                 res.code = 404;
                 res.body = "Player not found!";
+                res.end();
                 return;
             }
 
-            GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
+            m_loggedInPlayers.push_back(player_id);
 
-            if (gun_data.GetId() == 0) {
-                res.code = 404;
-                res.body = "Gun not found!";
-                return;
+
+            auto& players = m_gameLogic.getPlayers();
+
+            if (players.size() < 4) {
+
+                if (player_data.GetId() == 0) {
+                    res.code = 404;
+                    res.body = "Player not found!";
+                    return;
+                }
+
+                GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
+
+                if (gun_data.GetId() == 0) {
+                    res.code = 404;
+                    res.body = "Gun not found!";
+                    return;
+                }
+
+                Gun player_gun;
+                player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
+                player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
+
+                Coordinate spawnpoint;
+                spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
+                spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
+
+                Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
+
+                m_gameLogic.addPlayer(new_player);
+
+                //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
+
+                /*crow::json::wvalue response;
+                response["current_players"] = players.size();
+                res.body = response.dump();*/
+                res.code = 200;
             }
-
-            Gun player_gun;
-            player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-            player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
-
-            Coordinate spawnpoint;
-            spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
-            spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
-
-            Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
-
-            m_gameLogic.addPlayer(new_player);
-
-            //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
-
-            /*crow::json::wvalue response;
-            response["current_players"] = players.size();
-            res.body = response.dump();*/
-            res.code = 200;
+            else {
+                res.code = 400;
+                res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
+            }
         }
-        else {
-            res.code = 400;
-            res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
+        catch (const std::exception& e) {
+            res.code = 500;
+            res.body = std::string("Internal server error: ") + e.what();
         }
-    }
-    catch (const std::exception& e) {
-        res.code = 500;
-        res.body = std::string("Internal server error: ") + e.what();
-    }
 
-    res.end();
+        res.end();
         });
 }
 
@@ -545,7 +573,7 @@ void Routing::HandlePlayerCommand()
 {
     CROW_ROUTE(m_app, "/command")
         .methods("POST"_method)([this](const crow::request& req) {
-  
+
         auto commandData = crow::json::load(req.body);
         if (!commandData) {
             return crow::response(400, "Invalid input");
@@ -554,7 +582,7 @@ void Routing::HandlePlayerCommand()
         std::string command = commandData["command"].s();
         int id = commandData["id"].i();
 
-       
+
         auto it = std::find_if(
             m_gameLogic.getPlayers().begin(),
             m_gameLogic.getPlayers().end(),
