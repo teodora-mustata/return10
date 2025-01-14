@@ -64,6 +64,9 @@
     <ClCompile Include="ChooseGameDificulty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StartGameWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UserSession.h">
@@ -95,6 +98,9 @@
     <QtMoc Include="ChooseGameDificulty.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="StartGameWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="LoginWidget.ui">
@@ -116,6 +122,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ChooseGameDificulty.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="StartGameWidget.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
