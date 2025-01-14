@@ -36,4 +36,3 @@ private:
 	GameLogic& m_gameLogic;
 	std::vector<int> m_loggedInPlayers;
 };
-

@@ -75,8 +75,8 @@ void RegisterWidget::handleRegister() {
     // Trimite un POST request catre server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/signup" },
-        cpr::Header{ {"Content-Type", "application/json"} },
-        cpr::Body{ jsonData.dump() }
+        cpr::Header{ {"Content-Type", "application/json"} },  // Seteaz? tipul de con?inut ca JSON
+        cpr::Body{ jsonData.dump() }  // Corpul cererii ca JSON (folosind `dump()` pentru a ob?ine un string JSON)
     );
 
     // Verifica raspunsul serverului
