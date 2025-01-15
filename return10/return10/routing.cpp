@@ -34,8 +34,14 @@ std::string ConvertCellToString(const CellType& cell) {
 //{
 //}
 
-Routing::Routing(GameStorage& storage, GameManager& gameLogic):m_storage(storage),m_games(gameLogic)
+Routing::Routing(GameStorage& storage, GameManager* gameLogic)
+    : m_storage(storage), m_games(gameLogic)  // Transmiterea pointerului către m_games
 {
+    std::thread gameThread([this]() {
+        m_games->run();  // Folosim -> pentru a apela funcția din GameManager
+        });
+
+    gameThread.join();
 }
 
 void Routing::Run() {
@@ -53,6 +59,13 @@ void Routing::Run() {
     //HandlePlayerCommand();
     m_app.port(18080).multithreaded().run();
 }
+
+void Routing::stopServer()
+{
+    m_games->stop();
+    m_app.stop();
+}
+
 
 void Routing::GetTheBestPlayersByScore() {
     CROW_ROUTE(m_app, "/leaderboard/score/<int>")
@@ -537,8 +550,8 @@ void Routing::AddPlayerToLobby()
                 return;
             }
 
-            m_games.addPlayerToLobby(player_id);
-
+            m_games->addPlayerToLobby(player_id);
+            m_games->createNewGame();
                 res.code = 200;
             }
         catch (const std::exception& e) {
@@ -573,7 +586,7 @@ void Routing::getActivePlayers()
     CROW_ROUTE(m_app, "/get_active_players")
         .methods(crow::HTTPMethod::GET)([&](const crow::request& req, crow::response& res) {
         try {
-            int players = m_games.getLobbyPlayers().size();
+            int players = m_games->getLobbyPlayers().size();
 
             crow::json::wvalue response;
             response["active_players"] = players;
@@ -645,7 +658,7 @@ void Routing::SetDifficulty()
 
         int requestedDifficulty = jsonData["difficulty"].i();
         int playerId = jsonData["playerId"].i();
-        auto game = m_games.getGameByPlayerId(playerId);
+        auto game = m_games->getGameByPlayerId(playerId);
 
         if (!game) {
             res.code = 404; // Not Found
@@ -682,7 +695,7 @@ void Routing::SetDifficulty()
         }
 
         int playerId = jsonData["playerId"].i();
-        auto game = m_games.getGameByPlayerId(playerId);
+        auto game = m_games->getGameByPlayerId(playerId);
 
         if (!game) {
             res.code = 404; // Not Found
