@@ -280,7 +280,7 @@ void Routing::SetupLoginRoutes()
         return crow::response(201, "Account created successfully!");
         });
 }
-//
+
 //void Routing::sendMap(crow::response& res)
 //{
 //    std::vector<std::string> map = m_gameLogic.convertMapToString();
@@ -305,16 +305,49 @@ void Routing::SetupLoginRoutes()
 //    res.write(mapJson.dump());
 //}
 
-//void Routing::SetupGameRoute()
-//{
-//    // Rută pentru a trimite harta
-//    CROW_ROUTE(m_app, "/map")
-//        .methods(crow::HTTPMethod::POST)([this](const crow::request&, crow::response& res) {
-//        sendMap(res);
-//        res.end();
-//            });
-//
-//}
+void Routing::sendMap(crow::response& res, int playerId)
+{
+    auto game = m_games.getGameByPlayerId(playerId);
+    if (!game) {
+        res.code = 404; // Not Found
+        res.write("Game not found for the player.");
+        res.end();
+        return;
+    }
+
+    std::vector<std::string> map = game->convertMapToString();
+
+    crow::json::wvalue mapJson;
+
+    crow::json::wvalue::list mapArray;
+    for (const auto& line : map) {
+        mapArray.push_back(line);
+    }
+    mapJson["map"] = std::move(mapArray);
+    res.set_header("Content-Type", "application/json");
+    res.write(mapJson.dump());
+    res.end();
+}
+
+void Routing::SetupGameRoute()
+{
+    // Rută pentru a trimite harta
+    CROW_ROUTE(m_app, "/map")
+        .methods(crow::HTTPMethod::POST)([this](const crow::request& req, crow::response& res) {
+        auto jsonData = crow::json::load(req.body);
+        if (!jsonData) {
+            res.code = 400;
+            res.write("Invalid JSON data.");
+            res.end();
+            return;
+        }
+        int playerId = jsonData["playerId"].i();
+
+        sendMap(res,playerId);
+        res.end();
+            });
+
+}
 
 
 void Routing::BuyReloadSpeedUpgrade() {

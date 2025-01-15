@@ -154,7 +154,16 @@ void GameInterface::startGame() {
     while (true) {
         std::cout << "\033[H";
 
-        cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/map" });
+        
+        crow::json::wvalue jsonData;
+        jsonData["playerId"] = playerId;
+
+   
+        cpr::Response r = cpr::Post(
+            cpr::Url{ "http://localhost:18080/map" },
+            cpr::Header{ { "Content-Type", "application/json" } },
+            cpr::Body{ jsonData.dump() }
+        );
 
         if (r.status_code == 200) {
             crow::json::rvalue gameData = crow::json::load(r.text);

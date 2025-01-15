@@ -19,8 +19,8 @@ public:
 	void GetTheBestPlayersByScore();
 	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
-	//void sendMap(crow::response& res);
-	//void SetupGameRoute();
+	void sendMap(crow::response& res, int playerId);
+	void SetupGameRoute();
 	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
 	//void AddPlayerToGame();
