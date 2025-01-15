@@ -537,7 +537,14 @@ void Routing::AddPlayerToLobby()
                 return;
             }
 
+            CROW_LOG_INFO << "Adding player " << player_id << " to lobby.";
             m_games.addPlayerToLobby(player_id);
+
+            // After adding player, log game creation process
+            CROW_LOG_INFO << "Creating new game.";
+            m_games.createNewGame();
+            CROW_LOG_INFO << "Ending games.";
+            m_games.endGames();
 
                 res.code = 200;
             }

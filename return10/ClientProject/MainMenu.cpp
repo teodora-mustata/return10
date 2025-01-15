@@ -97,10 +97,35 @@ void MainMenu::display() {
     }
 }
 
+//bool MainMenu::sendDifficultyToServer(int difficulty)
+//{
+//    crow::json::wvalue jsonData;
+//    jsonData["difficulty"] = difficulty;
+//
+//    auto response = cpr::Post(
+//        cpr::Url{ "http://localhost:18080/send_difficulty" },
+//        cpr::Header{ { "Content-Type", "application/json" } },
+//        cpr::Body{ jsonData.dump() }
+//    );
+//
+//    if (response.status_code == 200) {
+//        std::cout << "Difficulty set successfully!\n";
+//        return true;
+//    }
+//    else if (response.status_code == 403) {
+//        std::cout << "Difficulty already set by another client.\n";
+//    }
+//    else {
+//        std::cout << "Couldn't send difficulty to server. Try again.\n";
+//    }
+//    return false;
+//}
+
 bool MainMenu::sendDifficultyToServer(int difficulty)
 {
     crow::json::wvalue jsonData;
     jsonData["difficulty"] = difficulty;
+    jsonData["playerId"] = UserSession::getInstance().getUserId();
 
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/send_difficulty" },

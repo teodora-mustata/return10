@@ -16,6 +16,7 @@ public:
 	void removePlayerFromGame(int playerId);
 	void createNewGame();
 	void endGame(int gameId);
+	void endGames();
 	std::shared_ptr<GameLogic> getGameByPlayerId(int playerId);
 	Player getPlayerFromID(int id);
 	std::vector<int> getLobbyPlayers();

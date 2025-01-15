@@ -1,4 +1,4 @@
-#include "GameManager.h"
+﻿#include "GameManager.h"
 
 GameManager& GameManager::getInstance(GameStorage& storage)
 {
@@ -47,23 +47,55 @@ void GameManager::removePlayerFromGame(int playerId)
     }
 }
 
+//void GameManager::createNewGame()
+//{
+//    if (m_lobbyPlayers.size() >= 2)
+//    {
+//        int lobbySize;
+//        if (m_lobbyPlayers.size() >= 4) lobbySize = 4;
+//            else lobbySize = m_lobbyPlayers.size();
+//        Map map;
+//        auto newGame = std::make_shared<GameLogic>(map);
+//        for (int i = 0; i < lobbySize; i++)
+//        {
+//            int id = m_lobbyPlayers[i];
+//            addPlayerToGame(id);
+//            removePlayerFromLobby(id);
+//            Player newPlayer = getPlayerFromID(id);
+//            newGame->addPlayer(newPlayer);
+//        }
+//        newGame->startGame();
+//        m_activeGames.push_back(newGame);
+//    }
+//}
+
 void GameManager::createNewGame()
 {
+    if (m_lobbyPlayers.size() < 2)
+        return;
     if (m_lobbyPlayers.size() >= 2)
     {
-        int lobbySize;
-        if (m_lobbyPlayers.size() >= 4) lobbySize = 4;
-            else lobbySize = m_lobbyPlayers.size();
+        int lobbySize = (m_lobbyPlayers.size() >= 4) ? 4 : m_lobbyPlayers.size();
+
+        // Dacă există un număr mai mic de jucători decât `lobbySize`, oprește-te
+        if (lobbySize > m_lobbyPlayers.size()) {
+            std::cerr << "Error: Trying to create game with more players than in lobby!" << std::endl;
+            return;
+        }
+
         Map map;
         auto newGame = std::make_shared<GameLogic>(map);
-        for (int i = 0; i < lobbySize; i++)
+
+        for (int i = lobbySize - 1; i >= 0; i--)
         {
             int id = m_lobbyPlayers[i];
             addPlayerToGame(id);
-            removePlayerFromLobby(id);
-            Player newPlayer = getPlayerFromID(m_lobbyPlayers[id]);
+            removePlayerFromLobby(id); 
+            Player newPlayer = getPlayerFromID(id);
             newGame->addPlayer(newPlayer);
         }
+
+        newGame->startGame();
         m_activeGames.push_back(newGame);
     }
 }
@@ -77,6 +109,18 @@ void GameManager::endGame(int gameId)
             int id = player.GetId();
             removePlayerFromGame(id);
             addPlayerToLobby(id);
+        }
+    }
+}
+
+void GameManager::endGames()
+{
+    for (size_t i = 0; i < m_activeGames.size(); ++i)
+    {
+        auto& game = m_activeGames[i];
+        if (!game->isRunning())
+        {
+            endGame(i);
         }
     }
 }
