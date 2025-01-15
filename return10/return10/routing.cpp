@@ -3,9 +3,9 @@
 
 
 
-Routing::Routing(GameStorage& storage, GameLogic& gameLogic) :m_storage(storage), m_gameLogic(gameLogic)
-{
-}
+//Routing::Routing(GameStorage& storage, GameLogic& gameLogic) :m_storage(storage), m_gameLogic(gameLogic)
+//{
+//}
 
 std::string ConvertCellToString(const CellType& cell) {
     return std::visit([](auto&& arg) -> std::string {
@@ -30,7 +30,11 @@ std::string ConvertCellToString(const CellType& cell) {
         }, cell);
 }
 
-Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic) :m_app(app), m_storage(storage), m_gameLogic(gameLogic)
+//Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic) :m_app(app), m_storage(storage), m_gameLogic(gameLogic)
+//{
+//}
+
+Routing::Routing(GameStorage& storage, GameManager& gameLogic):m_storage(storage),m_games(gameLogic)
 {
 }
 
@@ -41,11 +45,11 @@ void Routing::Run() {
     GetTheBestPlayersByScore();
     BuyReloadSpeedUpgrade();
     BuyBulletSpeedUpgrade();
-    SetupGameRoute();
-    getActivePlayers();
+    //SetupGameRoute();
+    //getActivePlayers();
     SetDifficulty();
-    AddPlayerToGame();
-    HandlePlayerCommand();
+    //AddPlayerToGame();
+    //HandlePlayerCommand();
     m_app.port(18080).multithreaded().run();
 }
 
@@ -275,41 +279,41 @@ void Routing::SetupLoginRoutes()
         return crow::response(201, "Account created successfully!");
         });
 }
+//
+//void Routing::sendMap(crow::response& res)
+//{
+//    std::vector<std::string> map = m_gameLogic.convertMapToString();
+//
+//    //std::vector<std::tuple<int, int, int>> playerPositions; // id+position
+//    //for (auto player : m_gameLogic.GetPlayers())
+//    //{
+//
+//    //    int i = player.GetPosition().i;
+//    //    int j = player.GetPosition().j;
+//    //    playerPositions.emplace_back(i, j);
+//    //}
+//
+//    crow::json::wvalue mapJson;
+//
+//    crow::json::wvalue::list mapArray;
+//    for (const auto& line : map) {
+//        mapArray.push_back(line);
+//    }
+//    mapJson["map"] = std::move(mapArray);
+//    res.set_header("Content-Type", "application/json");
+//    res.write(mapJson.dump());
+//}
 
-void Routing::sendMap(crow::response& res)
-{
-    std::vector<std::string> map = m_gameLogic.convertMapToString();
-
-    //std::vector<std::tuple<int, int, int>> playerPositions; // id+position
-    //for (auto player : m_gameLogic.GetPlayers())
-    //{
-
-    //    int i = player.GetPosition().i;
-    //    int j = player.GetPosition().j;
-    //    playerPositions.emplace_back(i, j);
-    //}
-
-    crow::json::wvalue mapJson;
-
-    crow::json::wvalue::list mapArray;
-    for (const auto& line : map) {
-        mapArray.push_back(line);
-    }
-    mapJson["map"] = std::move(mapArray);
-    res.set_header("Content-Type", "application/json");
-    res.write(mapJson.dump());
-}
-
-void Routing::SetupGameRoute()
-{
-    // Rută pentru a trimite harta
-    CROW_ROUTE(m_app, "/map")
-        .methods(crow::HTTPMethod::POST)([this](const crow::request&, crow::response& res) {
-        sendMap(res);
-        res.end();
-            });
-
-}
+//void Routing::SetupGameRoute()
+//{
+//    // Rută pentru a trimite harta
+//    CROW_ROUTE(m_app, "/map")
+//        .methods(crow::HTTPMethod::POST)([this](const crow::request&, crow::response& res) {
+//        sendMap(res);
+//        res.end();
+//            });
+//
+//}
 
 
 void Routing::BuyReloadSpeedUpgrade() {
@@ -430,83 +434,83 @@ void Routing::BuyBulletSpeedUpgrade() {
         }
             });
 }
-void Routing::AddPlayerToGame()
-{
-    CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
-
-        try {
-            auto jsonBody = crow::json::load(req.body);
-            if (!jsonBody || !jsonBody.has("player_id")) {
-                res.code = 400;
-                res.body = "Invalid request! Missing or incorrect 'player_id'.";
-                res.end();
-                return;
-            }
-
-            int player_id = jsonBody["player_id"].i();
-
-            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
-
-            if (player_data.GetId() == 0) {
-                res.code = 404;
-                res.body = "Player not found!";
-                res.end();
-                return;
-            }
-
-            m_loggedInPlayers.push_back(player_id);
-
-
-            auto& players = m_gameLogic.getPlayers();
-
-            if (players.size() < 4) {
-
-                if (player_data.GetId() == 0) {
-                    res.code = 404;
-                    res.body = "Player not found!";
-                    return;
-                }
-
-                GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
-
-                if (gun_data.GetId() == 0) {
-                    res.code = 404;
-                    res.body = "Gun not found!";
-                    return;
-                }
-
-                Gun player_gun;
-                player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-                player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
-
-                Coordinate spawnpoint;
-                spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
-                spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
-
-                Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
-
-                m_gameLogic.addPlayer(new_player);
-
-                //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
-
-                /*crow::json::wvalue response;
-                response["current_players"] = players.size();
-                res.body = response.dump();*/
-                res.code = 200;
-            }
-            else {
-                res.code = 400;
-                res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
-            }
-        }
-        catch (const std::exception& e) {
-            res.code = 500;
-            res.body = std::string("Internal server error: ") + e.what();
-        }
-
-        res.end();
-        });
-}
+//void Routing::AddPlayerToGame()
+//{
+//    CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
+//
+//        try {
+//            auto jsonBody = crow::json::load(req.body);
+//            if (!jsonBody || !jsonBody.has("player_id")) {
+//                res.code = 400;
+//                res.body = "Invalid request! Missing or incorrect 'player_id'.";
+//                res.end();
+//                return;
+//            }
+//
+//            int player_id = jsonBody["player_id"].i();
+//
+//            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
+//
+//            if (player_data.GetId() == 0) {
+//                res.code = 404;
+//                res.body = "Player not found!";
+//                res.end();
+//                return;
+//            }
+//
+//            m_loggedInPlayers.push_back(player_id);
+//
+//
+//            auto& players = m_gameLogic.getPlayers();
+//
+//            if (players.size() < 4) {
+//
+//                if (player_data.GetId() == 0) {
+//                    res.code = 404;
+//                    res.body = "Player not found!";
+//                    return;
+//                }
+//
+//                GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
+//
+//                if (gun_data.GetId() == 0) {
+//                    res.code = 404;
+//                    res.body = "Gun not found!";
+//                    return;
+//                }
+//
+//                Gun player_gun;
+//                player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
+//                player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
+//
+//                Coordinate spawnpoint;
+//                spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
+//                spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
+//
+//                Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
+//
+//                m_gameLogic.addPlayer(new_player);
+//
+//                //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
+//
+//                /*crow::json::wvalue response;
+//                response["current_players"] = players.size();
+//                res.body = response.dump();*/
+//                res.code = 200;
+//            }
+//            else {
+//                res.code = 400;
+//                res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
+//            }
+//        }
+//        catch (const std::exception& e) {
+//            res.code = 500;
+//            res.body = std::string("Internal server error: ") + e.what();
+//        }
+//
+//        res.end();
+//        });
+//}
 
 
 //void Routing::GetActivePlayers()
@@ -526,6 +530,48 @@ void Routing::AddPlayerToGame()
 //        }
 //            });
 //}
+//
+//void Routing::SetDifficulty()
+//{
+//    CROW_ROUTE(m_app, "/send_difficulty").methods(crow::HTTPMethod::POST)
+//        ([&](const crow::request& req, crow::response& res) {
+//        auto jsonData = crow::json::load(req.body);
+//        if (!jsonData) {
+//            res.code = 400;
+//            res.write("Invalid JSON data.");
+//            res.end();
+//            return;
+//        }
+//
+//        int requestedDifficulty = jsonData["difficulty"].i();
+//        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
+//
+//        if (currentDifficulty != 0) {
+//            res.code = 403; // Forbidden
+//            res.write("Difficulty already set by another client.");
+//            res.end();
+//            return;
+//        }
+//
+//        m_gameLogic.GetMap().setDifficulty(requestedDifficulty);
+//        m_gameLogic.GetMap().initialize();
+//
+//        res.code = 200;
+//        res.write("Difficulty set successfully.");
+//        res.end();
+//            });
+//
+//    CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
+//        ([&](const crow::request& req, crow::response& res) {
+//        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
+//        crow::json::wvalue jsonResponse;
+//        jsonResponse["difficulty"] = currentDifficulty;
+//
+//        res.code = 200;
+//        res.write(jsonResponse.dump());
+//        res.end();
+//            });
+//}
 
 void Routing::SetDifficulty()
 {
@@ -540,7 +586,17 @@ void Routing::SetDifficulty()
         }
 
         int requestedDifficulty = jsonData["difficulty"].i();
-        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
+        int playerId = jsonData["playerId"].i();
+        auto game = m_games.getGameByPlayerId(playerId);
+
+        if (!game) {
+            res.code = 404; // Not Found
+            res.write("Game not found for the player.");
+            res.end();
+            return;
+        }
+
+        int currentDifficulty = game->GetMap().getDifficulty();
 
         if (currentDifficulty != 0) {
             res.code = 403; // Forbidden
@@ -549,8 +605,8 @@ void Routing::SetDifficulty()
             return;
         }
 
-        m_gameLogic.GetMap().setDifficulty(requestedDifficulty);
-        m_gameLogic.GetMap().initialize();
+        game->GetMap().setDifficulty(requestedDifficulty);
+        game->GetMap().initialize();
 
         res.code = 200;
         res.write("Difficulty set successfully.");
@@ -559,7 +615,25 @@ void Routing::SetDifficulty()
 
     CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
         ([&](const crow::request& req, crow::response& res) {
-        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
+        auto jsonData = crow::json::load(req.body);
+        if (!jsonData) {
+            res.code = 400;
+            res.write("Invalid JSON data.");
+            res.end();
+            return;
+        }
+
+        int playerId = jsonData["playerId"].i();
+        auto game = m_games.getGameByPlayerId(playerId);
+
+        if (!game) {
+            res.code = 404; // Not Found
+            res.write("Game not found for the player.");
+            res.end();
+            return;
+        }
+
+        int currentDifficulty = game->GetMap().getDifficulty();
         crow::json::wvalue jsonResponse;
         jsonResponse["difficulty"] = currentDifficulty;
 
@@ -568,71 +642,71 @@ void Routing::SetDifficulty()
         res.end();
             });
 }
+//
+//void Routing::HandlePlayerCommand()
+//{
+//    CROW_ROUTE(m_app, "/command")
+//        .methods("POST"_method)([this](const crow::request& req) {
+//
+//        auto commandData = crow::json::load(req.body);
+//        if (!commandData) {
+//            return crow::response(400, "Invalid input");
+//        }
+//
+//        std::string command = commandData["command"].s();
+//        int id = commandData["id"].i();
+//
+//
+//        auto it = std::find_if(
+//            m_gameLogic.getPlayers().begin(),
+//            m_gameLogic.getPlayers().end(),
+//            [id](const Player& player) { return player.GetId() == id; }
+//        );
+//
+//        if (it == m_gameLogic.getPlayers().end()) {
+//            return crow::response(404, "Player not found");
+//        }
+//
+//        Player& currentPlayer = *it;
+//
+//        if (command == "MOVE_UP") {
+//            m_gameLogic.movePlayer(&currentPlayer, Direction::UP);
+//        }
+//        else if (command == "MOVE_LEFT") {
+//            m_gameLogic.movePlayer(&currentPlayer, Direction::LEFT);
+//        }
+//        else if (command == "MOVE_DOWN") {
+//            m_gameLogic.movePlayer(&currentPlayer, Direction::DOWN);
+//        }
+//        else if (command == "MOVE_RIGHT") {
+//            m_gameLogic.movePlayer(&currentPlayer, Direction::RIGHT);
+//        }
+//        else if (command == "SHOOT") {
+//            Direction dir = currentPlayer.GetFacingDirection();
+//            currentPlayer.shoot(dir);
+//        }
+//        else {
+//            return crow::response(400, "Invalid command");
+//        }
+//        //if (m_gameLogic.WinCondition()) {
+//        //    return crow::response(200, crow::json::wvalue{
+//        //        {"status", "game_over"},
+//        //        {"message", "A player has won the game!"}
+//        //        });
+//        //}
+//        return crow::response(200, "Command processed successfully");
+//            });
+//}
 
-void Routing::HandlePlayerCommand()
-{
-    CROW_ROUTE(m_app, "/command")
-        .methods("POST"_method)([this](const crow::request& req) {
-
-        auto commandData = crow::json::load(req.body);
-        if (!commandData) {
-            return crow::response(400, "Invalid input");
-        }
-
-        std::string command = commandData["command"].s();
-        int id = commandData["id"].i();
-
-
-        auto it = std::find_if(
-            m_gameLogic.getPlayers().begin(),
-            m_gameLogic.getPlayers().end(),
-            [id](const Player& player) { return player.GetId() == id; }
-        );
-
-        if (it == m_gameLogic.getPlayers().end()) {
-            return crow::response(404, "Player not found");
-        }
-
-        Player& currentPlayer = *it;
-
-        if (command == "MOVE_UP") {
-            m_gameLogic.movePlayer(&currentPlayer, Direction::UP);
-        }
-        else if (command == "MOVE_LEFT") {
-            m_gameLogic.movePlayer(&currentPlayer, Direction::LEFT);
-        }
-        else if (command == "MOVE_DOWN") {
-            m_gameLogic.movePlayer(&currentPlayer, Direction::DOWN);
-        }
-        else if (command == "MOVE_RIGHT") {
-            m_gameLogic.movePlayer(&currentPlayer, Direction::RIGHT);
-        }
-        else if (command == "SHOOT") {
-            Direction dir = currentPlayer.GetFacingDirection();
-            currentPlayer.shoot(dir);
-        }
-        else {
-            return crow::response(400, "Invalid command");
-        }
-        //if (m_gameLogic.WinCondition()) {
-        //    return crow::response(200, crow::json::wvalue{
-        //        {"status", "game_over"},
-        //        {"message", "A player has won the game!"}
-        //        });
-        //}
-        return crow::response(200, "Command processed successfully");
-            });
-}
-
-void Routing::StartGame()
-{
-    CROW_ROUTE(m_app, "/start_game")
-        .methods("POST"_method)([this](const crow::request& req)
-            {
-                m_gameLogic.startGame();
-                return crow::response(200);
-            });
-}
+//void Routing::StartGame()
+//{
+//    CROW_ROUTE(m_app, "/start_game")
+//        .methods("POST"_method)([this](const crow::request& req)
+//            {
+//                m_gameLogic.startGame();
+//                return crow::response(200);
+//            });
+//}
 
 //int GameInterface::getActivePlayers()
 //{
@@ -657,15 +731,15 @@ void Routing::StartGame()
 //    res.write(jsonResponse.dump());
 //    res.end();
 //    });
-
-void Routing::getActivePlayers()
-{
-    CROW_ROUTE(m_app, "/get_active_players").methods("GET"_method)([this](const crow::request& req)
-        {
-            int players = m_gameLogic.getPlayers().size();
-            crow::json::wvalue jsonResponse;
-            jsonResponse["active_players"] = players;
-            return crow::response{ jsonResponse };
-        });
-}
+//
+//void Routing::getActivePlayers()
+//{
+//    CROW_ROUTE(m_app, "/get_active_players").methods("GET"_method)([this](const crow::request& req)
+//        {
+//            int players = m_gameLogic.getPlayers().size();
+//            crow::json::wvalue jsonResponse;
+//            jsonResponse["active_players"] = players;
+//            return crow::response{ jsonResponse };
+//        });
+//}
 

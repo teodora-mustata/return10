@@ -16,7 +16,7 @@ public:
 	void removePlayerFromGame(int playerId);
 	void createNewGame();
 	void endGame(int gameId);
-
+	std::shared_ptr<GameLogic> getGameByPlayerId(int playerId);
 	Player getPlayerFromID(int id);
 private:
 	GameManager(GameStorage& storage);

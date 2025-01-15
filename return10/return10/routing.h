@@ -9,8 +9,9 @@
 class Routing
 {
 public:
-	Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic);
-	Routing( GameStorage& storage, GameLogic& gameLogic);
+	//Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic);
+	Routing( GameStorage& storage, GameManager& gameLogic);
+	//Routing( GameManager& game);
 
 	void Run();
 	void SetupLoginRoutes();
@@ -18,22 +19,21 @@ public:
 	void GetTheBestPlayersByScore();
 	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
-	void sendMap(crow::response& res);
-	void SetupGameRoute();
+	//void sendMap(crow::response& res);
+	//void SetupGameRoute();
 	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
-	void AddPlayerToGame();
+	//void AddPlayerToGame();
 	void SetDifficulty();
-	void HandlePlayerCommand();
-	void StartGame();
-	void getActivePlayers();
+	//void HandlePlayerCommand();
+	//void StartGame();
+	//void getActivePlayers();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
 
-	//GameManager m_games;
-
-	GameLogic& m_gameLogic;
-	std::vector<int> m_loggedInPlayers;
+	GameManager m_games;
+	//GameLogic& m_gameLogic;
+	//std::vector<int> m_loggedInPlayers;
 };
 

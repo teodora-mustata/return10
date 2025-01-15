@@ -93,3 +93,16 @@ Player GameManager::getPlayerFromID(int id)
     Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
     return new_player;
 }
+
+
+std::shared_ptr<GameLogic> GameManager::getGameByPlayerId(int playerId)
+{
+    for (auto& game : m_activeGames) {
+        for (const auto& player : game->getPlayers()) {
+            if (player.GetId() == playerId) {
+                return game;
+            }
+        }
+    }
+    return nullptr;
+}
