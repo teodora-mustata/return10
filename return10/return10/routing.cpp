@@ -512,7 +512,6 @@ void Routing::BuyBulletSpeedUpgrade() {
 //        res.end();
 //        });
 //}
-
 void Routing::AddPlayerToLobby()
 {
     CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
@@ -546,8 +545,8 @@ void Routing::AddPlayerToLobby()
             CROW_LOG_INFO << "Ending games.";
             m_games.endGames();
 
-                res.code = 200;
-            }
+            res.code = 200;
+        }
         catch (const std::exception& e) {
             res.code = 500;
             res.body = std::string("Internal server error: ") + e.what();
