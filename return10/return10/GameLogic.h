@@ -17,7 +17,7 @@ enum class GameState {
 class GameLogic {
 public:
 public:
-    GameLogic(Map& map);
+    GameLogic(std::shared_ptr<Map> map);
 
     void initializePlayers();
     void initializeScores();
@@ -48,7 +48,8 @@ public:
     void setState(GameState state);
     GameState getState() const;
 private:
-    Map& map;
+    //Map& map;
+    std::shared_ptr<Map> map;
     std::vector<Player> m_players;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;

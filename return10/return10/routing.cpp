@@ -50,6 +50,7 @@ void Routing::Run() {
     SetDifficulty();
     //AddPlayerToGame();
     AddPlayerToLobby();
+    CreateGame();
     //HandlePlayerCommand();
     m_app.port(18080).multithreaded().run();
 }
@@ -571,12 +572,8 @@ void Routing::AddPlayerToLobby()
 
             CROW_LOG_INFO << "Adding player " << player_id << " to lobby.";
             m_games.addPlayerToLobby(player_id);
-
-            // After adding player, log game creation process
-            CROW_LOG_INFO << "Creating new game.";
-            m_games.createNewGame();
-            CROW_LOG_INFO << "Ending games.";
-            m_games.endGames();
+            //m_games.createNewGame();
+            //m_games.endGames();
 
             res.code = 200;
         }
@@ -693,7 +690,13 @@ void Routing::SetDifficulty()
             return;
         }
 
-        int currentDifficulty = game->GetMap().getDifficulty();
+        //int currentDifficulty = game->GetMap().getDifficulty();
+
+        auto& mapRef = game->GetMap();
+        int currentDifficulty = mapRef.getDifficulty();
+
+        CROW_LOG_INFO << "Current difficulty is: " << currentDifficulty;
+        CROW_LOG_INFO << "Difficulty to set: " << requestedDifficulty;
 
         if (currentDifficulty != 0) {
             res.code = 403; // Forbidden
@@ -702,8 +705,8 @@ void Routing::SetDifficulty()
             return;
         }
 
-        game->GetMap().setDifficulty(requestedDifficulty);
-        game->GetMap().initialize();
+        mapRef.setDifficulty(requestedDifficulty);
+        mapRef.initialize();
 
         res.code = 200;
         res.write("Difficulty set successfully.");
@@ -795,15 +798,15 @@ void Routing::SetDifficulty()
 //            });
 //}
 
-//void Routing::StartGame()
-//{
-//    CROW_ROUTE(m_app, "/start_game")
-//        .methods("POST"_method)([this](const crow::request& req)
-//            {
-//                m_gameLogic.startGame();
-//                return crow::response(200);
-//            });
-//}
+void Routing::CreateGame()
+{
+    CROW_ROUTE(m_app, "/start_game")
+        .methods("POST"_method)([this](const crow::request& req)
+            {
+                m_games.createNewGame();
+                return crow::response(200);
+            });
+}
 
 //int GameInterface::getActivePlayers()
 //{

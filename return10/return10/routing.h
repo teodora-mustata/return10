@@ -27,7 +27,7 @@ public:
 	void AddPlayerToLobby();
 	void SetDifficulty();
 	//void HandlePlayerCommand();
-	//void StartGame();
+	void CreateGame();
 	void getActivePlayers();
 private:
 	crow::SimpleApp m_app;

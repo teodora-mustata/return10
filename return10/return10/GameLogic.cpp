@@ -1,10 +1,14 @@
 ﻿#include "GameLogic.h"
 
-GameLogic::GameLogic(Map& map) : map{ map } {}
+GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }
+{
+    map->setDifficulty(0);
+    std::cout << "Map initialized in GameLogic constructor with difficulty: " << map->getDifficulty();
+}
 
 void GameLogic::checkForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
-    auto& cell = map.getCellType(pos.i, pos.j);
+    auto& cell = map->getCellType(pos.i, pos.j);
 
     // Use std::visit to handle the cell type
     std::visit(
@@ -13,7 +17,7 @@ void GameLogic::checkForTraps(Player& player) {
             if constexpr (std::is_base_of_v<Trap, T>) {
                 // If the cell is a Trap or derived from Trap, activate it
                 cellType.activateEffect(player);
-                map.setCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
+                map->setCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
             }
             
         },
@@ -23,7 +27,7 @@ void GameLogic::checkForTraps(Player& player) {
 
 void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 {
-    auto spawnPoints = map.getSpawnPoints();
+    auto spawnPoints = map->getSpawnPoints();
     int numPlayers = m_players.size();
 
     for (int i = 0; i < numPlayers; ++i) {
@@ -75,10 +79,10 @@ void GameLogic::applyDamage(Bomb bomb)
             }
         }
 
-        auto& celltype = map.getCellType(x, y); // Observă folosirea lui `auto&`!
+        auto& celltype = map->getCellType(x, y);
         if (auto* wall = std::get_if<Wall>(&celltype); wall && wall->isDestructible())
         {
-            map.setCellType(x, y, std::monostate{});
+            map->setCellType(x, y, std::monostate{});
         }
     }
 }
@@ -168,10 +172,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
 {
     std::vector<std::string> charMap;
 
-    for (int rowIndex = 0; rowIndex < map.getDimensions().first; ++rowIndex) {
+    for (int rowIndex = 0; rowIndex < map->getDimensions().first; ++rowIndex) {
         std::string rowStr;
 
-        for (int colIndex = 0; colIndex < map.getDimensions().second; ++colIndex) {
+        for (int colIndex = 0; colIndex < map->getDimensions().second; ++colIndex) {
             bool cellOverridden = false;
 
 
@@ -198,7 +202,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
           
             if (!cellOverridden) {
-                auto trapInfo = map.getTrapInfo(rowIndex, colIndex);
+                auto trapInfo = map->getTrapInfo(rowIndex, colIndex);
                 
                 if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
                     //std::cout << trapInfo->first << ' ' << trapInfo->second;
@@ -229,7 +233,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
             }
 
             if (!cellOverridden) {
-                const auto& cell = map.getCellType(rowIndex, colIndex);
+                const auto& cell = map->getCellType(rowIndex, colIndex);
                 if (std::holds_alternative<std::monostate>(cell)) {
                     rowStr.push_back('0');
                 }
@@ -270,7 +274,7 @@ void GameLogic::updateBullets() {
             bullet.move(); // Mutăm glonțul pe hartă
 
             // Verificăm coliziunea cu zidurile
-            if (checkWallCollision(map, bullet)) {
+            if (checkWallCollision(*map, bullet)) {
                 continue; // Dacă glonțul lovește un zid, îl distrugem
             }
 
@@ -317,12 +321,15 @@ void GameLogic::removePlayer(Player player)
 
 const Map& GameLogic::GetMap() const
 {
-    return map;
+    return *map;
 }
 
 Map& GameLogic::GetMap()
 {
-    return map;
+    if (&map == nullptr) {
+        throw std::runtime_error("Map reference is invalid!");
+    }
+    return *map;
 }
 
 bool GameLogic::isRunning() const
@@ -371,7 +378,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
     case Direction::RIGHT: newY++; break;
     }
 
-    auto dimensions = map.getDimensions();
+    auto dimensions = map->getDimensions();
     std::cout << "Attempting to move to: (" << newX << ", " << newY << ")\n";
     std::cout << "Map dimensions: (" << dimensions.first << ", " << dimensions.second << ")\n";
 
@@ -380,7 +387,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         return;
     }
 
-    if (std::holds_alternative<Wall>(map.getBoard()[newX][newY]))
+    if (std::holds_alternative<Wall>(map->getBoard()[newX][newY]))
     {
         std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
         return;

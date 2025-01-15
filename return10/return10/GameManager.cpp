@@ -76,14 +76,12 @@ void GameManager::createNewGame()
     if (m_lobbyPlayers.size() >= 2)
     {
         int lobbySize = (m_lobbyPlayers.size() >= 4) ? 4 : m_lobbyPlayers.size();
-
-        // Dacă există un număr mai mic de jucători decât `lobbySize`, oprește-te
         if (lobbySize > m_lobbyPlayers.size()) {
             std::cerr << "Error: Trying to create game with more players than in lobby!" << std::endl;
             return;
         }
 
-        Map map;
+        auto map = std::make_shared<Map>();
         auto newGame = std::make_shared<GameLogic>(map);
 
         for (int i = lobbySize - 1; i >= 0; i--)
@@ -97,6 +95,7 @@ void GameManager::createNewGame()
 
         newGame->startGame();
         m_activeGames.push_back(newGame);
+        std::cout << "Created a new game! "<< std::endl;
     }
 }
 
@@ -120,6 +119,7 @@ void GameManager::endGames()
         auto& game = m_activeGames[i];
         if (!game->isRunning())
         {
+            std::cout << "Ended game with id: " << i << std::endl;
             endGame(i);
         }
     }
@@ -146,6 +146,16 @@ std::vector<int> GameManager::getLobbyPlayers()
 std::vector<int> GameManager::getInGamePlayers()
 {
     return m_inGamePlayers;
+}
+
+std::vector<std::shared_ptr<GameLogic>> GameManager::getActiveGames()
+{
+    return m_activeGames;
+}
+
+void GameManager::startGame(int gameId)
+{
+    m_activeGames[gameId]->startGame();
 }
 
 

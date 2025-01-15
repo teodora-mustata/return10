@@ -157,7 +157,7 @@ void MainMenu::display() {
                         break;
                     }
                 }
-                if (currentPlayers == 2)
+                if (currentPlayers >= 2)
                 {
                     std::cout << "Game starting now!" << std::endl;
 
@@ -167,6 +167,8 @@ void MainMenu::display() {
                         std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă
                     }
 
+                    createGame();
+
                     // Set the difficulty after the game has started
                     if (sendDifficultyToServer(difficulty)) {
                         std::cout << "Difficulty set successfully!\n";
@@ -175,7 +177,7 @@ void MainMenu::display() {
                         std::cout << "Difficulty could not be set. Another client may have already set it.\n";
                     }
 
-                    startServerGame();
+                    createGame();
                     bool gameRunning = true;
                     while (gameRunning)
                     {
@@ -301,7 +303,7 @@ void MainMenu::checkCurrentDifficulty()
     }
 }
 
-void MainMenu::startServerGame()
+void MainMenu::createGame()
 {
     try {
         auto response = cpr::Post(

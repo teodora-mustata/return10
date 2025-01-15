@@ -21,6 +21,8 @@ public:
 	Player getPlayerFromID(int id);
 	std::vector<int> getLobbyPlayers();
 	std::vector<int> getInGamePlayers();
+	std::vector<std::shared_ptr<GameLogic>> getActiveGames();
+	void startGame(int gameId);
 private:
 	GameManager(GameStorage& storage);
 private:
