@@ -46,9 +46,10 @@ void Routing::Run() {
     BuyReloadSpeedUpgrade();
     BuyBulletSpeedUpgrade();
     //SetupGameRoute();
-    //getActivePlayers();
+    getActivePlayers();
     SetDifficulty();
     //AddPlayerToGame();
+    AddPlayerToLobby();
     //HandlePlayerCommand();
     m_app.port(18080).multithreaded().run();
 }
@@ -512,6 +513,42 @@ void Routing::BuyBulletSpeedUpgrade() {
 //        });
 //}
 
+void Routing::AddPlayerToLobby()
+{
+    CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
+
+        try {
+            auto jsonBody = crow::json::load(req.body);
+            if (!jsonBody || !jsonBody.has("player_id")) {
+                res.code = 400;
+                res.body = "Invalid request! Missing or incorrect 'player_id'.";
+                res.end();
+                return;
+            }
+
+            int player_id = jsonBody["player_id"].i();
+
+            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
+
+            if (player_data.GetId() == 0) {
+                res.code = 404;
+                res.body = "Player not found!";
+                res.end();
+                return;
+            }
+
+            m_games.addPlayerToLobby(player_id);
+
+                res.code = 200;
+            }
+        catch (const std::exception& e) {
+            res.code = 500;
+            res.body = std::string("Internal server error: ") + e.what();
+        }
+
+        res.end();
+        });
+}
 
 //void Routing::GetActivePlayers()
 //{
@@ -530,7 +567,28 @@ void Routing::BuyBulletSpeedUpgrade() {
 //        }
 //            });
 //}
-//
+
+void Routing::getActivePlayers()
+{
+    CROW_ROUTE(m_app, "/get_active_players")
+        .methods(crow::HTTPMethod::GET)([&](const crow::request& req, crow::response& res) {
+        try {
+            int players = m_games.getLobbyPlayers().size();
+
+            crow::json::wvalue response;
+            response["active_players"] = players;
+            res.body = response.dump();
+            res.code = 200;
+            res.end();
+        }
+        catch (const std::exception& e) {
+            res.code = 500;
+            res.body = std::string("Internal server error: ") + e.what();
+            res.end();
+        }
+            });
+}
+
 //void Routing::SetDifficulty()
 //{
 //    CROW_ROUTE(m_app, "/send_difficulty").methods(crow::HTTPMethod::POST)

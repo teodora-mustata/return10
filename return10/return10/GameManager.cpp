@@ -94,6 +94,16 @@ Player GameManager::getPlayerFromID(int id)
     return new_player;
 }
 
+std::vector<int> GameManager::getLobbyPlayers()
+{
+    return m_lobbyPlayers;
+}
+
+std::vector<int> GameManager::getInGamePlayers()
+{
+    return m_inGamePlayers;
+}
+
 
 std::shared_ptr<GameLogic> GameManager::getGameByPlayerId(int playerId)
 {

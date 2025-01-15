@@ -24,10 +24,11 @@ public:
 	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
 	//void AddPlayerToGame();
+	void AddPlayerToLobby();
 	void SetDifficulty();
 	//void HandlePlayerCommand();
 	//void StartGame();
-	//void getActivePlayers();
+	void getActivePlayers();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
