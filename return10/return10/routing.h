@@ -10,11 +10,10 @@ class Routing
 {
 public:
 	//Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic);
-	Routing( GameStorage& storage, GameManager* gameLogic);
+	Routing( GameStorage& storage, GameManager& gameLogic);
 	//Routing( GameManager& game);
 
 	void Run();
-	void stopServer();
 	void SetupLoginRoutes();
 	void GetTheBestPlayersByCrowns();
 	void GetTheBestPlayersByScore();
@@ -33,7 +32,8 @@ public:
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
-	GameManager* m_games;
+
+	GameManager m_games;
 	//GameLogic& m_gameLogic;
 	//std::vector<int> m_loggedInPlayers;
 };

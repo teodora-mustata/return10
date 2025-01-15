@@ -1,29 +1,12 @@
 #include "GameManager.h"
-std::mutex GameManager::mtx;
 
-GameManager* GameManager::getInstance(GameStorage& storage)
+GameManager& GameManager::getInstance(GameStorage& storage)
 {
-    std::lock_guard<std::mutex> lock(mtx);
-    static GameManager instance(storage);
-    return &instance; 
+    static GameManager instance(storage); 
+    return instance;
 }
 
-void GameManager::run()
-{
-    while (m_isRunning)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        std::lock_guard<std::mutex> lock(mtx);
-        createNewGame();
-    }
-}
-
-void GameManager::stop()
-{
-    m_isRunning = false;
-}
-
-GameManager::GameManager(GameStorage& storage) : m_storage(storage), m_isRunning(true) {}
+GameManager::GameManager(GameStorage& storage) : m_storage(storage) {}
 
 void GameManager::sortLobbyPlayers()
 {
@@ -35,14 +18,12 @@ void GameManager::sortLobbyPlayers()
 
 void GameManager::addPlayerToLobby(int playerId)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     m_lobbyPlayers.push_back(playerId);
     sortLobbyPlayers();
 }
 
 void GameManager::removePlayerFromLobby(int playerId)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     auto it = std::find(m_lobbyPlayers.begin(), m_lobbyPlayers.end(), playerId);
 
     if (it != m_lobbyPlayers.end())
@@ -53,13 +34,11 @@ void GameManager::removePlayerFromLobby(int playerId)
 
 void GameManager::addPlayerToGame(int playerId)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     m_inGamePlayers.push_back(playerId);
 }
 
 void GameManager::removePlayerFromGame(int playerId)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     auto it = std::find(m_inGamePlayers.begin(), m_inGamePlayers.end(), playerId);
 
     if (it != m_inGamePlayers.end())
@@ -70,7 +49,6 @@ void GameManager::removePlayerFromGame(int playerId)
 
 void GameManager::createNewGame()
 {
-    std::lock_guard<std::mutex> lock(mtx);
     if (m_lobbyPlayers.size() >= 2)
     {
         int lobbySize;
@@ -92,7 +70,6 @@ void GameManager::createNewGame()
 
 void GameManager::endGame(int gameId)
 {
-    std::lock_guard<std::mutex> lock(mtx);
     if (m_activeGames[gameId]->isRunning() == false) //game is over
     {
         for (auto player : m_activeGames[gameId]->getPlayers())
@@ -119,13 +96,11 @@ Player GameManager::getPlayerFromID(int id)
 
 std::vector<int> GameManager::getLobbyPlayers()
 {
-    std::lock_guard<std::mutex> lock(mtx);
     return m_lobbyPlayers;
 }
 
 std::vector<int> GameManager::getInGamePlayers()
 {
-    std::lock_guard<std::mutex> lock(mtx);
     return m_inGamePlayers;
 }
 
