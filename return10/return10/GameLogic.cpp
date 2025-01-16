@@ -188,10 +188,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
                 if (!cellOverridden)
                 {
-                    std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
+                    // std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
                     for (const auto& bullet : player.getGun().getFiredBullets())
                     {
-                        std::cout << "Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
+                        // std::cout << "Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
                         if (bullet.getX() == rowIndex && bullet.getY() == colIndex) {
                             rowStr.push_back('*');
                             cellOverridden = true;

@@ -46,7 +46,7 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
     const auto& board = gameData["map"];
 
     for (size_t i = 0; i < board.size(); ++i) {
-        const std::string& row = board[i].s();  // Accesăm fiecare șir.
+        const std::string& row = board[i].s();
 
         for (size_t j = 0; j < row.size(); ++j) {
             char cell = row[j]; 
@@ -94,8 +94,9 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
             cpr::Header{ {"Content-Type", "application/json"} },
             cpr::Body{ jsonData.dump() }
         );
+        //std::cout << "Sending JSON: " << jsonData.dump() << std::endl;
 
-        if (response.status_code == 200) {
+        /*if (response.status_code == 200) {
             auto responseJson = crow::json::load(response.text);
 
             if (responseJson.has("status") && responseJson["status"].s() == "success") {
@@ -105,6 +106,10 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
             else if (responseJson.has("error")) {
                 std::cerr << "Server error: " << responseJson["error"].s() << std::endl;
             }
+        }*/
+        if (response.status_code == 200) {
+            //std::cout << "Server response: " << response.text << std::endl;
+            return true;
         }
         else {
             std::cerr << "Failed to execute command. HTTP Status: " << response.status_code << std::endl;
@@ -165,16 +170,17 @@ void GameInterface::startGame() {
             cpr::Body{ jsonData.dump() }
         );
 
+
+
         if (r.status_code == 200) {
             crow::json::rvalue gameData = crow::json::load(r.text);
-
-            if (gameData.has("map") /* && gameData.has("players")*/) {
-                renderGame(gameData, playerId); 
-                handleInput(); 
-                //displayStatus();
+            //CROW_LOG_INFO << "Received response: " << r.text;
+            if (gameData.has("map") && gameData["map"].t() == crow::json::type::List) {
+                renderGame(gameData, playerId);
+                handleInput();
             }
             else {
-                std::cerr << "Game data is missing necessary fields!" << std::endl;
+                std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;
                 break;
             }
         }

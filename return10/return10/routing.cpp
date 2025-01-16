@@ -310,7 +310,7 @@ void Routing::sendMap(crow::response& res, int playerId)
 {
     auto game = m_games.getGameByPlayerId(playerId);
     CROW_LOG_INFO << "Game found: " << game.get();
-    if (!game) {
+    if (!game.get()) {
         res.code = 404; // Not Found
         res.write("Game not found for the player.");
         res.end();
@@ -320,12 +320,12 @@ void Routing::sendMap(crow::response& res, int playerId)
     std::vector<std::string> map = game->convertMapToString();
 
     crow::json::wvalue mapJson;
-
     crow::json::wvalue::list mapArray;
     for (const auto& line : map) {
         mapArray.push_back(line);
     }
     mapJson["map"] = std::move(mapArray);
+    //CROW_LOG_INFO << "Sending map data: " << mapJson.dump();
     res.set_header("Content-Type", "application/json");
     res.write(mapJson.dump());
     res.end();
@@ -807,6 +807,7 @@ void Routing::HandlePlayerCommand()
         if (!commandData) {
             return crow::response(400, "Invalid input");
         }
+        std::cout << "Received JSON: " << req.body << std::endl;
 
         std::string command = commandData["command"].s();
         int id = commandData["id"].i();
