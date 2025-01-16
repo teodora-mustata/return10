@@ -26,7 +26,7 @@ public:
 	//void AddPlayerToGame();
 	void AddPlayerToLobby();
 	void SetDifficulty();
-	//void HandlePlayerCommand();
+	void HandlePlayerCommand();
 	void CreateGame();
 	void getActivePlayers();
 private:

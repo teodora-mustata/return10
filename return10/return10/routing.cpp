@@ -45,13 +45,13 @@ void Routing::Run() {
     GetTheBestPlayersByScore();
     BuyReloadSpeedUpgrade();
     BuyBulletSpeedUpgrade();
-    //SetupGameRoute();
+    SetupGameRoute();
     getActivePlayers();
     SetDifficulty();
     //AddPlayerToGame();
     AddPlayerToLobby();
     CreateGame();
-    //HandlePlayerCommand();
+    HandlePlayerCommand();
     m_app.port(18080).multithreaded().run();
 }
 
@@ -309,6 +309,7 @@ void Routing::SetupLoginRoutes()
 void Routing::sendMap(crow::response& res, int playerId)
 {
     auto game = m_games.getGameByPlayerId(playerId);
+    CROW_LOG_INFO << "Game found: " << game.get();
     if (!game) {
         res.code = 404; // Not Found
         res.write("Game not found for the player.");
@@ -343,7 +344,6 @@ void Routing::SetupGameRoute()
             return;
         }
         int playerId = jsonData["playerId"].i();
-
         sendMap(res,playerId);
         res.end();
             });
@@ -797,6 +797,61 @@ void Routing::SetDifficulty()
 //        return crow::response(200, "Command processed successfully");
 //            });
 //}
+
+void Routing::HandlePlayerCommand()
+{
+    CROW_ROUTE(m_app, "/command")
+        .methods("POST"_method)([this](const crow::request& req) {
+
+        auto commandData = crow::json::load(req.body);
+        if (!commandData) {
+            return crow::response(400, "Invalid input");
+        }
+
+        std::string command = commandData["command"].s();
+        int id = commandData["id"].i();
+
+
+        auto game = m_games.getGameByPlayerId(id);
+        if (!game) {
+            return crow::response(404, "Game not found for the player");
+        }
+
+        auto it = std::find_if(
+            game->getPlayers().begin(),
+            game->getPlayers().end(),
+            [id](const Player& player) { return player.GetId() == id; }
+        );
+
+        if (it == game->getPlayers().end()) {
+            return crow::response(404, "Player not found in this game");
+        }
+
+        Player& currentPlayer = *it;
+
+        if (command == "MOVE_UP") {
+            game->movePlayer(&currentPlayer, Direction::UP);
+        }
+        else if (command == "MOVE_LEFT") {
+            game->movePlayer(&currentPlayer, Direction::LEFT);
+        }
+        else if (command == "MOVE_DOWN") {
+            game->movePlayer(&currentPlayer, Direction::DOWN);
+        }
+        else if (command == "MOVE_RIGHT") {
+            game->movePlayer(&currentPlayer, Direction::RIGHT);
+        }
+        else if (command == "SHOOT") {
+            Direction dir = currentPlayer.GetFacingDirection();
+            currentPlayer.shoot(dir);
+        }
+        else {
+            return crow::response(400, "Invalid command");
+        }
+
+        return crow::response(200, "Command processed successfully");
+            });
+}
 
 void Routing::CreateGame()
 {

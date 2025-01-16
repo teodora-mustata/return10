@@ -2,7 +2,6 @@
 
 Map::Map() : m_height(40), m_width(40), m_difficulty(0) //default dimensions
 {
-	std::cout << "Map difficulty initialized to: " << m_difficulty;
 	resizeMap();
 	generateSpawnPoints();
 	generateWalls();

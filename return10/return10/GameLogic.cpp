@@ -3,7 +3,6 @@
 GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }
 {
     map->setDifficulty(0);
-    std::cout << "Map initialized in GameLogic constructor with difficulty: " << map->getDifficulty();
 }
 
 void GameLogic::checkForTraps(Player& player) {
@@ -189,7 +188,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
                 if (!cellOverridden)
                 {
-                    for (const auto& bullet : player.getGun().getFiredBullets()) {
+                    std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
+                    for (const auto& bullet : player.getGun().getFiredBullets())
+                    {
+                        std::cout << "Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
                         if (bullet.getX() == rowIndex && bullet.getY() == colIndex) {
                             rowStr.push_back('*');
                             cellOverridden = true;

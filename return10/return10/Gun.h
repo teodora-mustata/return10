@@ -4,6 +4,7 @@
 #include <chrono>
 #include <vector>
 #include <algorithm>
+#include <iostream>
 using namespace std::chrono;
 
 class Gun

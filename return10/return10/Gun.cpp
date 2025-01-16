@@ -26,34 +26,29 @@ bool Gun::isJammed() const {
 
 bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
 
-    if (!m_isJammed && canFire()) {
-        
-        // Calculăm timpul scurs de la ultima tragere
-        auto now = steady_clock::now();
-        if (duration_cast<seconds>(now - m_lastFiredTime).count() < 4) {
-            return false; // Așteptăm 4 secunde între trageri
-        }
-
-        int bulletX = playerX;
-        int bulletY = playerY;
-
-        switch (playerDirection) {
-        case Direction::UP: bulletY -= 1; break;
-        case Direction::DOWN: bulletY += 1; break;
-        case Direction::LEFT: bulletX -= 1; break;
-        case Direction::RIGHT: bulletX += 1; break;
-        default: break;
-        }
-
-        Bullet newBullet(playerX, playerY, playerDirection, m_bulletSpeed);
-        newBullet.setActive(true);
-
-        m_firedBullets.push_back(newBullet);
-        m_lastFiredTime = std::chrono::steady_clock::now();
-
-        return true; // Fired
+    if (m_isJammed || !canFire()) {
+        return false;
     }
-    return false; // Gun is jammed or firing rate not met
+
+    int bulletX = playerX;
+    int bulletY = playerY;
+
+    switch (playerDirection) {
+    case Direction::UP: bulletY -= 1; break;
+    case Direction::DOWN: bulletY += 1; break;
+    case Direction::LEFT: bulletX -= 1; break;
+    case Direction::RIGHT: bulletX += 1; break;
+    default: break;
+    }
+
+    Bullet newBullet(bulletX, bulletY, playerDirection, m_bulletSpeed);
+    newBullet.setActive(true);
+
+    m_firedBullets.push_back(newBullet);
+    std::cout << "Bullet fired at position (" << bulletX << ", " << bulletY << ")" << std::endl;
+    m_lastFiredTime = std::chrono::steady_clock::now();
+
+    return true;
 }
 
 
