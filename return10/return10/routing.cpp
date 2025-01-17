@@ -52,6 +52,7 @@ void Routing::Run() {
     AddPlayerToLobby();
     CreateGame();
     HandlePlayerCommand();
+    updateMap();
     m_app.port(18080).multithreaded().run();
 }
 
@@ -614,6 +615,33 @@ void Routing::getActivePlayers()
             crow::json::wvalue response;
             response["active_players"] = players;
             res.body = response.dump();
+            res.code = 200;
+            res.end();
+        }
+        catch (const std::exception& e) {
+            res.code = 500;
+            res.body = std::string("Internal server error: ") + e.what();
+            res.end();
+        }
+            });
+}
+
+void Routing::updateMap() {
+    CROW_ROUTE(m_app, "/update_map")
+        .methods(crow::HTTPMethod::POST)([&](const crow::request& req, crow::response& res) {
+        try {
+            auto jsonData = crow::json::load(req.body);
+
+            if (!jsonData || !jsonData.has("id")) {
+                res.code = 400;
+                res.end();
+                return;
+            }
+
+            int userId = jsonData["id"].i();
+            auto game = m_games.getGameByPlayerId(userId);
+            game->updateBullets();
+            
             res.code = 200;
             res.end();
         }

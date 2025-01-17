@@ -29,6 +29,7 @@ public:
 	void HandlePlayerCommand();
 	void CreateGame();
 	void getActivePlayers();
+	void updateMap();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;

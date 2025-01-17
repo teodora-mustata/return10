@@ -12,6 +12,7 @@ public:
     void startGame();
     void handleInput(); // se ocupa de comenzile playerului
     void renderGame(const crow::json::rvalue& gameData, int playerId); // afiseaza mapa
+    void updateMap();
     bool sendCommandToServer(const std::string& command);
     void displayStatus();
     int getActivePlayers();

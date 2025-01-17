@@ -83,6 +83,24 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
     }
 }
 
+void GameInterface::updateMap() {
+    crow::json::wvalue jsonData;
+    jsonData["id"] = UserSession::getInstance().getUserId();
+
+    auto response = cpr::Post(
+        cpr::Url{ "http://localhost:18080/update_map" },
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
+    );
+
+    if (response.status_code == 200) {
+        std::cout << "Map updated successfully!" << std::endl;
+    }
+    else {
+        std::cout << "Failed to update map. Status code: " << response.status_code << std::endl;
+    }
+}
+
 bool GameInterface::sendCommandToServer(const std::string& command) {
     try {
         crow::json::wvalue jsonData;
@@ -156,7 +174,7 @@ void GameInterface::startGame() {
     std::cout << "\033[2J\033[1;1H";
 #endif
 
-    while (true) {
+    while (true) { //win condition
         std::cout << "\033[H";
 
         
@@ -178,6 +196,7 @@ void GameInterface::startGame() {
             if (gameData.has("map") && gameData["map"].t() == crow::json::type::List) {
                 renderGame(gameData, playerId);
                 handleInput();
+                updateMap();
             }
             else {
                 std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;

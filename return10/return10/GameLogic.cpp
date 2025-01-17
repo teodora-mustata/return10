@@ -55,7 +55,7 @@ void GameLogic::startGame()
     startTime = std::chrono::steady_clock::now();
     while (gameRunning)
     {
-        updateBullets();
+        //updateBullets();
         if (winCondition() == true) gameRunning = false;
     }
 }
