@@ -21,5 +21,11 @@
     <ClCompile Include="validation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="verifier.cppm">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="verifier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

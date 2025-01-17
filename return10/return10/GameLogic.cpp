@@ -31,10 +31,11 @@ void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 
     for (int i = 0; i < numPlayers; ++i) {
         const auto& spawnPoint = spawnPoints[i];
-        Coordinate coords;
-        coords.i= spawnPoint.first;
-        coords.j = spawnPoint.second;
+        Coordinate coords(spawnPoint.first, spawnPoint.second);
+        /*coords.i= spawnPoint.first;
+        coords.j = spawnPoint.second;*/
         m_players[i].setInitialPosition(coords);
+        m_players[i].setPosition(coords);
         std::cout << "Player " << i + 1 << " initialized at ("
             << spawnPoint.first << ", " << spawnPoint.second << ")\n";
     }

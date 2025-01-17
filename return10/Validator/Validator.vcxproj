@@ -21,6 +21,8 @@
   <ItemGroup>
     <ClCompile Include="validation.cpp" />
     <ClCompile Include="validation.cppm" />
+    <ClCompile Include="verifier.cpp" />
+    <ClCompile Include="verifier.cppm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
