@@ -161,7 +161,7 @@ void MainMenu::display() {
                 {
                     std::cout << "Game starting now!" << std::endl;
 
-                    for (int i = 3; i > 0; --i)
+                    for (int i = 10; i > 0; --i)
                     {
                         std::cout << i << "..." << std::endl;
                         std::this_thread::sleep_for(std::chrono::seconds(1)); // Așteaptă 1 secundă

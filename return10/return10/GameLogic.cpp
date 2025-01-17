@@ -43,7 +43,7 @@ void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
 
 void GameLogic::initializeScores()
 {
-    for (Player player : getPlayers())
+    for (Player& player : m_players)
     {
         player.setInitialScore();
     }
@@ -181,6 +181,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
             for (const auto& player : m_players) {
                 if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex) 
                 {
+                    std::cout << "Player " << player.GetId() << " found at position: " << rowIndex << ", " << colIndex << std::endl;
                     rowStr.push_back('P');
                     cellOverridden = true;
                     break; 

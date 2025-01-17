@@ -18,7 +18,8 @@ public:
 	void endGame(int gameId);
 	void endGames();
 	std::shared_ptr<GameLogic> getGameByPlayerId(int playerId);
-	Player getPlayerFromID(int id);
+	//Player getPlayerFromID(int id);
+	std::unique_ptr<Player> getPlayerFromID(int id);
 	std::vector<int> getLobbyPlayers();
 	std::vector<int> getInGamePlayers();
 	std::vector<std::shared_ptr<GameLogic>> getActiveGames();

@@ -8,7 +8,7 @@ Map::Map() : m_height(40), m_width(40), m_difficulty(0) //default dimensions
 	setBombs();
 }
 
-std::vector<std::vector<CellType>>& Map::getBoard() //here i put & jerry it solved the debug assertion failure for playerMove
+std::vector<std::vector<CellType>>& Map::getBoard()
 {
 	return this->m_board;
 }
@@ -196,6 +196,7 @@ void Map::generateRandomTrap() {
 void Map::initialize()
 {
 	if (m_difficulty != 0) generateRandomTrap();
+	// to do: make sure there are no traps on spawnpoints
 	else std::cout << "Difficulty is 0! \n";
 }
 

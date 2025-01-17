@@ -84,15 +84,22 @@ void GameManager::createNewGame()
         auto map = std::make_shared<Map>();
         auto newGame = std::make_shared<GameLogic>(map);
 
-        for (int i = lobbySize - 1; i >= 0; i--)
+        for (int i = lobbySize - 1; i >= 0; i--) // pe ruta de login de la player
         {
             int id = m_lobbyPlayers[i];
             addPlayerToGame(id);
             removePlayerFromLobby(id); 
-            Player newPlayer = getPlayerFromID(id);
-            newGame->addPlayer(newPlayer);
+            std::unique_ptr<Player> newPlayer = getPlayerFromID(id);
+            if (newPlayer) {
+                newGame->addPlayer(*newPlayer);
+            }
+            else {
+                std::cerr << "Error: Failed to retrieve player with ID " << id << "\n";
+            }
+            //newGame->addPlayer(*newPlayer);
         }
-
+        newGame->initializePlayers();
+        newGame->initializeScores();
         newGame->startGame();
         m_activeGames.push_back(newGame);
         std::cout << "Created a new game! "<< std::endl;
@@ -125,17 +132,30 @@ void GameManager::endGames()
     }
 }
 
-Player GameManager::getPlayerFromID(int id)
+//Player GameManager::getPlayerFromID(int id)
+//{
+//    PlayerDAO player_data = m_storage.GetPlayerByID(id);
+//    GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
+//
+//    Gun player_gun;
+//    player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
+//    player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
+//
+//    Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
+//    return new_player;
+//}
+
+std::unique_ptr<Player> GameManager::getPlayerFromID(int id)
 {
     PlayerDAO player_data = m_storage.GetPlayerByID(id);
     GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
 
-    Gun player_gun;
-    player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-    player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
+    auto player_gun = std::make_shared<Gun>();
+    player_gun->setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
+    player_gun->setBulletSpeed(gun_data.GetBulletSpeed());
 
-    Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
-    return new_player;
+    return std::make_unique<Player>(player_data.GetId(), player_data.GetName(),
+        player_data.GetScore(), player_data.GetCrowns(), *player_gun);
 }
 
 std::vector<int> GameManager::getLobbyPlayers()
