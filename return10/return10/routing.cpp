@@ -678,7 +678,7 @@ void Routing::checkWinCondition()
                 return;
             }
 
-            int winCondition = game->winCondition();
+            int winCondition = game->checkIfRunning();
             std::cout << "Win condition: " << winCondition << std::endl;
 
             crow::json::wvalue response;
@@ -881,6 +881,7 @@ void Routing::HandlePlayerCommand()
         std::cout << "Received JSON: " << req.body << std::endl;
 
         std::string command = commandData["command"].s();
+        CROW_LOG_INFO <<"Command received:"<< command;
         int id = commandData["id"].i();
 
 

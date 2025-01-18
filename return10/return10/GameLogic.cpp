@@ -56,7 +56,7 @@ void GameLogic::startGame()
     while (gameRunning)
     {
         //updateBullets();
-        if (winCondition() == true) gameRunning = false; // jocul e gata = gameRunning = false
+        if (checkIfRunning() == true) gameRunning = false; // jocul e gata = gameRunning = false
     }
 }
 
@@ -188,7 +188,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
                     break; 
                 }
 
-                if (!cellOverridden)
+                if (cellOverridden==false)
                 {
                     // std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
                     for (const auto& bullet : player.getGun().getFiredBullets())
@@ -478,7 +478,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 }
 
 
-bool GameLogic::winCondition()
+bool GameLogic::checkIfRunning()
 {
     int aliveCount = 0;
 
@@ -486,11 +486,10 @@ bool GameLogic::winCondition()
         if (player.IsAlive()) {
             aliveCount++;
         }
-
-        if (aliveCount > 1) {
-            return false; // false = jocul mai continua
-        }
+    }
+    if (aliveCount > 1) {
+        return true; //true = jocul continua
     }
 
-    return (aliveCount <= 1);  //true = jocul e gata
+    return false;  // false = jocul nu mai continua
 }

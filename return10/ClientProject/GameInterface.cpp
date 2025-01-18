@@ -178,6 +178,7 @@ void GameInterface::startGame() {
 #endif
     bool isGameRunning = true;
     while (isGameRunning) {// checkWinCondition() = true daca jocul e terminat, false daca jocul continua
+        // checkWinCondition() = true daca jocul continua, false daca jocul se opreste
         std::cout << "\033[H";
 
         
@@ -200,7 +201,7 @@ void GameInterface::startGame() {
                 renderGame(gameData, playerId);
                 handleInput();
                 updateMap();
-                isGameRunning = !checkWinCondition();
+                isGameRunning = checkWinCondition();
             }
             else {
                 std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;
@@ -243,10 +244,9 @@ bool GameInterface::checkWinCondition()
     if (r.status_code == 200) {
         auto responseJson = crow::json::load(r.text);
         if (responseJson && responseJson.has("win_condition")) {
-            bool winCondition = responseJson["win_condition"].i();
-            if (winCondition == 1) return false;
-            else return true;
-            //return winCondition; // true daca jocul e terminat, false daca jocul continua
+            int winCondition = responseJson["win_condition"].i();
+            if (winCondition == 1) return true;
+            else return false;
         }
     }
     else {

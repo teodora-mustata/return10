@@ -5,19 +5,20 @@ Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
 {
 }
 
+
 void Bullet::move() {
     switch (m_direction) {
     case Direction::UP:
-        m_y -= 1;
-        break;
-    case Direction::DOWN:
-        m_y += 1;
-        break;
-    case Direction::LEFT:
         m_x -= 1;
         break;
-    case Direction::RIGHT:
+    case Direction::DOWN:
         m_x += 1;
+        break;
+    case Direction::LEFT:
+        m_y -= 1;
+        break;
+    case Direction::RIGHT:
+        m_y += 1;
         break;
     }
 }

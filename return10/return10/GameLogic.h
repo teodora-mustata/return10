@@ -25,9 +25,6 @@ public:
     std::vector<Player>& getPlayers();
     void removePlayer(Player player);
 
-    GameLogic(GameLogic&&) = default;
-    GameLogic& operator=(GameLogic&&) = default;
-
     void applyDamage(Bomb bomb);
     void checkForTraps(Player& player);
     void explodeBomb(Bomb& bomb);
@@ -45,7 +42,7 @@ public:
 
     void startGame();
     bool isRunning() const;
-    bool winCondition();
+    bool checkIfRunning();
 
     void processInput(int playerId, const std::string& command);
     void setState(GameState state);
