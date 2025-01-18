@@ -34,7 +34,7 @@ public:
     Map& GetMap();
 
     bool checkPlayerCollision(Player& target, Bullet& bullet);
-    bool checkWallCollision(Map& map, Bullet& bullet);
+    bool checkWallCollision(std::unique_ptr<Bullet> bullet);
     std::vector<std::string> convertMapToString() const;
 
     void moveBullet(Map& map, Player& target, Gun* bullets);
