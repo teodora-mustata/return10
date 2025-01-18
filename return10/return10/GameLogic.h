@@ -25,6 +25,9 @@ public:
     std::vector<Player>& getPlayers();
     void removePlayer(Player player);
 
+    GameLogic(GameLogic&&) = default;
+    GameLogic& operator=(GameLogic&&) = default;
+
     void applyDamage(Bomb bomb);
     void checkForTraps(Player& player);
     void explodeBomb(Bomb& bomb);

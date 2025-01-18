@@ -97,10 +97,10 @@ void GameInterface::updateMap() {
     );
 
     if (response.status_code == 200) {
-        std::cout << "Map updated successfully!" << std::endl;
+        //std::cout << "Map updated successfully!" << std::endl;
     }
     else {
-        std::cout << "Failed to update map. Status code: " << response.status_code << std::endl;
+        //std::cout << "Failed to update map. Status code: " << response.status_code << std::endl;
     }
 }
 
@@ -176,8 +176,8 @@ void GameInterface::startGame() {
 #else
     std::cout << "\033[2J\033[1;1H";
 #endif
-
-    while (true) { //win condition
+    bool isGameRunning = true;
+    while (isGameRunning) {// checkWinCondition() = true daca jocul e terminat, false daca jocul continua
         std::cout << "\033[H";
 
         
@@ -200,6 +200,7 @@ void GameInterface::startGame() {
                 renderGame(gameData, playerId);
                 handleInput();
                 updateMap();
+                isGameRunning = !checkWinCondition();
             }
             else {
                 std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;
@@ -228,6 +229,31 @@ int GameInterface::getActivePlayers()
         }
     }
     return -1;
+}
+
+bool GameInterface::checkWinCondition()
+{
+    crow::json::wvalue jsonData;
+    jsonData["id"] = UserSession::getInstance().getUserId();
+    auto r = cpr::Get(
+        cpr::Url{ "http://localhost:18080/check_win_condition" },
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
+    );
+    if (r.status_code == 200) {
+        auto responseJson = crow::json::load(r.text);
+        if (responseJson && responseJson.has("win_condition")) {
+            bool winCondition = responseJson["win_condition"].i();
+            if (winCondition == 1) return false;
+            else return true;
+            //return winCondition; // true daca jocul e terminat, false daca jocul continua
+        }
+    }
+    else {
+        std::cerr << "Eroare: Răspunsul nu conține cheia 'win_condition'." << std::endl;
+        return false;
+    }
+    return false;
 }
 
 //void GameInterface::startGame() {

@@ -30,6 +30,7 @@ public:
 	void CreateGame();
 	void getActivePlayers();
 	void updateMap();
+	void checkWinCondition();
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;

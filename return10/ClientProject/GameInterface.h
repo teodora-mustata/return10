@@ -16,4 +16,5 @@ public:
     bool sendCommandToServer(const std::string& command);
     void displayStatus();
     int getActivePlayers();
+    bool checkWinCondition();
 };

@@ -55,7 +55,7 @@ public:
 private:
 	int m_id;
 	int m_score;
-	int m_lives;
+	int m_lives=3;
 	int m_crowns;
 	std::string m_name;
 	Coordinate m_position;

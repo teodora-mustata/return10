@@ -1,6 +1,6 @@
 ﻿#include "GameLogic.h"
 
-GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }
+GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }, gameRunning{ true }
 {
     map->setDifficulty(0);
 }
@@ -56,7 +56,7 @@ void GameLogic::startGame()
     while (gameRunning)
     {
         //updateBullets();
-        if (winCondition() == true) gameRunning = false;
+        if (winCondition() == true) gameRunning = false; // jocul e gata = gameRunning = false
     }
 }
 
@@ -488,9 +488,9 @@ bool GameLogic::winCondition()
         }
 
         if (aliveCount > 1) {
-            return false;
+            return false; // false = jocul mai continua
         }
     }
 
-    return (aliveCount <= 1);
+    return (aliveCount <= 1);  //true = jocul e gata
 }

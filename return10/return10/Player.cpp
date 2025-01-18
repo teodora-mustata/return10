@@ -9,11 +9,11 @@ Player::Player(std::string name, int startX, int startY) :
 	m_initial_position{ startX, startY },
 	m_position{ startX, startY } {}
 
-Player::Player(int id, std::string name, int score, int crowns, Gun gun, Coordinate spawnpoint) : m_id(id), m_name(name), m_score(score), m_crowns(crowns), m_gun(gun), m_initial_position(spawnpoint)
+Player::Player(int id, std::string name, int score, int crowns, Gun gun, Coordinate spawnpoint) : m_id(id), m_name(name), m_score(score), m_crowns(crowns), m_gun(gun), m_initial_position(spawnpoint), m_lives{3}
 {
 }
 
-Player::Player(int id, std::string name, int score, int crowns, Gun gun): m_id(id), m_name(name), m_score(score), m_crowns(crowns), m_gun(gun)
+Player::Player(int id, std::string name, int score, int crowns, Gun gun): m_id(id), m_name(name), m_score(score), m_crowns(crowns), m_gun(gun), m_lives{ 3 }
 {
 }
 

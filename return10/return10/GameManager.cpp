@@ -89,7 +89,7 @@ void GameManager::createNewGame()
             int id = m_lobbyPlayers[i];
             addPlayerToGame(id);
             removePlayerFromLobby(id); 
-            std::unique_ptr<Player> newPlayer = getPlayerFromID(id);
+            std::shared_ptr<Player> newPlayer = getPlayerFromID(id);
             if (newPlayer) {
                 newGame->addPlayer(*newPlayer);
             }
@@ -102,7 +102,7 @@ void GameManager::createNewGame()
         newGame->initializeScores();
         newGame->startGame();
         m_activeGames.push_back(newGame);
-        std::cout << "Created a new game! "<< std::endl;
+        CROW_LOG_INFO << "Created a new game! ";
     }
 }
 

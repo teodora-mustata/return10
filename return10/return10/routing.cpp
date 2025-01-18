@@ -53,6 +53,7 @@ void Routing::Run() {
     CreateGame();
     HandlePlayerCommand();
     updateMap();
+    checkWinCondition();
     m_app.port(18080).multithreaded().run();
 }
 
@@ -643,6 +644,48 @@ void Routing::updateMap() {
             game->updateBullets();
             
             res.code = 200;
+            res.end();
+        }
+        catch (const std::exception& e) {
+            res.code = 500;
+            res.body = std::string("Internal server error: ") + e.what();
+            res.end();
+        }
+            });
+}
+
+void Routing::checkWinCondition()
+{
+    CROW_ROUTE(m_app, "/check_win_condition")
+        .methods("GET"_method)([&](const crow::request& req, crow::response& res) {
+        try {
+            auto jsonData = crow::json::load(req.body);
+
+            if (!jsonData || !jsonData.has("id")) {
+                res.code = 400;
+                res.end();
+                return;
+            }
+
+            int userId = jsonData["id"].i();
+
+            auto game = m_games.getGameByPlayerId(userId);
+            if (!game) {
+                std::cerr << "Error: game pointer is null!" << std::endl;
+                res.code = 500;
+                res.body = "Internal server error: Game not found.";
+                res.end();
+                return;
+            }
+
+            int winCondition = game->winCondition();
+            std::cout << "Win condition: " << winCondition << std::endl;
+
+            crow::json::wvalue response;
+            response["win_condition"] = winCondition;
+
+            res.code = 200;
+            res.body = response.dump();
             res.end();
         }
         catch (const std::exception& e) {
