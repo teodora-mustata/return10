@@ -201,7 +201,7 @@ void GameInterface::startGame() {
                 renderGame(gameData, playerId);
                 handleInput();
                 updateMap();
-                isGameRunning = checkWinCondition();
+                //isGameRunning = checkWinCondition();
             }
             else {
                 std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;
@@ -250,7 +250,7 @@ bool GameInterface::checkWinCondition()
         }
     }
     else {
-        std::cerr << "Eroare: Răspunsul nu conține cheia 'win_condition'." << std::endl;
+        std::cerr << "Eroare: Raspunsul nu contine cheia 'win_condition'." << std::endl;
         return false;
     }
     return false;

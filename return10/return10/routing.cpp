@@ -914,10 +914,21 @@ void Routing::HandlePlayerCommand()
         }
         else if (command == "MOVE_RIGHT") {
             game->movePlayer(&currentPlayer, Direction::RIGHT);
+            
         }
-        else if (command == "SHOOT") {
+        /*else if (command == "SHOOT") {
             Direction dir = currentPlayer.GetFacingDirection();
             currentPlayer.shoot(dir);
+        }*/
+        else if (command == "SHOOT") {
+            Direction dir = currentPlayer.GetFacingDirection();
+            Coordinate nextPosition = game->getNextPosition(currentPlayer.GetPosition(), dir);
+            if (game->isInsideMap(nextPosition)) {
+                currentPlayer.shoot(dir);
+            }
+            else {
+                return crow::response(400, "Cannot shoot outside the map");
+            }
         }
         else {
             return crow::response(400, "Invalid command");

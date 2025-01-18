@@ -47,6 +47,9 @@ public:
     void processInput(int playerId, const std::string& command);
     void setState(GameState state);
     GameState getState() const;
+    bool isInsideMap(const Coordinate& position);
+    Coordinate getNextPosition(const Coordinate& currentPosition, Direction direction);
+
 private:
     //Map& map;
     std::shared_ptr<Map> map;
