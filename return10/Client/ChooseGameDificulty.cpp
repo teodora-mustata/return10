@@ -1,4 +1,4 @@
-#include "ChooseGameDificulty.h"
+﻿#include "ChooseGameDificulty.h"
 #include "MainMenuWidget.h"
 #include "StartGameWidget.h"
 #include<QApplication>
@@ -8,6 +8,8 @@ ChooseGameDificulty::ChooseGameDificulty(QWidget* parent, MainMenuWidget* mainMe
 {
     setupUI();
     this->setWindowTitle("Choose Difficulty");
+    // Crearea paginii StartGameWidget și transmiterea mainMenuWidget
+
 }
 
 ChooseGameDificulty::~ChooseGameDificulty() {}
@@ -15,37 +17,38 @@ ChooseGameDificulty::~ChooseGameDificulty() {}
 void ChooseGameDificulty::setupUI()
 {
     stackedWidget = new QStackedWidget(this);
-    //layout = new QVBoxLayout(this);
+  
 
-    QWidget* chooseGAmeDificultyWidget = new QWidget(this);
-    QVBoxLayout* chooseGAmeDificultyLayout = new QVBoxLayout(chooseGAmeDificultyWidget);
+    QWidget* chooseGameDificultyWidget = new QWidget(this);
+    QVBoxLayout* chooseGameDificultyLayout = new QVBoxLayout(chooseGameDificultyWidget);
+
 
 
     titleLabel = new QLabel("==== Choose Difficulty ====", this);
     titleLabel->setAlignment(Qt::AlignCenter);
-    chooseGAmeDificultyLayout->addWidget(titleLabel);
+    chooseGameDificultyLayout->addWidget(titleLabel);
 
     easyModeButton = new QPushButton("Easy", this);
-    chooseGAmeDificultyLayout->addWidget(easyModeButton);
+    chooseGameDificultyLayout->addWidget(easyModeButton);
     connect(easyModeButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_easyModeButton_clicked);
 
     mediumModeButton = new QPushButton("Medium", this);
-    chooseGAmeDificultyLayout->addWidget(mediumModeButton);
+    chooseGameDificultyLayout->addWidget(mediumModeButton);
     connect(mediumModeButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_mediumModeButton_clicked);
 
     hardModeButton = new QPushButton("Hard", this);
-    chooseGAmeDificultyLayout->addWidget(hardModeButton);
+    chooseGameDificultyLayout->addWidget(hardModeButton);
     connect(hardModeButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_hardModeButton_clicked);
 
     goBackButton = new QPushButton("Go Back", this);
-    chooseGAmeDificultyLayout->addWidget(goBackButton);
+    chooseGameDificultyLayout->addWidget(goBackButton);
     connect(goBackButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_goBackButton_clicked);
 
+    chooseGameDificultyWidget->setLayout(chooseGameDificultyLayout);
+    stackedWidget->addWidget(chooseGameDificultyWidget);
 
-    chooseGAmeDificultyWidget->setLayout(chooseGAmeDificultyLayout);
-    stackedWidget->addWidget(chooseGAmeDificultyWidget);
+    startGameWidgetPage = new StartGameWidget(nullptr, this, mainMenuWidget);  // Modificare aici
 
-    startGameWidgetPage = new StartGameWidget(nullptr, this);
     stackedWidget->addWidget(startGameWidgetPage);
 
     QVBoxLayout* chooseDificultyLayout = new QVBoxLayout(this);
@@ -58,6 +61,8 @@ void ChooseGameDificulty::on_easyModeButton_clicked()
     selectedDifficulty = 1;
     QMessageBox::information(this, "Difficulty", "Easy mode selected.");
     stackedWidget->setCurrentWidget(startGameWidgetPage);
+    // Verificăm widgetul curent
+    qDebug() << "Current widget after switching:" << stackedWidget->currentWidget();
 }
 
 void ChooseGameDificulty::on_mediumModeButton_clicked()
