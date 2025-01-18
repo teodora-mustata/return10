@@ -5,6 +5,30 @@ GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }, gameRunning{ true }
     map->setDifficulty(0);
 }
 
+// Implementarea funcțiilor
+Coordinate GameLogic::getNextPosition(const Coordinate& currentPosition, Direction direction) {
+    Coordinate nextPosition = currentPosition;
+    switch (direction) {
+    case Direction::UP:
+        nextPosition.i -= 1;
+        break;
+    case Direction::DOWN:
+        nextPosition.i += 1;
+        break;
+    case Direction::LEFT:
+        nextPosition.j -= 1;
+        break;
+    case Direction::RIGHT:
+        nextPosition.j += 1;
+        break;
+    }
+    return nextPosition;
+}
+
+bool GameLogic::isInsideMap(const Coordinate& position) {
+    return (position.j >= 0 && position.j < map->getWidth() && position.i >= 0 && position.i < map->getHeight());
+}
+
 void GameLogic::checkForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
     auto& cell = map->getCellType(pos.i, pos.j);
@@ -55,7 +79,8 @@ void GameLogic::startGame()
     startTime = std::chrono::steady_clock::now();
     while (gameRunning)
     {
-        //updateBullets();
+        //
+        // updateBullets();
         if (checkIfRunning() == true) gameRunning = false; // jocul e gata = gameRunning = false
     }
 }
@@ -310,6 +335,7 @@ void GameLogic::updateBullets() {
 
             if (!bullet->isActive()) continue; 
 
+            //moveBullet(GetMap(), player, &player.getGun());
             bullet->move();
 
             if (checkWallCollision(std::move(bullet))) {
