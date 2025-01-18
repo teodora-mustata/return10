@@ -78,6 +78,9 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
             else if (cell == 'S') {
                 std::cout << "\033[33mS \033[0m";  // Stun Trap (galben)
             }
+            else if (cell == '*') {
+                std::cout << "\033[33mS \033[0m";  // Stun Trap (galben)
+            }
         }
         std::cout << std::endl;
     }
@@ -208,7 +211,7 @@ void GameInterface::startGame() {
             break;
         }
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         //std::cout << "\033[2J\033[1;1H"; 
     }

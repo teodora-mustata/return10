@@ -628,7 +628,7 @@ void Routing::getActivePlayers()
 
 void Routing::updateMap() {
     CROW_ROUTE(m_app, "/update_map")
-        .methods(crow::HTTPMethod::POST)([&](const crow::request& req, crow::response& res) {
+        .methods("POST"_method)([&](const crow::request& req, crow::response& res) {
         try {
             auto jsonData = crow::json::load(req.body);
 

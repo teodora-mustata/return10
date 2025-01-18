@@ -122,9 +122,9 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     }
 }
 
-bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
+bool GameLogic::checkWallCollision(std::unique_ptr<Bullet> bullet) {
 
-    CellType cell = map.getCellType(bullet.getX(), bullet.getY());
+    CellType cell = map->getCellType(bullet->getX(), bullet->getY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         std::cout << "Wall detected at position (" << wall->getX() << ", "
             << wall->getY() << "). IsDestructible: "
@@ -149,20 +149,20 @@ bool GameLogic::checkWallCollision(Map& map, Bullet& bullet) {
             }
 
             std::cout << "Destroying wall and replacing with empty cell." << std::endl;
-            map.setCellType(bullet.getX(), bullet.getY(), std::monostate{});
-            bullet.deactivate();
+            map->setCellType(bullet->getX(), bullet->getY(), std::monostate{});
+            bullet->deactivate();
             std::cout << "Bullet deactivated after hitting a destructible wall." << std::endl;
             return true;
         }
         else {
             std::cout << "Wall is indestructible. Bullet deactivated." << std::endl;
-            bullet.deactivate();
+            bullet->deactivate();
             return true;
         }
     }
     else {
         std::cout << "No wall detected at bullet position ("
-            << bullet.getX() << ", " << bullet.getY() << ")." << std::endl;
+            << bullet->getX() << ", " << bullet->getY() << ")." << std::endl;
     }
 
     return false;
@@ -265,42 +265,111 @@ std::vector<std::string> GameLogic::convertMapToString() const
     return charMap;
 }
 
+//
+//void GameLogic::updateBullets() {
+//    for (auto& player : m_players) {
+//        // Parcurgem fiecare glonț tras de jucătorul curent
+//        auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
+//        for (size_t i = 0; i < bullets.size(); ++i) {
+//            auto& bullet = bullets[i];
+//
+//            if (!bullet.isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
+//
+//            bullet.move(); // Mutăm glonțul pe hartă
+//
+//            // Verificăm coliziunea cu zidurile
+//            if (checkWallCollision(std::make_unique<Bullet>(bullet))) {
+//                continue; // Dacă glonțul lovește un zid, îl distrugem
+//            }
+//
+//            // Verificăm coliziunea cu alți jucători
+//            for (auto& enemyPlayer : m_players) {
+//                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
+//                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
+//                }
+//            }
+//
+//            // Verificăm coliziunea între gloanțele diferitelor jucători
+//            for (size_t j = i + 1; j < bullets.size(); ++j) {
+//                auto& otherBullet = bullets[j];
+//                if (bullet.getX() == otherBullet.getX() && bullet.getY() == otherBullet.getY()) {
+//                    // Dacă două gloanțe se întâlnesc, le anulam
+//                    bullet.deactivate();
+//                    otherBullet.deactivate();
+//                }
+//            }
+//        }
+//    }
+//}
 
 void GameLogic::updateBullets() {
     for (auto& player : m_players) {
-        // Parcurgem fiecare glonț tras de jucătorul curent
         auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
         for (size_t i = 0; i < bullets.size(); ++i) {
-            auto& bullet = bullets[i];
+            auto bullet = std::make_unique<Bullet>(bullets[i]);
 
-            if (!bullet.isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
+            if (!bullet->isActive()) continue; 
 
-            bullet.move(); // Mutăm glonțul pe hartă
+            bullet->move();
 
-            // Verificăm coliziunea cu zidurile
-            if (checkWallCollision(*map, bullet)) {
-                continue; // Dacă glonțul lovește un zid, îl distrugem
+            if (checkWallCollision(std::move(bullet))) {
+                continue; 
             }
 
-            // Verificăm coliziunea cu alți jucători
             for (auto& enemyPlayer : m_players) {
-                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
-                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
+                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, *bullet)) {
+                    break; 
                 }
             }
 
-            // Verificăm coliziunea între gloanțele diferitelor jucători
             for (size_t j = i + 1; j < bullets.size(); ++j) {
-                auto& otherBullet = bullets[j];
-                if (bullet.getX() == otherBullet.getX() && bullet.getY() == otherBullet.getY()) {
-                    // Dacă două gloanțe se întâlnesc, le anulam
-                    bullet.deactivate();
-                    otherBullet.deactivate();
+                auto otherBullet = std::make_unique<Bullet>(bullets[j]);
+                if (bullet->getX() == otherBullet->getX() && bullet->getY() == otherBullet->getY()) {
+                    bullet->deactivate();
+                    otherBullet->deactivate();
                 }
             }
         }
     }
 }
+
+//
+//void GameLogic::updateBullets() {
+//    for (auto* player : m_players) {
+//        // Parcurgem fiecare glonț tras de jucătorul curent
+//        auto* bullets = &player->getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
+//        for (size_t i = 0; i < bullets->size(); ++i) {
+//            // Convertim fiecare glonț într-un unique_ptr
+//            auto bullet = std::make_unique<Bullet>((*bullets)[i]);
+//
+//            if (!bullet->isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
+//
+//            bullet->move(); // Mutăm glonțul pe hartă
+//
+//            // Verificăm coliziunea cu zidurile
+//            if (checkWallCollision(std::move(bullet))) {
+//                continue; // Dacă glonțul lovește un zid, îl distrugem
+//            }
+//
+//            // Verificăm coliziunea cu alți jucători
+//            for (auto* enemyPlayer : m_players) {
+//                if (player != enemyPlayer && checkPlayerCollision(*enemyPlayer, *bullet)) {
+//                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
+//                }
+//            }
+//
+//            // Verificăm coliziunea între gloanțele diferitelor jucători
+//            for (size_t j = i + 1; j < bullets->size(); ++j) {
+//                auto otherBullet = std::make_unique<Bullet>((*bullets)[j]);
+//                if (bullet->getX() == otherBullet->getX() && bullet->getY() == otherBullet->getY()) {
+//                    // Dacă două gloanțe se întâlnesc, le anulam
+//                    bullet->deactivate();
+//                    otherBullet->deactivate();
+//                }
+//            }
+//        }
+//    }
+//}
 
 
 std::vector<Player>& GameLogic::getPlayers()

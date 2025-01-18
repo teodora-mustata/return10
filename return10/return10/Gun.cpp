@@ -45,8 +45,8 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
     newBullet.setActive(true);
 
     m_firedBullets.push_back(newBullet);
-    // std::cout << "Bullet fired at position (" << bulletX << ", " << bulletY << ")" << std::endl;
-    m_lastFiredTime = std::chrono::steady_clock::now();
+    std::cout << "bullet fired at position (" << bulletX << ", " << bulletY << ")" << std::endl;
+    //m_lastFiredTime = std::chrono::steady_clock::now();
 
     return true;
 }
