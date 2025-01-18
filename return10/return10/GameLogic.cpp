@@ -135,12 +135,19 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().i;
     int targetY = target.GetPosition().j;
 
-    if (bullet.getX() == targetX && bullet.getY() == targetY && target.GetLives() > 1) {
-        target.resetPosition();
-        bullet.deactivate();
-        target.loseLife();
-        return true;
-    }
+    if (bullet.getX() == targetX && bullet.getY() == targetY && bullet.isActive() == true)
+        if (target.GetLives() > 1) {
+            target.resetPosition();
+            bullet.deactivate();
+            target.loseLife();
+            return true;
+        }
+        else if (target.GetLives() == 1)
+        {
+            bullet.deactivate();
+            target.loseLife();
+            return true;
+        }
     else {
         return false;
     }
@@ -203,7 +210,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
 
             for (const auto& player : m_players) {
-                if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex) 
+                if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex && player.GetLives()>0) 
                 {
                     std::cout << "Player " << player.GetId() << " found at position: " << rowIndex << ", " << colIndex << std::endl;
                     rowStr.push_back('P');
@@ -217,7 +224,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
                     for (const auto& bullet : player.getGun().getFiredBullets())
                     {
                         //std::cout << "CONVERT MAP TO STRING: Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
-                        if (bullet.getX() == rowIndex && bullet.getY() == colIndex) {
+                        if (bullet.getX() == rowIndex && bullet.getY() == colIndex && bullet.isActive()==true) {
                             rowStr.push_back('*');
                             cellOverridden = true;
                             break;
@@ -511,7 +518,7 @@ bool GameLogic::checkIfRunning()
             aliveCount++;
         }
     }
-    if (aliveCount > 1) {
+    if (aliveCount > 1) { // mai mult de 1 player in viata
         return true; //true = jocul continua
     }
 
