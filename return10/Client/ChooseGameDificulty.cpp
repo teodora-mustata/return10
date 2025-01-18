@@ -1,28 +1,21 @@
 ﻿#include "ChooseGameDificulty.h"
 #include "MainMenuWidget.h"
 #include "StartGameWidget.h"
-#include<QApplication>
+#include "UserSession.h"
 
 ChooseGameDificulty::ChooseGameDificulty(QWidget* parent, MainMenuWidget* mainMenu)
-    : QWidget(parent), mainMenuWidget(mainMenu), selectedDifficulty(0)
-{
+    : QWidget(parent), mainMenuWidget(mainMenu), selectedDifficulty(0) {
     setupUI();
     this->setWindowTitle("Choose Difficulty");
-    // Crearea paginii StartGameWidget și transmiterea mainMenuWidget
-
 }
 
 ChooseGameDificulty::~ChooseGameDificulty() {}
 
-void ChooseGameDificulty::setupUI()
-{
+void ChooseGameDificulty::setupUI() {
     stackedWidget = new QStackedWidget(this);
-  
 
     QWidget* chooseGameDificultyWidget = new QWidget(this);
     QVBoxLayout* chooseGameDificultyLayout = new QVBoxLayout(chooseGameDificultyWidget);
-
-
 
     titleLabel = new QLabel("==== Choose Difficulty ====", this);
     titleLabel->setAlignment(Qt::AlignCenter);
@@ -40,6 +33,10 @@ void ChooseGameDificulty::setupUI()
     chooseGameDificultyLayout->addWidget(hardModeButton);
     connect(hardModeButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_hardModeButton_clicked);
 
+    readyToPlayButton = new QPushButton("Ready To Play", this);
+    chooseGameDificultyLayout->addWidget(readyToPlayButton);
+    connect(readyToPlayButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_readyToPlayButton_clicked);
+
     goBackButton = new QPushButton("Go Back", this);
     chooseGameDificultyLayout->addWidget(goBackButton);
     connect(goBackButton, &QPushButton::clicked, this, &ChooseGameDificulty::on_goBackButton_clicked);
@@ -47,54 +44,53 @@ void ChooseGameDificulty::setupUI()
     chooseGameDificultyWidget->setLayout(chooseGameDificultyLayout);
     stackedWidget->addWidget(chooseGameDificultyWidget);
 
-    startGameWidgetPage = new StartGameWidget(nullptr, this, mainMenuWidget);  // Modificare aici
-
-    stackedWidget->addWidget(startGameWidgetPage);
-
-    QVBoxLayout* chooseDificultyLayout = new QVBoxLayout(this);
-    chooseDificultyLayout->addWidget(stackedWidget);
-    setLayout(chooseDificultyLayout);
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+    mainLayout->addWidget(stackedWidget);
+    setLayout(mainLayout);
 }
 
-void ChooseGameDificulty::on_easyModeButton_clicked()
-{
+void ChooseGameDificulty::on_easyModeButton_clicked() {
     selectedDifficulty = 1;
+    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Easy mode selected.");
-    stackedWidget->setCurrentWidget(startGameWidgetPage);
-    // Verificăm widgetul curent
-    qDebug() << "Current widget after switching:" << stackedWidget->currentWidget();
 }
 
-void ChooseGameDificulty::on_mediumModeButton_clicked()
-{
+void ChooseGameDificulty::on_mediumModeButton_clicked() {
     selectedDifficulty = 2;
+    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Medium mode selected.");
-    stackedWidget->setCurrentWidget(startGameWidgetPage);
-
 }
 
-void ChooseGameDificulty::on_hardModeButton_clicked()
-{
+void ChooseGameDificulty::on_hardModeButton_clicked() {
     selectedDifficulty = 3;
+    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Hard mode selected.");
-    stackedWidget->setCurrentWidget(startGameWidgetPage);
-
 }
 
-void ChooseGameDificulty::on_goBackButton_clicked()
-{
+void ChooseGameDificulty::on_goBackButton_clicked() {
     if (mainMenuWidget) {
         mainMenuWidget->stackedWidget->setCurrentIndex(0);
     }
+}
+
+void ChooseGameDificulty::on_readyToPlayButton_clicked() {
+    if (selectedDifficulty == 0) {
+        QMessageBox::information(this, "Game", "First you have to choose difficulty.");
+    }
     else {
-        QMessageBox::information(this, "Home", "Main menu is not available.");
+        emit readyToPlay(); // Emit signal to start the game
     }
 }
 
-bool ChooseGameDificulty::sendDifficultyToServer(int difficulty)
-{
+bool ChooseGameDificulty::createGame() {
+    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/start_game" });
+    return response.status_code == 200;
+}
+
+bool ChooseGameDificulty::sendDifficultyToServer(int difficulty) {
     crow::json::wvalue jsonData;
     jsonData["difficulty"] = difficulty;
+    jsonData["playerId"] = UserSession::getInstance().getUserId();
 
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/send_difficulty" },
@@ -102,12 +98,5 @@ bool ChooseGameDificulty::sendDifficultyToServer(int difficulty)
         cpr::Body{ jsonData.dump() }
     );
 
-    if (response.status_code == 200) {
-        std::cout << "Difficulty sent successfully!\n";
-        return true;
-    }
-    else {
-        std::cout << "Failed to send difficulty to server. Try again.\n";
-    }
-    return false;
+    return response.status_code == 200;
 }

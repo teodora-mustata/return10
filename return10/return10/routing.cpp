@@ -740,6 +740,7 @@ void Routing::checkWinCondition()
 
 void Routing::SetDifficulty()
 {
+http://localhost:18080/send_difficulty
     CROW_ROUTE(m_app, "/send_difficulty").methods(crow::HTTPMethod::POST)
         ([&](const crow::request& req, crow::response& res) {
         auto jsonData = crow::json::load(req.body);

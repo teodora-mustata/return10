@@ -1,23 +1,33 @@
 #pragma once
 
 #include <QWidget>
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QLabel>
+#include <QVBoxLayout>
+#include <QTimer>
+#include <QKeyEvent>
+#include <crow/json.h>
 
 class ChooseGameDificulty;
-class MainMenuWidget;
 
-class StartGameWidget : public QWidget
-{
-	Q_OBJECT//go back to main menu
+class StartGameWidget : public QWidget {
+    Q_OBJECT
 
 public:
-	StartGameWidget(QWidget *parent = nullptr,ChooseGameDificulty* chooseGameDificuly=nullptr,MainMenuWidget* mainMenuWidget=nullptr);
-	~StartGameWidget();
+    StartGameWidget(QWidget* parent = nullptr, ChooseGameDificulty* chooseGameDificulty = nullptr);
+    ~StartGameWidget();
+    void startGame();
+    void renderGame(const crow::json::rvalue& gameData, int playerId);
+
+protected:
+    void keyPressEvent(QKeyEvent* event) override;
 
 private:
-	MainMenuWidget* mainMenuWidget;
-	ChooseGameDificulty* chooseGameDificultyWidget;
-	void setupUI();
+    QLabel* imageLabel;
+    int playerId;
+    QTimer* gameTimer;
+
+    ChooseGameDificulty* chooseGameDificultyWidget;
+
+    void sendCommandToServer(const QString& command);
+    void setupUI();
 };
