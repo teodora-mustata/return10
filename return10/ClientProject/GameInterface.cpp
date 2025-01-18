@@ -79,7 +79,7 @@ void GameInterface::renderGame(const crow::json::rvalue& gameData, int playerId)
                 std::cout << "\033[33mS \033[0m";  // Stun Trap (galben)
             }
             else if (cell == '*') {
-                std::cout << "\033[33mS \033[0m";  // Stun Trap (galben)
+                std::cout << "\033[33m* \033[0m";  // Bullet (galben)
             }
         }
         std::cout << std::endl;
@@ -198,9 +198,10 @@ void GameInterface::startGame() {
             crow::json::rvalue gameData = crow::json::load(r.text);
             //CROW_LOG_INFO << "Received response: " << r.text;
             if (gameData.has("map") && gameData["map"].t() == crow::json::type::List) {
+                updateMap();
                 renderGame(gameData, playerId);
                 handleInput();
-                updateMap();
+                //updateMap();
                 //isGameRunning = checkWinCondition();
             }
             else {
@@ -213,7 +214,7 @@ void GameInterface::startGame() {
             break;
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
         //std::cout << "\033[2J\033[1;1H"; 
     }

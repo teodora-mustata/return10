@@ -26,7 +26,7 @@ public:
 	int GetLives()const;
 	Coordinate GetPosition() const;
 	Gun& getGun();
-	Gun getGun() const;
+	const Gun& getGun() const;
 	int GetId() const;
 	Direction GetFacingDirection();
 	Coordinate getInitialPosition() const;

@@ -5,7 +5,6 @@ GameLogic::GameLogic(std::shared_ptr<Map> map) : map{ map }, gameRunning{ true }
     map->setDifficulty(0);
 }
 
-// Implementarea funcțiilor
 Coordinate GameLogic::getNextPosition(const Coordinate& currentPosition, Direction direction) {
     Coordinate nextPosition = currentPosition;
     switch (direction) {
@@ -81,7 +80,7 @@ void GameLogic::startGame()
     {
         //
         // updateBullets();
-        if (checkIfRunning() == true) gameRunning = false; // jocul e gata = gameRunning = false
+        if (checkIfRunning() == true) gameRunning = false; // jocul e gata
     }
 }
 
@@ -147,9 +146,9 @@ bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
     }
 }
 
-bool GameLogic::checkWallCollision(std::unique_ptr<Bullet> bullet) {
+bool GameLogic::checkWallCollision(Bullet& bullet) {
 
-    CellType cell = map->getCellType(bullet->getX(), bullet->getY());
+    CellType cell = map->getCellType(bullet.getX(), bullet.getY());
     if (auto* wall = std::get_if<Wall>(&cell)) {
         std::cout << "Wall detected at position (" << wall->getX() << ", "
             << wall->getY() << "). IsDestructible: "
@@ -174,20 +173,20 @@ bool GameLogic::checkWallCollision(std::unique_ptr<Bullet> bullet) {
             }
 
             std::cout << "Destroying wall and replacing with empty cell." << std::endl;
-            map->setCellType(bullet->getX(), bullet->getY(), std::monostate{});
-            bullet->deactivate();
+            map->setCellType(bullet.getX(), bullet.getY(), std::monostate{});
+            bullet.deactivate();
             std::cout << "Bullet deactivated after hitting a destructible wall." << std::endl;
             return true;
         }
         else {
             std::cout << "Wall is indestructible. Bullet deactivated." << std::endl;
-            bullet->deactivate();
+            bullet.deactivate();
             return true;
         }
     }
     else {
         std::cout << "No wall detected at bullet position ("
-            << bullet->getX() << ", " << bullet->getY() << ")." << std::endl;
+            << bullet.getX() << ", " << bullet.getY() << ")." << std::endl;
     }
 
     return false;
@@ -199,7 +198,6 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
     for (int rowIndex = 0; rowIndex < map->getDimensions().first; ++rowIndex) {
         std::string rowStr;
-
         for (int colIndex = 0; colIndex < map->getDimensions().second; ++colIndex) {
             bool cellOverridden = false;
 
@@ -215,10 +213,10 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
                 if (cellOverridden==false)
                 {
-                    // std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
+                    //std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
                     for (const auto& bullet : player.getGun().getFiredBullets())
                     {
-                        // std::cout << "Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
+                        //std::cout << "CONVERT MAP TO STRING: Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
                         if (bullet.getX() == rowIndex && bullet.getY() == colIndex) {
                             rowStr.push_back('*');
                             cellOverridden = true;
@@ -230,7 +228,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
             }
 
           
-            if (!cellOverridden) {
+            if (cellOverridden==false) {
                 auto trapInfo = map->getTrapInfo(rowIndex, colIndex);
                 
                 if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
@@ -261,7 +259,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
                  
             }
 
-            if (!cellOverridden) {
+            if (cellOverridden==false) {
                 const auto& cell = map->getCellType(rowIndex, colIndex);
                 if (std::holds_alternative<std::monostate>(cell)) {
                     rowStr.push_back('0');
@@ -329,29 +327,29 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
 void GameLogic::updateBullets() {
     for (auto& player : m_players) {
-        auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
+        auto& bullets = player.getGun().getFiredBullets();
         for (size_t i = 0; i < bullets.size(); ++i) {
-            auto bullet = std::make_unique<Bullet>(bullets[i]);
+            auto& bullet = bullets[i];
 
-            if (!bullet->isActive()) continue; 
+            if (!bullet.isActive()) continue; 
 
             //moveBullet(GetMap(), player, &player.getGun());
-            bullet->move();
+            bullet.move();
 
-            if (checkWallCollision(std::move(bullet))) {
-                continue; 
+            if (checkWallCollision(bullet)) {
+                break;
             }
 
             for (auto& enemyPlayer : m_players) {
-                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, *bullet)) {
+                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
                     break; 
                 }
             }
 
             for (size_t j = i + 1; j < bullets.size(); ++j) {
                 auto otherBullet = std::make_unique<Bullet>(bullets[j]);
-                if (bullet->getX() == otherBullet->getX() && bullet->getY() == otherBullet->getY()) {
-                    bullet->deactivate();
+                if (bullet.getX() == otherBullet->getX() && bullet.getY() == otherBullet->getY()) {
+                    bullet.deactivate();
                     otherBullet->deactivate();
                 }
             }

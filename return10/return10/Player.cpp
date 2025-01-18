@@ -127,8 +127,7 @@ Gun& Player::getGun() {
 	return m_gun; 
 }
 
-Gun Player::getGun() const
-{
+const Gun& Player::getGun() const {
 	return m_gun;
 }
 
