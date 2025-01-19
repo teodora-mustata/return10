@@ -33,14 +33,14 @@ public:
     const Map& GetMap() const;
     Map& GetMap();
 
-    bool checkPlayerCollision(Player& target, Bullet& bullet);
+    bool checkPlayerCollision(Player& owner, Player& target, Bullet& bullet);
     bool checkWallCollision(Bullet& bullet);
     std::vector<std::string> convertMapToString() const;
 
     void moveBullet(Map& map, Player& target, Gun* bullets);
     void movePlayer(Player *player, Direction direction);
 
-    void startGame();
+    //void startGame();
     bool isRunning() const;
     bool checkIfRunning();
 
@@ -54,6 +54,7 @@ private:
     //Map& map;
     std::shared_ptr<Map> map;
     std::vector<Player> m_players;
+    std::vector<std::shared_ptr<Player>> m_playersInDeathOrder;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
     GameState m_gameState;

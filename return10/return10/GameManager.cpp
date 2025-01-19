@@ -96,13 +96,17 @@ void GameManager::createNewGame()
             else {
                 std::cerr << "Error: Failed to retrieve player with ID " << id << "\n";
             }
-            //newGame->addPlayer(*newPlayer);
         }
         newGame->initializePlayers();
         newGame->initializeScores();
-        newGame->startGame();
-        m_activeGames.push_back(newGame);
-        CROW_LOG_INFO << "Created a new game! ";
+        //newGame->startGame();
+        if (newGame) {
+            m_activeGames.push_back(newGame);
+            CROW_LOG_INFO << "Created a new game!";
+        }
+        else {
+            std::cerr << "Error: Failed to create new game!" << std::endl;
+        }
     }
 }
 
@@ -173,10 +177,10 @@ std::vector<std::shared_ptr<GameLogic>> GameManager::getActiveGames()
     return m_activeGames;
 }
 
-void GameManager::startGame(int gameId)
-{
-    m_activeGames[gameId]->startGame();
-}
+//void GameManager::startGame(int gameId)
+//{
+//    m_activeGames[gameId]->startGame();
+//}
 
 
 std::shared_ptr<GameLogic> GameManager::getGameByPlayerId(int playerId)

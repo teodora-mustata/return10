@@ -33,13 +33,13 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
     int bulletX = playerX;
     int bulletY = playerY;
 
-    switch (playerDirection) {
+    /*switch (playerDirection) {
     case Direction::UP: bulletX -= 1; break;
     case Direction::DOWN: bulletX += 1; break;
     case Direction::LEFT: bulletY -= 1; break;
     case Direction::RIGHT: bulletY += 1; break;
     default: break;
-    }
+    }*/
     
     Bullet newBullet(bulletX, bulletY, playerDirection, m_bulletSpeed);
     newBullet.setActive(true);

@@ -73,16 +73,24 @@ void GameLogic::initializeScores()
     }
 }
 
-void GameLogic::startGame()
-{
-    startTime = std::chrono::steady_clock::now();
-    while (gameRunning)
-    {
-        //
-        // updateBullets();
-        if (checkIfRunning() == true) gameRunning = false; // jocul e gata
-    }
-}
+//void GameLogic::startGame()
+//{
+//    startTime = std::chrono::steady_clock::now();
+//    while (gameRunning)
+//    {
+//        if (checkIfRunning() == false)
+//        {
+//            m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addCrowns(2);
+//            m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addScore(200);
+//            if (m_playersInDeathOrder.size() >= 2)
+//            {
+//                m_playersInDeathOrder[m_playersInDeathOrder.size() - 2]->addCrowns(1);
+//            }
+//            gameRunning = false; // jocul e gata
+//
+//        }
+//    }
+//}
 
 void GameLogic::applyDamage(Bomb bomb)
 {
@@ -131,21 +139,24 @@ void GameLogic::addPlayer(Player player)
 
 //Bullet
 
-bool GameLogic::checkPlayerCollision(Player& target, Bullet& bullet) {
+bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().i;
     int targetY = target.GetPosition().j;
 
     if (bullet.getX() == targetX && bullet.getY() == targetY && bullet.isActive() == true)
         if (target.GetLives() > 1) {
             target.resetPosition();
-            bullet.deactivate();
             target.loseLife();
+            owner.addScore(100);
+            bullet.deactivate();
             return true;
         }
         else if (target.GetLives() == 1)
         {
-            bullet.deactivate();
+            m_playersInDeathOrder.push_back(std::make_shared<Player>(target));
+            owner.addScore(100);
             target.loseLife();
+            bullet.deactivate();
             return true;
         }
     else {
@@ -348,7 +359,7 @@ void GameLogic::updateBullets() {
             }
 
             for (auto& enemyPlayer : m_players) {
-                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
+                if (&player != &enemyPlayer && checkPlayerCollision(player, enemyPlayer, bullet)) {
                     break; 
                 }
             }
@@ -488,18 +499,21 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 
     if (newX < 0 || newX >= dimensions.first || newY < 0 || newY >= dimensions.second) {
         std::cout << "Out of bounds! Movement aborted.\n";
+        player->SetFacingDirection(direction);
         return;
     }
 
     if (std::holds_alternative<Wall>(map->getBoard()[newX][newY]))
     {
         std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
+        player->SetFacingDirection(direction);
         return;
     }
 
-    for (const auto& player : m_players) {
-        if (player.GetPosition().i == newX && player.GetPosition().j == newY) {
+    for (const auto& p : m_players) {
+        if (p.GetPosition().i == newX && p.GetPosition().j == newY) {
             std::cout << "Hit a player at (" << newX << ", " << newY << "). Movement aborted.\n";
+            player->SetFacingDirection(direction);
             return;
         }
     }
@@ -512,15 +526,23 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 bool GameLogic::checkIfRunning()
 {
     int aliveCount = 0;
+    std::shared_ptr<Player> lastPlayer = nullptr;
 
-    for (const auto& player : m_players) {
+    for (auto& player : m_players) {
         if (player.IsAlive()) {
             aliveCount++;
+            lastPlayer = std::make_shared<Player>(player);
         }
     }
-    if (aliveCount > 1) { // mai mult de 1 player in viata
-        return true; //true = jocul continua
+
+    if (aliveCount > 1) { // Mai mult de 1 player în viață
+        return true; // Jocul continuă
     }
 
-    return false;  // false = jocul nu mai continua
+    if (aliveCount == 1 && lastPlayer != nullptr) {
+        m_playersInDeathOrder.push_back(lastPlayer);
+        std::cout << "Winner: " << lastPlayer->GetName() << std::endl;
+    }
+
+    return false; // Jocul nu mai continuă
 }

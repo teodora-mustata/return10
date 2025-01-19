@@ -95,7 +95,6 @@ bool Player::operator==(const Player& other)
 void Player::shoot(Direction direction)
 {
 	m_gun.fire(m_position.i, m_position.j, direction);
-	//TO DO: check if the bullet collided with any player, add the points and remove the health points :)
 }
 
 std::string Player::GetName() const
