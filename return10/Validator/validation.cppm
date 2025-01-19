@@ -1,10 +1,10 @@
-export module validation; 
-import <string_view>;      
-import <string>;           
-import <regex>;            
+export module validation;
+import <string>;
 
-export class __declspec(dllexport) Validator {
+
+export class __declspec(dllexport) Validator
+{
 public:
-    static bool ValidatePassword(std::string_view password);
-    static bool ValidateUserInput(std::string_view input);
+	bool validatePassword(const std::string& password);
+	bool validateUserInput(const char& input);
 };
