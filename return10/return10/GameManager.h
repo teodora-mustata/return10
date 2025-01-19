@@ -9,6 +9,7 @@ class GameManager
 {
 public:
 	static GameManager& getInstance(GameStorage& storage);
+	void updatePlayerScore(Player player);
 	void sortLobbyPlayers();
 	void addPlayerToLobby(int playerId);
 	void removePlayerFromLobby(int playerId);

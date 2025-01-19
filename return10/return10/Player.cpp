@@ -229,6 +229,7 @@ void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::ch
 	m_immobilizedDuration = duration;
 }
 
+
 void Player::UpdateStatus(float deltaTime) {
 
 	if (m_isImmobilized) {

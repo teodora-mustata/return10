@@ -474,11 +474,101 @@ void GameLogic::moveBullet(Map& map, Player& target, Gun* bullets)
     }
 }
 
+//void GameLogic::movePlayer(Player* player, Direction direction)
+//{
+//    if (player == nullptr)
+//    {
+//        std::cout << "Player is null in movePlayer\n";
+//        return;
+//    }
+//
+//    // Actualizează statutul jucătorului
+//    player->UpdateStatus(0); // Actualizează statusul, deltaTime poate fi calculat în funcție de implementarea ta
+//
+//    if () {
+//        std::cout << "Player is immobilized and cannot move.\n";
+//        return;
+//    }
+//
+//    auto [currentX, currentY] = player->GetPosition();
+//    std::cout << "Current position: (" << currentX << ", " << currentY << ")\n";
+//
+//    int newX = currentX;
+//    int newY = currentY;
+//
+//    switch (direction) {
+//    case Direction::UP:    newX--; break;
+//    case Direction::DOWN:  newX++; break;
+//    case Direction::LEFT:  newY--; break;
+//    case Direction::RIGHT: newY++; break;
+//    }
+//
+//    auto dimensions = map->getDimensions();
+//    std::cout << "Attempting to move to: (" << newX << ", " << newY << ")\n";
+//    std::cout << "Map dimensions: (" << dimensions.first << ", " << dimensions.second << ")\n";
+//
+//    if (newX < 0 || newX >= dimensions.first || newY < 0 || newY >= dimensions.second) {
+//        std::cout << "Out of bounds! Movement aborted.\n";
+//        player->SetFacingDirection(direction);
+//        return;
+//    }
+//
+//    if (std::holds_alternative<Wall>(map->getBoard()[newX][newY]))
+//    {
+//        std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
+//        player->SetFacingDirection(direction);
+//        return;
+//    }
+//
+//    for (const auto& p : m_players) {
+//        if (p.GetPosition().i == newX && p.GetPosition().j == newY) {
+//            std::cout << "Hit a player at (" << newX << ", " << newY << "). Movement aborted.\n";
+//            player->SetFacingDirection(direction);
+//            return;
+//        }
+//    }
+// 
+//    //// Adaugă metoda Immobilize în clasa Player
+//    //void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
+//    //    m_isImmobilized = true;
+//    //    m_immobilizedStartTime = startTime;
+//    //    m_immobilizedDuration = duration;
+//    //}
+//    // Verifică dacă jucătorul se mută pe un CellType StunTrap
+//    player->move(direction);
+//    std::cout << "Player moved successfully.\n";
+//    CellType cellType = map->getCellType(newX, newY);
+//    if (std::holds_alternative<StunTrap>(cellType)) {
+//        std::cout << "Player is immobilized at (" << newX << ", " << newY << ").\n";
+//        StunTrap trap(newX, newY, 5);
+//        trap.activateEffect(*player);
+//        //player->Immobilize(std::chrono::steady_clock::now(), std::chrono::seconds(5));
+//    }
+//    CellType cellType2 = map->getCellType(newX, newY);
+//    if (std::holds_alternative<DisableGunTrap>(cellType)) {
+//        std::cout << "Player is immobilized at (" << newX << ", " << newY << ").\n";
+//        DisableGunTrap trap(newX,newY,5);
+//        trap.activateEffect(*player);
+//    }
+//
+//    /*player->move(direction);
+//    std::cout << "Player moved successfully.\n";*/
+//}
+
 void GameLogic::movePlayer(Player* player, Direction direction)
 {
     if (player == nullptr)
     {
         std::cout << "Player is null in movePlayer\n";
+        return;
+    }
+
+    // Actualizează statutul jucătorului
+    player->UpdateStatus(0); // Actualizează statusul, deltaTime poate fi calculat în funcție de implementarea ta
+
+    // Verifică dacă jucătorul este imobilizat
+    if (player->IsImmobilized()) {
+        std::cout << "Player is immobilized and cannot move.\n";
         return;
     }
 
@@ -520,8 +610,46 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         }
     }
 
+    // Mută jucătorul
     player->move(direction);
     std::cout << "Player moved successfully.\n";
+
+    // Verifică dacă jucătorul se mută pe un CellType care este o capcană și activează efectul acesteia
+    CellType cellType = map->getCellType(newX, newY);
+
+    if (std::holds_alternative<StunTrap>(cellType)) {
+        //StunTrap trap(newX,newY,5);
+        StunTrap& trap = std::get<StunTrap>(cellType);
+        if (trap.IsActive()) {
+            trap.activateEffect(*player);
+            trap.SetState(false);
+            std::cout << "Player has been immobilized at (" << newX << ", " << newY << ").\n";
+        }
+    }
+
+    if (std::holds_alternative<DisableGunTrap>(cellType)) {
+        DisableGunTrap& trap = std::get<DisableGunTrap>(cellType);
+        //DisableGunTrap trap(newX,newY,5);
+        if (trap.IsActive()) {
+            trap.activateEffect(*player);
+            trap.SetState(false);
+            std::cout << "Player's gun has been disabled at (" << newX << ", " << newY << ").\n";
+        }
+    }
+
+    if (std::holds_alternative<TeleportTrap>(cellType)) {
+        TeleportTrap& trap = std::get<TeleportTrap>(cellType);
+        //DisableGunTrap trap(newX,newY,5);
+        if (trap.IsActive()) {
+            trap.activateEffect(*player);
+            trap.SetState(false);
+            std::cout << "Player's gun has been disabled at (" << newX << ", " << newY << ").\n";
+        }
+    }
+
+
+    // Actualizează starea armei
+    player->getGun().updateJammed();
 }
 
 
