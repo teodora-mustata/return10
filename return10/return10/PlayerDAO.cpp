@@ -9,62 +9,62 @@ PlayerDAO::PlayerDAO(std::string name, std::string password): m_name(name), m_pa
 {
 }
 
-std::string PlayerDAO::GetName() const
+std::string PlayerDAO::getName() const
 {
 	return m_name;
 }
 
-int PlayerDAO::GetCrowns() const
+int PlayerDAO::getCrowns() const
 {
 	return m_crowns;
 }
 
-int PlayerDAO::GetScore() const
+int PlayerDAO::getScore() const
 {
 	return m_score;
 }
 
-std::string PlayerDAO::GetPassword() const
+std::string PlayerDAO::getPassword() const
 {
 	return m_password;
 }
 
-int PlayerDAO::GetId() const
+int PlayerDAO::getId() const
 {
 	return m_id;
 }
 
-int PlayerDAO::GetGunId() const
+int PlayerDAO::getGunId() const
 {
 	return m_gunId;
 }
 
-void PlayerDAO::SetId(int id)
+void PlayerDAO::setId(int id)
 {
 	this->m_id = id;
 }
 
-void PlayerDAO::SetName(std::string name) 
+void PlayerDAO::setName(std::string name) 
 {
 	this->m_name = name;
 }
 
-void PlayerDAO::SetCrowns(int crowns)
+void PlayerDAO::setCrowns(int crowns)
 {
 	this->m_crowns = crowns;
 }
 
-void PlayerDAO::SetScore(int score)
+void PlayerDAO::setScore(int score)
 {
 	this->m_score = score;
 }
 
-void PlayerDAO::SetPassword(std::string password)
+void PlayerDAO::setPassword(std::string password)
 {
 	this->m_password = password;
 }
 
-void PlayerDAO::SetGunId(int gunId)
+void PlayerDAO::setGunId(int gunId)
 {
 	this->m_gunId = gunId;
 }

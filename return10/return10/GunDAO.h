@@ -3,13 +3,13 @@
 class GunDAO 
 {
 public:
-    int GetId() const;
-    double GetFireRate() const;
-    double GetBulletSpeed() const;
+    int getId() const;
+    double getFireRate() const;
+    double getBulletSpeed() const;
 
-    void SetId(int id);
-    void SetFireRate(double firingRate);
-    void SetBulletSpeed(double bulletSpeed);
+    void setId(int id);
+    void setFireRate(double firingRate);
+    void setBulletSpeed(double bulletSpeed);
 
 private:
     int m_id;

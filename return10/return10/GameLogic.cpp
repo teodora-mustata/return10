@@ -29,7 +29,7 @@ bool GameLogic::isInsideMap(const Coordinate& position) {
 }
 
 void GameLogic::checkForTraps(Player& player) {
-    Coordinate pos = player.GetPosition();
+    Coordinate pos = player.getPosition();
     auto& cell = map->getCellType(pos.i, pos.j);
 
     std::visit(
@@ -81,8 +81,8 @@ void GameLogic::applyDamage(Bomb bomb)
 
         for (Player &player : getPlayers())
         {
-            int playerXCoord = player.GetPosition().i;
-            int playerYCoord = player.GetPosition().j;
+            int playerXCoord = player.getPosition().i;
+            int playerYCoord = player.getPosition().j;
             if (playerXCoord == x && playerYCoord == y)
             {
                 player.loseLife();
@@ -117,11 +117,11 @@ void GameLogic::addPlayer(Player player)
 }
 
 bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bullet) {
-    int targetX = target.GetPosition().i;
-    int targetY = target.GetPosition().j;
+    int targetX = target.getPosition().i;
+    int targetY = target.getPosition().j;
 
     if (bullet.getX() == targetX && bullet.getY() == targetY && bullet.isActive() == true)
-        if (target.GetLives() > 1) {
+        if (target.getLives() > 1) {
             target.resetPosition();
             target.loseLife();
             owner.addScore(100);
@@ -129,7 +129,7 @@ bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bull
             bullet.deactivate();
             return true;
         }
-        else if (target.GetLives() == 1)
+        else if (target.getLives() == 1)
         {
             m_playersInDeathOrder.push_back(&target);
             owner.addScore(100);
@@ -200,9 +200,9 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
 
             for (const auto& player : m_players) {
-                if (player.GetPosition().i == rowIndex && player.GetPosition().j == colIndex && player.GetLives()>0) 
+                if (player.getPosition().i == rowIndex && player.getPosition().j == colIndex && player.getLives()>0) 
                 {
-                    std::cout << "Player " << player.GetId() << " found at position: " << rowIndex << ", " << colIndex << std::endl;
+                    std::cout << "Player " << player.getId() << " found at position: " << rowIndex << ", " << colIndex << std::endl;
                     rowStr.push_back('P');
                     cellOverridden = true;
                     break; 
@@ -371,14 +371,14 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         return;
     }
 
-    player->UpdateStatus(0); 
+    player->updateStatus(0); 
 
-    if (player->IsImmobilized()) {
+    if (player->isImmobilized()) {
         std::cout << "Player is immobilized and cannot move.\n";
         return;
     }
 
-    auto [currentX, currentY] = player->GetPosition();
+    auto [currentX, currentY] = player->getPosition();
     std::cout << "Current position: (" << currentX << ", " << currentY << ")\n";
 
     int newX = currentX;
@@ -397,21 +397,21 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 
     if (newX < 0 || newX >= dimensions.first || newY < 0 || newY >= dimensions.second) {
         std::cout << "Out of bounds! Movement aborted.\n";
-        player->SetFacingDirection(direction);
+        player->setFacingDirection(direction);
         return;
     }
 
     if (std::holds_alternative<Wall>(map->getBoard()[newX][newY]))
     {
         std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
-        player->SetFacingDirection(direction);
+        player->setFacingDirection(direction);
         return;
     }
 
     for (const auto& p : m_players) {
-        if (p.GetPosition().i == newX && p.GetPosition().j == newY) {
+        if (p.getPosition().i == newX && p.getPosition().j == newY) {
             std::cout << "Hit a player at (" << newX << ", " << newY << "). Movement aborted.\n";
-            player->SetFacingDirection(direction);
+            player->setFacingDirection(direction);
             return;
         }
     }
@@ -422,27 +422,27 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 
     if (std::holds_alternative<StunTrap>(cellType)) {
         StunTrap& trap = std::get<StunTrap>(cellType);
-        if (trap.IsActive()) {
+        if (trap.isActive()) {
             trap.activateEffect(*player);
-            trap.SetState(false);
+            trap.setState(false);
             std::cout << "Player has been immobilized at (" << newX << ", " << newY << ").\n";
         }
     }
 
     if (std::holds_alternative<DisableGunTrap>(cellType)) {
         DisableGunTrap& trap = std::get<DisableGunTrap>(cellType);
-        if (trap.IsActive()) {
+        if (trap.isActive()) {
             trap.activateEffect(*player);
-            trap.SetState(false);
+            trap.setState(false);
             std::cout << "Player's gun has been disabled at (" << newX << ", " << newY << ").\n";
         }
     }
 
     if (std::holds_alternative<TeleportTrap>(cellType)) {
         TeleportTrap& trap = std::get<TeleportTrap>(cellType);
-        if (trap.IsActive()) {
+        if (trap.isActive()) {
             trap.activateEffect(*player);
-            trap.SetState(false);
+            trap.setState(false);
             std::cout << "Player's gun has been disabled at (" << newX << ", " << newY << ").\n";
         }
     }
@@ -457,7 +457,7 @@ bool GameLogic::checkIfRunning()
     Player* lastPlayer = nullptr;
 
     for (auto& player : m_players) {
-        if (player.IsAlive()) {
+        if (player.isAlive()) {
             aliveCount++;
             lastPlayer = &player;
         }
@@ -469,7 +469,7 @@ bool GameLogic::checkIfRunning()
 
     if (aliveCount == 1 && lastPlayer != nullptr) {
         m_playersInDeathOrder.push_back(lastPlayer);
-        std::cout << "Winner: " << lastPlayer->GetName() << std::endl;
+        std::cout << "Winner: " << lastPlayer->getName() << std::endl;
     }
 
     return false; // Jocul nu mai continuă

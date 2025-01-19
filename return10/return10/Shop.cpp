@@ -9,19 +9,19 @@ Shop::Shop() {}
 
 void Shop::buySpeedUpgrade(Player player) {
     Gun gun = player.getGun();
-    if (player.GetCrowns() >= SPEED_UPGRADE_COST)
+    if (player.getCrowns() >= SPEED_UPGRADE_COST)
     {
-        float currentSpeed = gun.GetBulletSpeed();
+        float currentSpeed = gun.getBulletSpeed();
         gun.setBulletSpeed(currentSpeed * 2.0f);
         player.addScore(-SPEED_UPGRADE_COST);
-        std::cout << "Bullet speed has been doubled! New speed: " << gun.GetBulletSpeed() << std::endl;
+        std::cout << "Bullet speed has been doubled! New speed: " << gun.getBulletSpeed() << std::endl;
     }
 }
 
 void Shop::buyReloadUpgrade(Player player)
 {
     Gun gun = player.getGun();
-    if (player.GetCrowns() < RELOAD_UPGRADE_COST) {
+    if (player.getCrowns() < RELOAD_UPGRADE_COST) {
         std::cout << "Insufficient crowns to buy upgrade!" << std::endl;
         return;
     }

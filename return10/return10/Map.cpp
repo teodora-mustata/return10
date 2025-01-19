@@ -116,15 +116,15 @@ std::optional<std::pair<char, bool>> Map::getTrapInfo(int row, int col) const {
 
 	if (std::holds_alternative<TeleportTrap>(cell)) {
 		const TeleportTrap& trap = std::get<TeleportTrap>(cell);
-		return std::make_pair('T', trap.IsActive());
+		return std::make_pair('T', trap.isActive());
 	}
 	else if (std::holds_alternative<DisableGunTrap>(cell)) {
 		const DisableGunTrap& trap = std::get<DisableGunTrap>(cell);
-		return std::make_pair('G', trap.IsActive());
+		return std::make_pair('G', trap.isActive());
 	}
 	else if (std::holds_alternative<StunTrap>(cell)) {
 		const StunTrap& trap = std::get<StunTrap>(cell);
-		return std::make_pair('S', trap.IsActive());
+		return std::make_pair('S', trap.isActive());
 	}
 
 	return std::nullopt;

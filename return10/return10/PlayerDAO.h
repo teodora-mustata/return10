@@ -7,19 +7,19 @@ public:
 	PlayerDAO(std::string name, std::string password);
 	PlayerDAO() = default;
 
-	std::string GetName() const;
-	int GetCrowns() const;
-	int GetScore() const;
-	std::string GetPassword() const;
-	int GetId() const;
-	int GetGunId()const;
+	std::string getName() const;
+	int getCrowns() const;
+	int getScore() const;
+	std::string getPassword() const;
+	int getId() const;
+	int getGunId()const;
 
-	void SetId(int id);
-	void SetName(std::string name);
-	void SetCrowns(int crowns);
-	void SetScore(int score);
-	void SetPassword(std::string password);
-	void SetGunId(int gunId);
+	void setId(int id);
+	void setName(std::string name);
+	void setCrowns(int crowns);
+	void setScore(int score);
+	void setPassword(std::string password);
+	void setGunId(int gunId);
 
 private:
 	int m_id;

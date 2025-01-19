@@ -9,19 +9,19 @@ GameManager& GameManager::getInstance(GameStorage& storage)
 GameManager::GameManager(GameStorage& storage) : m_storage(storage) {}
 
 void GameManager::updatePlayerScore(Player player) {
-    PlayerDAO playerDAO = m_storage.GetPlayerByID(player.GetId());
-    int newScore = playerDAO.GetScore() + player.GetScore();
-    int newCrownsAmount = playerDAO.GetCrowns() + player.GetCrowns();
-    playerDAO.SetScore(newScore);
-    playerDAO.SetCrowns(newCrownsAmount);
-    m_storage.UpdatePlayerDAO(playerDAO);
+    PlayerDAO playerDAO = m_storage.getPlayerByID(player.getId());
+    int newScore = playerDAO.getScore() + player.getScore();
+    int newCrownsAmount = playerDAO.getCrowns() + player.getCrowns();
+    playerDAO.setScore(newScore);
+    playerDAO.setCrowns(newCrownsAmount);
+    m_storage.updatePlayerDAO(playerDAO);
 }
 
 void GameManager::sortLobbyPlayers()
 {
     std::sort(m_lobbyPlayers.begin(), m_lobbyPlayers.end(),
         [this](int id1, int id2) {
-            return m_storage.GetPlayerScoreById(id1) > m_storage.GetPlayerScoreById(id2);
+            return m_storage.getPlayerScoreById(id1) > m_storage.getPlayerScoreById(id2);
         });
 }
 
@@ -102,7 +102,7 @@ void GameManager::endGame(int gameId)
     {
         for (auto player : m_activeGames[gameId]->getPlayers())
         {
-            int id = player.GetId();
+            int id = player.getId();
             removePlayerFromGame(id);
             addPlayerToLobby(id);
         }
@@ -124,15 +124,15 @@ void GameManager::endGames()
 
 std::unique_ptr<Player> GameManager::getPlayerFromID(int id)
 {
-    PlayerDAO player_data = m_storage.GetPlayerByID(id);
-    GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
+    PlayerDAO player_data = m_storage.getPlayerByID(id);
+    GunDAO gun_data = m_storage.getGunById(player_data.getGunId());
 
     auto player_gun = std::make_shared<Gun>();
-    player_gun->setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-    player_gun->setBulletSpeed(gun_data.GetBulletSpeed());
+    player_gun->setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.getFireRate())));
+    player_gun->setBulletSpeed(gun_data.getBulletSpeed());
 
-    return std::make_unique<Player>(player_data.GetId(), player_data.GetName(),
-        player_data.GetScore(), player_data.GetCrowns(), *player_gun);
+    return std::make_unique<Player>(player_data.getId(), player_data.getName(),
+        player_data.getScore(), player_data.getCrowns(), *player_gun);
 }
 
 std::vector<int> GameManager::getLobbyPlayers()
@@ -156,7 +156,7 @@ std::shared_ptr<GameLogic> GameManager::getGameByPlayerId(int playerId)
 {
     for (auto& game : m_activeGames) {
         for (const auto& player : game->getPlayers()) {
-            if (player.GetId() == playerId) {
+            if (player.getId() == playerId) {
                 return game;
             }
         }

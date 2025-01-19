@@ -19,15 +19,15 @@ public:
 	bool operator==(const Player& other);
 	void shoot(Direction direction);
 
-	std::string GetName() const;
-	int GetScore() const;
-	int GetCrowns() const;
-	int GetLives()const;
-	Coordinate GetPosition() const;
+	std::string getName() const;
+	int getScore() const;
+	int getCrowns() const;
+	int getLives() const;
+	Coordinate getPosition() const;
 	Gun& getGun();
 	const Gun& getGun() const;
-	int GetId() const;
-	Direction GetFacingDirection();
+	int getId() const;
+	Direction getFacingDirection();
 	Coordinate getInitialPosition() const;
 
 	void addScore(int acumulated_points);
@@ -35,7 +35,7 @@ public:
 	void setInitialScore();
 	void setInitialCrowns();
 	void setId(int id);
-	void SetFacingDirection(const Direction& dir);
+	void setFacingDirection(const Direction& dir);
 
 	void resetPosition();
 	void loseLife();
@@ -45,10 +45,10 @@ public:
 	void setInitialPosition(Coordinate coords);
 	void setPosition(Coordinate coords);
 
-	void Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration);
-	void UpdateStatus(float deltaTime);
-	bool IsImmobilized() const;
-	bool IsAlive() const;
+	void immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration);
+	void updateStatus(float deltaTime);
+	bool isImmobilized() const;
+	bool isAlive() const;
 
 private:
 	int m_id;

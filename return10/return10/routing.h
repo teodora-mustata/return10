@@ -10,20 +10,20 @@ class Routing
 {
 public:
 	Routing( GameStorage& storage, GameManager& gameLogic);
-	void Run();
-	void SetupLoginRoutes();
-	void GetTheBestPlayersByCrowns();
-	void GetTheBestPlayersByScore();
+	void run();
+	void setupLoginRoutes();
+	void getTheBestPlayersByCrowns();
+	void getTheBestPlayersByScore();
 	GunDAO getGunById(int userId);
 	PlayerDAO getPlayerById(int userId);
 	void sendMap(crow::response& res, int playerId);
-	void SetupGameRoute();
-	void BuyReloadSpeedUpgrade();
-	void BuyBulletSpeedUpgrade();
-	void AddPlayerToLobby();
-	void SetDifficulty();
-	void HandlePlayerCommand();
-	void CreateGame();
+	void setupGameRoute();
+	void buyReloadSpeedUpgrade();
+	void buyBulletSpeedUpgrade();
+	void addPlayerToLobby();
+	void setDifficulty();
+	void handlePlayerCommand();
+	void createGame();
 	void getActivePlayers();
 	void updateMap();
 	void checkWinCondition();

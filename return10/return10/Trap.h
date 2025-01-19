@@ -7,9 +7,9 @@ public:
     Trap(int x, int y);
     virtual ~Trap() = default;
 
-    std::pair<int, int> GetCoordinates() const;
-    bool IsActive() const;
-    void SetState(bool isActive);
+    std::pair<int, int> getCoordinates() const;
+    bool isActive() const;
+    void setState(bool isActive);
 
     virtual void activateEffect(Player& player) = 0;
 

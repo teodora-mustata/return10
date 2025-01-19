@@ -67,7 +67,7 @@ void Gun::setFiringRate(std::chrono::duration<float> newRate)
     m_firingRate = newRate;
 }
 
-float Gun::GetBulletSpeed() const
+float Gun::getBulletSpeed() const
 {
     return m_bulletSpeed;
 }

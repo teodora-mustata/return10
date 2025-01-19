@@ -20,5 +20,5 @@ void TeleportTrap::activateEffect(Player& player) {
     player.setPosition(newLocation);
     std::cout << "Player teleported to (" << newLocation.i << ", " << newLocation.j << ").\n";
 
-    SetState(false);
+    setState(false);
 }

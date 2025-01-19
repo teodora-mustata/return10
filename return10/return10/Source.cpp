@@ -18,16 +18,16 @@ int main()
 {
 	std::cout << "Server" << std::endl;
 	GameStorage storage;
-	if (!storage.Initialize())
+	if (!storage.initialize())
 	{
 		std::cout << "Failed to initialize the database!";
 		return -1;
 	}
 	
-	storage.DisplayDatabaseContents();
+	storage.displayDatabaseContents();
 	Map map;
 	GameManager& gameManager = GameManager::getInstance(storage);
 	Routing routing( storage,gameManager);
-	routing.Run();
+	routing.run();
 
 }

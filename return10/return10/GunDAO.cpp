@@ -1,26 +1,26 @@
 #include "GunDAO.h"
 
-int GunDAO::GetId() const
+int GunDAO::getId() const
 {
 	return m_id;
 }
-void GunDAO::SetId(int id)
+void GunDAO::setId(int id)
 {
 	this->m_id = id;
 }
 
-double GunDAO::GetFireRate() const
+double GunDAO::getFireRate() const
 {
 	return m_firingRate;
 }
-void GunDAO::SetFireRate(double fireRate_) {
+void GunDAO::setFireRate(double fireRate_) {
 	this->m_firingRate = fireRate_;
 }
 
-double GunDAO::GetBulletSpeed() const {
+double GunDAO::getBulletSpeed() const {
 	return m_bulletSpeed;
 }
-void GunDAO::SetBulletSpeed(double bulletSpeed) {
+void GunDAO::setBulletSpeed(double bulletSpeed) {
 	this->m_bulletSpeed = bulletSpeed;
 }
 

@@ -65,27 +65,27 @@ void Player::shoot(Direction direction)
 	m_gun.fire(m_position.i, m_position.j, direction);
 }
 
-std::string Player::GetName() const
+std::string Player::getName() const
 {
 	return m_name;
 }
 
-int Player::GetScore() const
+int Player::getScore() const
 {
 	return m_score;
 }
 
-int Player::GetCrowns() const
+int Player::getCrowns() const
 {
 	return m_crowns;
 }
 
-int Player::GetLives() const
+int Player::getLives() const
 {
 	return m_lives;
 }
 
-Coordinate Player::GetPosition() const
+Coordinate Player::getPosition() const
 {
 	return m_position;
 }
@@ -98,12 +98,12 @@ const Gun& Player::getGun() const {
 	return m_gun;
 }
 
-int Player::GetId() const
+int Player::getId() const
 {
 	return m_id;
 }
 
-Direction Player::GetFacingDirection()
+Direction Player::getFacingDirection()
 {
 	return m_facingDirection;
 }
@@ -138,7 +138,7 @@ void Player::setId(int id)
 	m_id = id;
 }
 
-void Player::SetFacingDirection(const Direction& dir)
+void Player::setFacingDirection(const Direction& dir)
 {
 	m_facingDirection = dir;
 }
@@ -159,7 +159,7 @@ void Player::loseLife()
 
 bool Player::operator==(const Player& other) const
 {
-	if (this->m_name == other.GetName()) return true;
+	if (this->m_name == other.getName()) return true;
 	return false;
 }
 
@@ -191,14 +191,14 @@ void Player::setPosition(Coordinate coords)
 }
 
 
-void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
+void Player::immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
 	m_isImmobilized = true;
 	m_immobilizedStartTime = startTime;
 	m_immobilizedDuration = duration;
 }
 
 
-void Player::UpdateStatus(float deltaTime) {
+void Player::updateStatus(float deltaTime) {
 
 	if (m_isImmobilized) {
 		auto now = std::chrono::steady_clock::now();
@@ -212,11 +212,11 @@ void Player::UpdateStatus(float deltaTime) {
 	m_gun.updateJammed();
 }
 
-bool Player::IsImmobilized() const {
+bool Player::isImmobilized() const {
 	return m_isImmobilized;
 }
 
-bool Player::IsAlive() const
+bool Player::isAlive() const
 {
 	if (m_lives == 0) return false;
 	return true;

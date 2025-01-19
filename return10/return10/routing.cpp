@@ -28,32 +28,32 @@ Routing::Routing(GameStorage& storage, GameManager& gameLogic):m_storage(storage
 {
 }
 
-void Routing::Run() {
+void Routing::run() {
 
-    SetupLoginRoutes();
-    GetTheBestPlayersByCrowns();
-    GetTheBestPlayersByScore();
-    BuyReloadSpeedUpgrade();
-    BuyBulletSpeedUpgrade();
-    SetupGameRoute();
+    setupLoginRoutes();
+    getTheBestPlayersByCrowns();
+    getTheBestPlayersByScore();
+    buyReloadSpeedUpgrade();
+    buyBulletSpeedUpgrade();
+    setupGameRoute();
     getActivePlayers();
-    SetDifficulty();
-    AddPlayerToLobby();
-    CreateGame();
-    HandlePlayerCommand();
+    setDifficulty();
+    addPlayerToLobby();
+    createGame();
+    handlePlayerCommand();
     updateMap();
     checkWinCondition();
     m_app.port(18080).multithreaded().run();
 }
 
-void Routing::GetTheBestPlayersByScore() {
+void Routing::getTheBestPlayersByScore() {
     CROW_ROUTE(m_app, "/leaderboard/score/<int>")
         ([this](int userId) {
         try {
-            auto players = m_storage.GetPlayersDAO();
+            auto players = m_storage.getPlayersDAO();
 
             std::sort(players.begin(), players.end(), [](const PlayerDAO& a, const PlayerDAO& b) {
-                return a.GetScore() > b.GetScore();
+                return a.getScore() > b.getScore();
                 });
 
             crow::json::wvalue res;
@@ -65,11 +65,11 @@ void Routing::GetTheBestPlayersByScore() {
                 if (i < 10) {
                     crow::json::wvalue playerJson;
                     playerJson["rank"] = i + 1;
-                    playerJson["name"] = players[i].GetName();
-                    playerJson["score"] = players[i].GetScore();
+                    playerJson["name"] = players[i].getName();
+                    playerJson["score"] = players[i].getScore();
                     topPlayers.push_back(std::move(playerJson));
                 }
-                if (players[i].GetId() == userId) {
+                if (players[i].getId() == userId) {
                     userRank = i + 1;
                     if (i < 10) {
                         isUserInTop10 = true;
@@ -85,8 +85,8 @@ void Routing::GetTheBestPlayersByScore() {
 
             if (!isUserInTop10 && userRank > 0) {
                 res["currentUser"]["rank"] = userRank;
-                res["currentUser"]["name"] = players[userRank - 1].GetName();
-                res["currentUser"]["score"] = players[userRank - 1].GetScore();
+                res["currentUser"]["name"] = players[userRank - 1].getName();
+                res["currentUser"]["score"] = players[userRank - 1].getScore();
             }
 
             return crow::response(200, res);
@@ -99,9 +99,9 @@ void Routing::GetTheBestPlayersByScore() {
 
 PlayerDAO Routing::getPlayerById(int userId)
 {
-    auto players = m_storage.GetPlayersDAO();
+    auto players = m_storage.getPlayersDAO();
     for (const auto& player : players) {
-        if (player.GetId() == userId) {
+        if (player.getId() == userId) {
             return player;
         }
     }
@@ -111,23 +111,23 @@ PlayerDAO Routing::getPlayerById(int userId)
 
 GunDAO Routing::getGunById(int gunId)
 {
-    auto guns = m_storage.GetGunsDAO();
+    auto guns = m_storage.getGunsDAO();
     for (const auto& gun : guns) {
-        if (gun.GetId() == gunId) {
+        if (gun.getId() == gunId) {
             return gun;
         }
     }
     throw std::runtime_error("Gun not found with ID: " + std::to_string(gunId));
 }
 
-void Routing::GetTheBestPlayersByCrowns() {
+void Routing::getTheBestPlayersByCrowns() {
     CROW_ROUTE(m_app, "/leaderboard/<int>")
         ([this](int userId) {
         try {
-            auto players = m_storage.GetPlayersDAO();
+            auto players = m_storage.getPlayersDAO();
 
             std::sort(players.begin(), players.end(), [](const PlayerDAO& a, const PlayerDAO& b) {
-                return a.GetCrowns() > b.GetCrowns();
+                return a.getCrowns() > b.getCrowns();
                 });
 
             crow::json::wvalue res;
@@ -139,11 +139,11 @@ void Routing::GetTheBestPlayersByCrowns() {
                 if (i < 10) {
                     crow::json::wvalue playerJson;
                     playerJson["rank"] = i + 1;
-                    playerJson["name"] = players[i].GetName();
-                    playerJson["crowns"] = players[i].GetCrowns();
+                    playerJson["name"] = players[i].getName();
+                    playerJson["crowns"] = players[i].getCrowns();
                     topPlayers.push_back(std::move(playerJson));
                 }
-                if (players[i].GetId() == userId) {
+                if (players[i].getId() == userId) {
                     userRank = i + 1;
                     if (i < 10) {
                         isUserInTop10 = true;
@@ -159,8 +159,8 @@ void Routing::GetTheBestPlayersByCrowns() {
 
             if (!isUserInTop10 && userRank > 0) {
                 res["currentUser"]["rank"] = userRank;
-                res["currentUser"]["name"] = players[userRank - 1].GetName();
-                res["currentUser"]["crowns"] = players[userRank - 1].GetCrowns();
+                res["currentUser"]["name"] = players[userRank - 1].getName();
+                res["currentUser"]["crowns"] = players[userRank - 1].getCrowns();
             }
 
             return crow::response(200, res);
@@ -171,7 +171,7 @@ void Routing::GetTheBestPlayersByCrowns() {
             });
 }
 
-void Routing::SetupLoginRoutes()
+void Routing::setupLoginRoutes()
 {
     CROW_ROUTE(m_app, "/login").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
@@ -183,9 +183,9 @@ void Routing::SetupLoginRoutes()
         std::string password = body["password"].s();
 
         try {
-            auto players = m_storage.GetPlayersDAO();
+            auto players = m_storage.getPlayersDAO();
             auto it = std::find_if(players.begin(), players.end(), [&](const PlayerDAO& player) {
-                return player.GetName() == username && player.GetPassword() == password;
+                return player.getName() == username && player.getPassword() == password;
                 });
 
             if (it == players.end()) {
@@ -195,21 +195,21 @@ void Routing::SetupLoginRoutes()
             const auto& user = *it;
 
             crow::json::wvalue gunDetails;
-            if (user.GetGunId() != -1) {
-                auto gun = m_storage.GetGunById(user.GetGunId());
-                gunDetails["fireRate"] = gun.GetFireRate();
-                gunDetails["bulletSpeed"] = gun.GetBulletSpeed();
+            if (user.getGunId() != -1) {
+                auto gun = m_storage.getGunById(user.getGunId());
+                gunDetails["fireRate"] = gun.getFireRate();
+                gunDetails["bulletSpeed"] = gun.getBulletSpeed();
             }
             else {
                 gunDetails = crow::json::wvalue();
             }
 
             crow::json::wvalue res;
-            res["message"] = "Welcome " + user.GetName() + "!";
-            res["score"] = user.GetScore();
-            res["crowns"] = user.GetCrowns();
+            res["message"] = "Welcome " + user.getName() + "!";
+            res["score"] = user.getScore();
+            res["crowns"] = user.getCrowns();
             res["gunDetails"] = std::move(gunDetails);
-            res["userId"] = user.GetId();
+            res["userId"] = user.getId();
             return crow::response(200, res);
         }
         catch (const std::exception& e) {
@@ -232,27 +232,27 @@ void Routing::SetupLoginRoutes()
             return crow::response(400, "Password does not meet complexity requirements");
         }
 
-        auto players = m_storage.GetPlayersDAO();
+        auto players = m_storage.getPlayersDAO();
         for (const auto& player : players) {
-            if (player.GetName() == username) {
+            if (player.getName() == username) {
                 return crow::response(409, "Username already exists");
             }
         }
 
         GunDAO newGun;
-        newGun.SetFireRate(4);
-        newGun.SetBulletSpeed(0.25);
+        newGun.setFireRate(4);
+        newGun.setBulletSpeed(0.25);
 
-        int gunId = m_storage.AddGunDAO(newGun);
+        int gunId = m_storage.addGunDAO(newGun);
 
         PlayerDAO newPlayer;
-        newPlayer.SetName(username);
-        newPlayer.SetPassword(password);
-        newPlayer.SetCrowns(0); 
-        newPlayer.SetScore(0);
-        newPlayer.SetGunId(gunId);
+        newPlayer.setName(username);
+        newPlayer.setPassword(password);
+        newPlayer.setCrowns(0); 
+        newPlayer.setScore(0);
+        newPlayer.setGunId(gunId);
 
-        m_storage.AddPlayerDAO(newPlayer);
+        m_storage.addPlayerDAO(newPlayer);
 
         return crow::response(201, "Account created successfully!");
         });
@@ -293,7 +293,7 @@ void Routing::sendMap(crow::response& res, int playerId)
     res.end();
 }
 
-void Routing::SetupGameRoute()
+void Routing::setupGameRoute()
 {
     CROW_ROUTE(m_app, "/map").methods(crow::HTTPMethod::POST)([this](const crow::request& req, crow::response& res) {
         auto jsonData = crow::json::load(req.body);
@@ -313,21 +313,21 @@ void Routing::SetupGameRoute()
 }
 
 
-void Routing::BuyReloadSpeedUpgrade() {
+void Routing::buyReloadSpeedUpgrade() {
 
     CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
         ([this](int userId) {
         try {
-            PlayerDAO player = m_storage.GetPlayerByID(userId);
+            PlayerDAO player = m_storage.getPlayerByID(userId);
 
-            if (player.GetId() == 0) {
+            if (player.getId() == 0) {
                 crow::json::wvalue res;
                 res["error"] = "User not found";
                 return crow::response(404, res);
             }
 
-            GunDAO gun = m_storage.GetGunById(player.GetGunId());
-            if (gun.GetId() == 0) {
+            GunDAO gun = m_storage.getGunById(player.getGunId());
+            if (gun.getId() == 0) {
                 crow::json::wvalue res;
                 res["error"] = "Gun not found for this player";
                 return crow::response(404, res);
@@ -338,29 +338,29 @@ void Routing::BuyReloadSpeedUpgrade() {
             const int upgradeCost = 500;
             const double minReloadSpeed = 0.25;
 
-            if (gun.GetFireRate() <= minReloadSpeed) {
+            if (gun.getFireRate() <= minReloadSpeed) {
                 crow::json::wvalue res;
                 res["error"] = "Reload speed is already at minimum value";
                 return crow::response(400, res);
             }
 
 
-            if (player.GetScore() < upgradeCost) {
+            if (player.getScore() < upgradeCost) {
                 crow::json::wvalue res;
                 res["error"] = "Not enough score to buy upgrade";
                 return crow::response(400, res);
             }
 
-            player.SetScore(player.GetScore() - upgradeCost);
-            gun.SetFireRate(std::max(gun.GetFireRate() / 2.0, minReloadSpeed));
+            player.setScore(player.getScore() - upgradeCost);
+            gun.setFireRate(std::max(gun.getFireRate() / 2.0, minReloadSpeed));
 
-            m_storage.UpdatePlayerDAO(player);
-            m_storage.UpdateGunDAO(gun);
+            m_storage.updatePlayerDAO(player);
+            m_storage.updateGunDAO(gun);
 
             crow::json::wvalue res;
             res["message"] = "Reload speed upgrade purchased successfully!";
-            res["remainingScore"] = player.GetScore();
-            res["newReloadSpeed"] = gun.GetFireRate();
+            res["remainingScore"] = player.getScore();
+            res["newReloadSpeed"] = gun.getFireRate();
 
             return crow::response(200, res);
         }
@@ -372,19 +372,19 @@ void Routing::BuyReloadSpeedUpgrade() {
             });
 }
 
-void Routing::BuyBulletSpeedUpgrade() {
+void Routing::buyBulletSpeedUpgrade() {
     CROW_ROUTE(m_app, "/upgrade/bullet_speed/<int>")
         ([this](int userId) {
         try {
             PlayerDAO player = getPlayerById(userId);
-            if (player.GetId() == 0) {
+            if (player.getId() == 0) {
                 crow::json::wvalue res;
                 res["error"] = "User not found";
                 return crow::response(404, res);
             }
 
-            GunDAO gun = getGunById(player.GetGunId());
-            if (gun.GetId() == 0) {
+            GunDAO gun = getGunById(player.getGunId());
+            if (gun.getId() == 0) {
                 crow::json::wvalue res;
                 res["error"] = "Gun not found for this player";
                 return crow::response(404, res);
@@ -393,28 +393,28 @@ void Routing::BuyBulletSpeedUpgrade() {
             const float maxBulletSpeed = 0.5;
             const int requiredCrowns = 10;
 
-            if (gun.GetBulletSpeed() >= maxBulletSpeed) {
+            if (gun.getBulletSpeed() >= maxBulletSpeed) {
                 crow::json::wvalue res;
                 res["error"] = "Bullet speed is already at maximum value";
                 return crow::response(400, res);
             }
 
 
-            if (player.GetCrowns() < requiredCrowns) {
+            if (player.getCrowns() < requiredCrowns) {
                 crow::json::wvalue res;
                 res["error"] = "Not enough crowns to upgrade bullet speed";
                 return crow::response(400, res);
             }
 
 
-            gun.SetBulletSpeed(maxBulletSpeed);
+            gun.setBulletSpeed(maxBulletSpeed);
 
-            m_storage.UpdateGunDAO(gun);
+            m_storage.updateGunDAO(gun);
 
             crow::json::wvalue res;
             res["message"] = "Bullet speed upgrade applied successfully!";
-            res["newBulletSpeed"] = gun.GetBulletSpeed();
-            res["remainingCrowns"] = player.GetCrowns();
+            res["newBulletSpeed"] = gun.getBulletSpeed();
+            res["remainingCrowns"] = player.getCrowns();
 
             return crow::response(200, res);
         }
@@ -426,7 +426,7 @@ void Routing::BuyBulletSpeedUpgrade() {
             });
 }
 
-void Routing::AddPlayerToLobby()
+void Routing::addPlayerToLobby()
 {
     CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
 
@@ -441,9 +441,9 @@ void Routing::AddPlayerToLobby()
 
             int player_id = jsonBody["player_id"].i();
 
-            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
+            PlayerDAO player_data = m_storage.getPlayerByID(player_id);
 
-            if (player_data.GetId() == 0) {
+            if (player_data.getId() == 0) {
                 res.code = 404;
                 res.body = "Player not found!";
                 res.end();
@@ -565,7 +565,7 @@ void Routing::checkWinCondition()
 }
 
 
-void Routing::SetDifficulty()
+void Routing::setDifficulty()
 {
 http://localhost:18080/send_difficulty
     CROW_ROUTE(m_app, "/send_difficulty").methods(crow::HTTPMethod::POST)
@@ -641,7 +641,7 @@ http://localhost:18080/send_difficulty
 }
 
 
-void Routing::HandlePlayerCommand()
+void Routing::handlePlayerCommand()
 {
     CROW_ROUTE(m_app, "/command").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
         try {
@@ -667,7 +667,7 @@ void Routing::HandlePlayerCommand()
             auto it = std::find_if(
                 game->getPlayers().begin(),
                 game->getPlayers().end(),
-                [playerId](const Player& player) { return player.GetId() == playerId; });
+                [playerId](const Player& player) { return player.getId() == playerId; });
 
             if (it == game->getPlayers().end()) {
                 res.code = 404;
@@ -684,8 +684,8 @@ void Routing::HandlePlayerCommand()
             else if (command == "MOVE_DOWN") dir = Direction::DOWN;
             else if (command == "MOVE_RIGHT") dir = Direction::RIGHT;
             else if (command == "SHOOT") {
-                dir = currentPlayer.GetFacingDirection();
-                Coordinate nextPosition = game->getNextPosition(currentPlayer.GetPosition(), dir);
+                dir = currentPlayer.getFacingDirection();
+                Coordinate nextPosition = game->getNextPosition(currentPlayer.getPosition(), dir);
                 if (!game->isInsideMap(nextPosition)) {
                     res.code = 400;
                     res.write("Cannot shoot outside the map");
@@ -718,7 +718,7 @@ void Routing::HandlePlayerCommand()
         });
 }
 
-void Routing::CreateGame()
+void Routing::createGame()
 {
     CROW_ROUTE(m_app, "/start_game")
         .methods("POST"_method)([this](const crow::request& req)

@@ -18,7 +18,7 @@ public:
     std::vector<Bullet>& getFiredBullets();
 
     std::chrono::duration<float> getFiringRate() const;
-    float GetBulletSpeed() const;
+    float getBulletSpeed() const;
     float GetFiringRate()const;
 
     void setBulletSpeed(float newBulletSpeed);

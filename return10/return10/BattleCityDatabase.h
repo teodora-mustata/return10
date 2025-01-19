@@ -10,51 +10,51 @@
 namespace sql = sqlite_orm;
 
 
-inline auto CreateStorage(const std::string& filename)
+inline auto createStorage(const std::string& filename)
 {
 	return sql::make_storage(
 		filename,
 		sql::make_table(
 			"Gun",
-			sql::make_column("id", &GunDAO::SetId, &GunDAO::GetId, sql::primary_key().autoincrement()),
-			sql::make_column("fireRate", &GunDAO::SetFireRate, &GunDAO::GetFireRate),
-			sql::make_column("bulletSpeed", &GunDAO::SetBulletSpeed, &GunDAO::GetBulletSpeed)
+			sql::make_column("id", &GunDAO::setId, &GunDAO::getId, sql::primary_key().autoincrement()),
+			sql::make_column("fireRate", &GunDAO::setFireRate, &GunDAO::getFireRate),
+			sql::make_column("bulletSpeed", &GunDAO::setBulletSpeed, &GunDAO::getBulletSpeed)
 		),
 		sql::make_table(
 			"Player",
-			sql::make_column("id", &PlayerDAO::SetId, &PlayerDAO::GetId, sql::primary_key().autoincrement()),
-			sql::make_column("name", &PlayerDAO::SetName, &PlayerDAO::GetName),
-			sql::make_column("score", &PlayerDAO::SetScore, &PlayerDAO::GetScore),
-			sql::make_column("crowns", &PlayerDAO::SetCrowns, &PlayerDAO::GetCrowns),
-			sql::make_column("gunId", &PlayerDAO::SetGunId, &PlayerDAO::GetGunId),
-			sql::make_column("password", &PlayerDAO::SetPassword, &PlayerDAO::GetPassword),
-			sqlite_orm::foreign_key(&PlayerDAO::GetGunId).references(&GunDAO::GetId).on_delete.cascade()
+			sql::make_column("id", &PlayerDAO::setId, &PlayerDAO::getId, sql::primary_key().autoincrement()),
+			sql::make_column("name", &PlayerDAO::setName, &PlayerDAO::getName),
+			sql::make_column("score", &PlayerDAO::setScore, &PlayerDAO::getScore),
+			sql::make_column("crowns", &PlayerDAO::setCrowns, &PlayerDAO::getCrowns),
+			sql::make_column("gunId", &PlayerDAO::setGunId, &PlayerDAO::getGunId),
+			sql::make_column("password", &PlayerDAO::setPassword, &PlayerDAO::getPassword),
+			sqlite_orm::foreign_key(&PlayerDAO::getGunId).references(&GunDAO::getId).on_delete.cascade()
 		)
 	);
 }
 
-using Storage = decltype(CreateStorage(""));
+using Storage = decltype(createStorage(""));
 
 class GameStorage
 {
 public:
-	bool Initialize();
-	void AddPlayer(const Player& player);
-	void AddPlayerDAO(const PlayerDAO& playerDAO);
-	int AddGunDAO(const GunDAO& gun);
-	std::vector<PlayerDAO> GetPlayersDAO();
-	std::vector<GunDAO> GetGunsDAO();
-	GunDAO GetGunById(int gunId);
-	PlayerDAO GetPlayerByID(int playerId);
-	void UpdatePlayerDAO(const PlayerDAO& player);
-	void UpdateGunDAO(const GunDAO& gun);
-	void DisplayDatabaseContents();
-	int GetPlayerScoreById(int playerId);
+	bool initialize();
+	void addPlayer(const Player& player);
+	void addPlayerDAO(const PlayerDAO& playerDAO);
+	int addGunDAO(const GunDAO& gun);
+	std::vector<PlayerDAO> getPlayersDAO();
+	std::vector<GunDAO> getGunsDAO();
+	GunDAO getGunById(int gunId);
+	PlayerDAO getPlayerByID(int playerId);
+	void updatePlayerDAO(const PlayerDAO& player);
+	void updateGunDAO(const GunDAO& gun);
+	void displayDatabaseContents();
+	int getPlayerScoreById(int playerId);
 private:
 	const std::string kDbFile{ "BattleCity.sqlite" };
 
 private:
-	Storage m_db = CreateStorage(kDbFile);
+	Storage m_db = createStorage(kDbFile);
 };
 
 
