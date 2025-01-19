@@ -37,8 +37,6 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
     newBullet.setActive(true);
 
     m_firedBullets.push_back(newBullet);
-    std::cout << "bullet fired at position (" << bulletX << ", " << bulletY << ")" << std::endl;
-
     return true;
 }
 
@@ -62,7 +60,7 @@ std::chrono::duration<float> Gun::getFiringRate() const
 void Gun::setFiringRate(std::chrono::duration<float> newRate)
 {
     if (newRate <= std::chrono::duration<float>(0)) {
-        throw std::invalid_argument("Firing rate cannot be instant.");
+        throw std::invalid_argument("Firing rate cannot be instant or less than 0.");
     }
     m_firingRate = newRate;
 }

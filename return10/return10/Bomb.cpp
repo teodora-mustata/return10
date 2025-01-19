@@ -30,11 +30,9 @@ std::list<std::pair<int, int>> Bomb::calculateEffectArea()
 void Bomb::deactivate()
 {
 	m_isActive = false;
-	std::cout << "Bomb deactivated." << std::endl;
 }
 
 void Bomb::activate()
 {
 	m_isActive = true;
-	std::cout << "Bomb activated at (" << m_posX << ", " << m_posY << ")." << std::endl;
 }

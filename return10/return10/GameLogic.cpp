@@ -417,7 +417,6 @@ void GameLogic::movePlayer(Player* player, Direction direction)
     }
 
     player->move(direction);
-    std::cout << "Player moved successfully.\n";
     CellType cellType = map->getCellType(newX, newY);
 
     if (std::holds_alternative<StunTrap>(cellType)) {
@@ -443,7 +442,7 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         if (trap.isActive()) {
             trap.activateEffect(*player);
             trap.setState(false);
-            std::cout << "Player's gun has been disabled at (" << newX << ", " << newY << ").\n";
+           
         }
     }
 
@@ -464,7 +463,7 @@ bool GameLogic::checkIfRunning()
     }
 
     if (aliveCount > 1) {
-        return true; // Jocul continuă
+        return true; 
     }
 
     if (aliveCount == 1 && lastPlayer != nullptr) {
@@ -472,7 +471,7 @@ bool GameLogic::checkIfRunning()
         std::cout << "Winner: " << lastPlayer->getName() << std::endl;
     }
 
-    return false; // Jocul nu mai continuă
+    return false; 
 }
 
 void GameLogic::giveCrowns()
@@ -485,6 +484,6 @@ void GameLogic::giveCrowns()
         {
             m_playersInDeathOrder[m_playersInDeathOrder.size() - 2]->addCrowns(1);
         }
-        gameRunning = false; // jocul e gata
+        gameRunning = false;
     }
 }

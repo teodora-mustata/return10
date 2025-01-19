@@ -18,7 +18,6 @@ void TeleportTrap::activateEffect(Player& player) {
     Coordinate newLocation = m_validCells[dist(gen)];
 
     player.setPosition(newLocation);
-    std::cout << "Player teleported to (" << newLocation.i << ", " << newLocation.j << ").\n";
 
     setState(false);
 }

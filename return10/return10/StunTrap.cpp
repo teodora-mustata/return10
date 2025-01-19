@@ -10,7 +10,6 @@ void StunTrap::activateEffect(Player& player) {
  
     if (m_isActive) {
         player.immobilize(std::chrono::steady_clock::now(), m_duration);
-        std::cout << "Player has been immobilized for " << m_duration.count() << " seconds.\n";
         setState(false);
     }
 }
