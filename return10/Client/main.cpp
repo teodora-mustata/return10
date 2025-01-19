@@ -14,6 +14,8 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
+    app.setWindowIcon(QIcon("catIcon3.png"));
+
     LoginRegisterManager loginRegisterWindow;
     loginRegisterWindow.setWindowTitle("Login");
     loginRegisterWindow.resize(400, 300);
