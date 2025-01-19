@@ -28,7 +28,6 @@ int main()
     catch (...) {
         std::cerr << "An unknown error occurred." << '\n';
     }
-
     return 0;
 
 }

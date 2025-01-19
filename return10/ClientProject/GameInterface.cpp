@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 #include <conio.h>
-
+import validation;
 #ifdef _WIN32
 #include <windows.h>
 void enableANSIInWindows() {
@@ -25,20 +25,27 @@ void GameInterface::handleInput()
         std::cout << "W/A/S/D to move, F to shoot: ";
         char input = _getch();
         input = toupper(input);
-
-        // Traducem input-ul într-o comandă pentru server
-        std::string command;
-        switch (input) {
-        case 'W': command = "MOVE_UP"; break;
-        case 'A': command = "MOVE_LEFT"; break;
-        case 'S': command = "MOVE_DOWN"; break;
-        case 'D': command = "MOVE_RIGHT"; break;
-        case 'F': command = "SHOOT"; break;
-        default:
-            std::cout << "Invalid command!" << std::endl;
+        //if (Validator::ValidateUserInput(input)) {
+        if (Validator::ValidateUserInput(std::string_view(&input, 1))) {
+            std::string command;
+            switch (input) {
+            case 'W': command = "MOVE_UP"; break;
+            case 'A': command = "MOVE_LEFT"; break;
+            case 'S': command = "MOVE_DOWN"; break;
+            case 'D': command = "MOVE_RIGHT"; break;
+            case 'F': command = "SHOOT"; break;
+            default:
+                std::cout << "Invalid command!" << std::endl;
+                return;
+            }
+            sendCommandToServer(command);
+        }
+        else {
             return;
         }
-        sendCommandToServer(command);
+        //validator.ValidateUserInput(input);
+        // Traducem input-ul într-o comandă pentru server
+        
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿#include "LoginMenu.h"
 import validation;
+import verification;
 void LoginMenu::display()
 {
     while (true) {
@@ -33,24 +34,28 @@ void LoginMenu::display()
             std::cin >> password;
             std::cout << "Reenter your password: ";
             std::cin >> passwordVerify;
-            Validator validator;
-            if (passwordValidation(password) == true)
+            //Validator validator;
+            Verifier verifier;
+            if (!verifier.AreEmpty(username,password,passwordVerify))
             {
-                if (password == passwordVerify && handleSignUp(username, password)) {
-                    std::cout << "Account created successfully! Proceeding to log in...\n";
-                    handleLogin(username, password);
-                    break;
-                }
-                else if (password != passwordVerify) {
-                    showErrorMessage("The passwords don't match! Please try again.\n");
-                }
-                else
+                if (Validator::ValidatePassword(password) == true)
                 {
-                    showErrorMessage("Sign Up failed. Please try again.\n");
+                    if (password == passwordVerify && handleSignUp(username, password)) {
+                        std::cout << "Account created successfully! Proceeding to log in...\n";
+                        handleLogin(username, password);
+                        break;
+                    }
+                    else if (password != passwordVerify) {
+                        showErrorMessage("The passwords don't match! Please try again.\n");
+                    }
+                    else
+                    {
+                        showErrorMessage("Sign Up failed. Please try again.\n");
+                    }
                 }
-            }
-            else {
-                showErrorMessage("Password is not strong enough! Please try again.\n");
+                else {
+                    showErrorMessage("Password is not strong enough! Please try again.\n");
+                }
             }
         }
         else {
