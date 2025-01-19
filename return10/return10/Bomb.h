@@ -16,7 +16,7 @@ public:
 	void activate();
 private:
 	int m_posX, m_posY;
-	bool m_isActive;
+	bool m_isActive = true;
 	static const int m_damage = 1;
 	static const int m_radius = 1;
 };

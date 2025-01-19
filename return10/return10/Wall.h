@@ -17,11 +17,11 @@ public:
     int getX();
     int getY();
     bool isDestructible() const;
-    void setContainedBomb(std::unique_ptr<Bomb> bomb);
-    Bomb* getContainedBomb() const;
+    void setContainedBomb(std::shared_ptr<Bomb> bomb);
+    std::shared_ptr<Bomb> getContainedBomb() const;
 
 private:
     int m_posX, m_posY;
     bool m_destructible;
-    std::unique_ptr<Bomb> m_containedBomb;
+    std::shared_ptr<Bomb> m_containedBomb;
 };

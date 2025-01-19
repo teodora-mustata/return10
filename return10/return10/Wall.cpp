@@ -34,8 +34,8 @@ int Wall::getY() { return m_posY; }
 
 bool Wall::isDestructible() const { return m_destructible; }
 
-void Wall::setContainedBomb(std::unique_ptr<Bomb> bomb) {
+void Wall::setContainedBomb(std::shared_ptr<Bomb> bomb) {
     m_containedBomb = std::move(bomb); // Transfer ownership
 }
 
-Bomb* Wall::getContainedBomb() const { return m_containedBomb.get(); }
+std::shared_ptr<Bomb> Wall::getContainedBomb() const { return m_containedBomb; }

@@ -25,7 +25,7 @@ public:
 	std::vector<int> getInGamePlayers();
 	std::vector<std::shared_ptr<GameLogic>> getActiveGames();
 	//void startGame(int gameId);
-	void updatePlayerScore(Player player);
+	//void updatePlayerScore(Player player);
 private:
 	GameManager(GameStorage& storage);
 private:

@@ -1,7 +1,7 @@
 #include "Bomb.h"
 
 
-Bomb::Bomb(int x, int y) : m_posX(x), m_posY(y), m_isActive(false) {}
+Bomb::Bomb(int x, int y) : m_posX(x), m_posY(y), m_isActive(true) {}
 
 int Bomb::getX()
 {

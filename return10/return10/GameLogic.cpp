@@ -100,14 +100,14 @@ void GameLogic::applyDamage(Bomb bomb)
         int x = coord.first;
         int y = coord.second;
 
-        for (Player player : getPlayers())
+        for (Player &player : getPlayers())
         {
             int playerXCoord = player.GetPosition().i;
             int playerYCoord = player.GetPosition().j;
             if (playerXCoord == x && playerYCoord == y)
             {
-                //player is in bomb range -> they take damage
                 player.loseLife();
+                player.resetPosition();
             }
         }
 
@@ -175,7 +175,7 @@ bool GameLogic::checkWallCollision(Bullet& bullet) {
             << (wall->isDestructible() ? "Yes" : "No") << std::endl;
 
         if (wall->isDestructible()) {
-            if (auto* bomb = wall->getContainedBomb()) {
+            if (auto bomb = wall->getContainedBomb()) {
                 std::cout << "Bomb found in wall at (" << bomb->getX() << ", "
                     << bomb->getY() << "). IsActive: "
                     << (bomb->isActive() ? "Yes" : "No") << std::endl;
@@ -563,10 +563,8 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         return;
     }
 
-    // Actualizează statutul jucătorului
-    player->UpdateStatus(0); // Actualizează statusul, deltaTime poate fi calculat în funcție de implementarea ta
+    player->UpdateStatus(0); 
 
-    // Verifică dacă jucătorul este imobilizat
     if (player->IsImmobilized()) {
         std::cout << "Player is immobilized and cannot move.\n";
         return;
