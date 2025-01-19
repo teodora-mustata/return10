@@ -270,42 +270,6 @@ std::pair<int, int> Map::getRandomSpawnPoint()
 	return selectedSpawnPoint;
 }
 
-//std::ostream& operator<<(std::ostream& os, const Map& map) {
-//	const auto& board = map.m_board;
-//	const auto& spawnPoints = map.m_spawnPoints;
-//
-//	for (int i = 0; i < board.size(); ++i) {
-//		for (int j = 0; j < board[i].size(); ++j) {
-//			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
-//				os << "\033[32mS \033[0m"; // Spawn point = green
-//			}
-//			else {
-//				std::visit([&](auto&& arg) {
-//					using T = std::decay_t<decltype(arg)>;
-//					if constexpr (std::is_same_v<T, std::monostate>) {
-//						os << "0 "; // Empty
-//					}
-//					else if constexpr (std::is_same_v<T, Wall>) {
-//						if (arg.IsDestructible()) {
-//							if (arg.GetContainedBomb() != nullptr) {
-//								os << "\033[31mDB \033[0m"; // Destructible wall with bomb = red
-//							}
-//							else {
-//								os << "\033[36mD \033[0m"; // Destructible wall = cyan
-//							}
-//						}
-//						else {
-//							os << "\033[34mI \033[0m"; // Indestructible wall = blue
-//						}
-//					}
-//					}, board[i][j]);
-//			}
-//		}
-//		os << '\n';
-//	}
-//
-//	return os;
-//}
 
 std::ostream& operator<<(std::ostream& os, const Map& map) {
 	const auto& board = map.m_board;

@@ -284,29 +284,6 @@ void Routing::SetupLoginRoutes()
         });
 }
 
-//void Routing::sendMap(crow::response& res)
-//{
-//    std::vector<std::string> map = m_gameLogic.convertMapToString();
-//
-//    //std::vector<std::tuple<int, int, int>> playerPositions; // id+position
-//    //for (auto player : m_gameLogic.GetPlayers())
-//    //{
-//
-//    //    int i = player.GetPosition().i;
-//    //    int j = player.GetPosition().j;
-//    //    playerPositions.emplace_back(i, j);
-//    //}
-//
-//    crow::json::wvalue mapJson;
-//
-//    crow::json::wvalue::list mapArray;
-//    for (const auto& line : map) {
-//        mapArray.push_back(line);
-//    }
-//    mapJson["map"] = std::move(mapArray);
-//    res.set_header("Content-Type", "application/json");
-//    res.write(mapJson.dump());
-//}
 
 void Routing::sendMap(crow::response& res, int playerId)
 {
@@ -322,11 +299,6 @@ void Routing::sendMap(crow::response& res, int playerId)
         }
 
         std::vector<std::string> map = game->convertMapToString();
-
-        // Debugging the map structure
-        //for (const auto& line : map) {
-        //    CROW_LOG_INFO << "Map line: " << line;
-        //}
 
         crow::json::wvalue mapJson;
         crow::json::wvalue::list mapArray;
@@ -602,23 +574,6 @@ void Routing::AddPlayerToLobby()
         });
 }
 
-//void Routing::GetActivePlayers()
-//{
-//    CROW_ROUTE(m_app, "/get_active_players")
-//        .methods(crow::HTTPMethod::POST)([&](const crow::request& req, crow::response& res) {
-//        try {
-//            int players = m_gameLogic.GetPlayers().size();
-//            crow::json::wvalue response;
-//            response["active_players"] = players;
-//            res.body = response.dump();
-//            res.code = 200;
-//        }
-//        catch (const std::exception& e) {
-//            res.code = 500;
-//            res.body = std::string("Internal server error: ") + e.what();
-//        }
-//            });
-//}
 
 void Routing::getActivePlayers()
 {
@@ -719,47 +674,6 @@ void Routing::checkWinCondition() //isGameRunning
             });
 }
 
-//void Routing::SetDifficulty()
-//{
-//    CROW_ROUTE(m_app, "/send_difficulty").methods(crow::HTTPMethod::POST)
-//        ([&](const crow::request& req, crow::response& res) {
-//        auto jsonData = crow::json::load(req.body);
-//        if (!jsonData) {
-//            res.code = 400;
-//            res.write("Invalid JSON data.");
-//            res.end();
-//            return;
-//        }
-//
-//        int requestedDifficulty = jsonData["difficulty"].i();
-//        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
-//
-//        if (currentDifficulty != 0) {
-//            res.code = 403; // Forbidden
-//            res.write("Difficulty already set by another client.");
-//            res.end();
-//            return;
-//        }
-//
-//        m_gameLogic.GetMap().setDifficulty(requestedDifficulty);
-//        m_gameLogic.GetMap().initialize();
-//
-//        res.code = 200;
-//        res.write("Difficulty set successfully.");
-//        res.end();
-//            });
-//
-//    CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
-//        ([&](const crow::request& req, crow::response& res) {
-//        int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
-//        crow::json::wvalue jsonResponse;
-//        jsonResponse["difficulty"] = currentDifficulty;
-//
-//        res.code = 200;
-//        res.write(jsonResponse.dump());
-//        res.end();
-//            });
-//}
 
 void Routing::SetDifficulty()
 {
@@ -837,61 +751,7 @@ http://localhost:18080/send_difficulty
         res.end();
             });
 }
-//
-//void Routing::HandlePlayerCommand()
-//{
-//    CROW_ROUTE(m_app, "/command")
-//        .methods("POST"_method)([this](const crow::request& req) {
-//
-//        auto commandData = crow::json::load(req.body);
-//        if (!commandData) {
-//            return crow::response(400, "Invalid input");
-//        }
-//
-//        std::string command = commandData["command"].s();
-//        int id = commandData["id"].i();
-//
-//
-//        auto it = std::find_if(
-//            m_gameLogic.getPlayers().begin(),
-//            m_gameLogic.getPlayers().end(),
-//            [id](const Player& player) { return player.GetId() == id; }
-//        );
-//
-//        if (it == m_gameLogic.getPlayers().end()) {
-//            return crow::response(404, "Player not found");
-//        }
-//
-//        Player& currentPlayer = *it;
-//
-//        if (command == "MOVE_UP") {
-//            m_gameLogic.movePlayer(&currentPlayer, Direction::UP);
-//        }
-//        else if (command == "MOVE_LEFT") {
-//            m_gameLogic.movePlayer(&currentPlayer, Direction::LEFT);
-//        }
-//        else if (command == "MOVE_DOWN") {
-//            m_gameLogic.movePlayer(&currentPlayer, Direction::DOWN);
-//        }
-//        else if (command == "MOVE_RIGHT") {
-//            m_gameLogic.movePlayer(&currentPlayer, Direction::RIGHT);
-//        }
-//        else if (command == "SHOOT") {
-//            Direction dir = currentPlayer.GetFacingDirection();
-//            currentPlayer.shoot(dir);
-//        }
-//        else {
-//            return crow::response(400, "Invalid command");
-//        }
-//        //if (m_gameLogic.WinCondition()) {
-//        //    return crow::response(200, crow::json::wvalue{
-//        //        {"status", "game_over"},
-//        //        {"message", "A player has won the game!"}
-//        //        });
-//        //}
-//        return crow::response(200, "Command processed successfully");
-//            });
-//}
+
 
 void Routing::HandlePlayerCommand()
 {

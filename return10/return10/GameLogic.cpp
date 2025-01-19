@@ -73,24 +73,7 @@ void GameLogic::initializeScores()
     }
 }
 
-//void GameLogic::startGame()
-//{
-//    startTime = std::chrono::steady_clock::now();
-//    while (gameRunning)
-//    {
-//        if (checkIfRunning() == false)
-//        {
-//            m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addCrowns(2);
-//            m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addScore(200);
-//            if (m_playersInDeathOrder.size() >= 2)
-//            {
-//                m_playersInDeathOrder[m_playersInDeathOrder.size() - 2]->addCrowns(1);
-//            }
-//            gameRunning = false; // jocul e gata
-//
-//        }
-//    }
-//}
+
 
 void GameLogic::applyDamage(Bomb bomb)
 {
@@ -252,23 +235,16 @@ std::vector<std::string> GameLogic::convertMapToString() const
                 auto trapInfo = map->getTrapInfo(rowIndex, colIndex);
                 
                 if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
-                    //std::cout << trapInfo->first << ' ' << trapInfo->second;
                     if (trapInfo->first == 'T') {
                         rowStr.push_back('T');
-                        //if(rowStr[rowStr.size() - 1] == 'T')
-                        //     std::cout << "successfully sent the character T " << "\n ";
                     }
                         
                     if (trapInfo->first == 'G') {
                             rowStr.push_back('G');
-                            /*if (rowStr[rowStr.size() - 1] == 'G')
-                            std::cout << "successfully sent the character G " <<  "\n ";*/
                     }
                         
                     if (trapInfo->first == 'S') {
                               rowStr.push_back('S');
-                              //if (rowStr[rowStr.size() - 1] == 'S')
-                              //       std::cout << "successfully sent the character S "  << "\n ";
                     }
                         
                     
@@ -308,42 +284,6 @@ std::vector<std::string> GameLogic::convertMapToString() const
     return charMap;
 }
 
-//
-//void GameLogic::updateBullets() {
-//    for (auto& player : m_players) {
-//        // Parcurgem fiecare glonț tras de jucătorul curent
-//        auto& bullets = player.getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
-//        for (size_t i = 0; i < bullets.size(); ++i) {
-//            auto& bullet = bullets[i];
-//
-//            if (!bullet.isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
-//
-//            bullet.move(); // Mutăm glonțul pe hartă
-//
-//            // Verificăm coliziunea cu zidurile
-//            if (checkWallCollision(std::make_unique<Bullet>(bullet))) {
-//                continue; // Dacă glonțul lovește un zid, îl distrugem
-//            }
-//
-//            // Verificăm coliziunea cu alți jucători
-//            for (auto& enemyPlayer : m_players) {
-//                if (&player != &enemyPlayer && checkPlayerCollision(enemyPlayer, bullet)) {
-//                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
-//                }
-//            }
-//
-//            // Verificăm coliziunea între gloanțele diferitelor jucători
-//            for (size_t j = i + 1; j < bullets.size(); ++j) {
-//                auto& otherBullet = bullets[j];
-//                if (bullet.getX() == otherBullet.getX() && bullet.getY() == otherBullet.getY()) {
-//                    // Dacă două gloanțe se întâlnesc, le anulam
-//                    bullet.deactivate();
-//                    otherBullet.deactivate();
-//                }
-//            }
-//        }
-//    }
-//}
 
 void GameLogic::updateBullets() {
     for (auto& player : m_players) {
@@ -353,7 +293,6 @@ void GameLogic::updateBullets() {
 
             if (!bullet.isActive()) continue; 
 
-            //moveBullet(GetMap(), player, &player.getGun());
             bullet.move(); 
 
             if (checkWallCollision(bullet)) {
@@ -377,43 +316,6 @@ void GameLogic::updateBullets() {
     }
 }
 
-//
-//void GameLogic::updateBullets() {
-//    for (auto* player : m_players) {
-//        // Parcurgem fiecare glonț tras de jucătorul curent
-//        auto* bullets = &player->getGun().getFiredBullets(); // Accesăm vectorul de gloanțe al jucătorului
-//        for (size_t i = 0; i < bullets->size(); ++i) {
-//            // Convertim fiecare glonț într-un unique_ptr
-//            auto bullet = std::make_unique<Bullet>((*bullets)[i]);
-//
-//            if (!bullet->isActive()) continue; // Dacă glonțul nu este activ, trecem mai departe
-//
-//            bullet->move(); // Mutăm glonțul pe hartă
-//
-//            // Verificăm coliziunea cu zidurile
-//            if (checkWallCollision(std::move(bullet))) {
-//                continue; // Dacă glonțul lovește un zid, îl distrugem
-//            }
-//
-//            // Verificăm coliziunea cu alți jucători
-//            for (auto* enemyPlayer : m_players) {
-//                if (player != enemyPlayer && checkPlayerCollision(*enemyPlayer, *bullet)) {
-//                    break; // Dacă glonțul lovește un alt jucător, pierde o viata
-//                }
-//            }
-//
-//            // Verificăm coliziunea între gloanțele diferitelor jucători
-//            for (size_t j = i + 1; j < bullets->size(); ++j) {
-//                auto otherBullet = std::make_unique<Bullet>((*bullets)[j]);
-//                if (bullet->getX() == otherBullet->getX() && bullet->getY() == otherBullet->getY()) {
-//                    // Dacă două gloanțe se întâlnesc, le anulam
-//                    bullet->deactivate();
-//                    otherBullet->deactivate();
-//                }
-//            }
-//        }
-//    }
-//}
 
 
 std::vector<Player>& GameLogic::getPlayers()
@@ -473,87 +375,6 @@ void GameLogic::moveBullet(Map& map, Player& target, Gun* bullets)
         }
     }
 }
-
-//void GameLogic::movePlayer(Player* player, Direction direction)
-//{
-//    if (player == nullptr)
-//    {
-//        std::cout << "Player is null in movePlayer\n";
-//        return;
-//    }
-//
-//    // Actualizează statutul jucătorului
-//    player->UpdateStatus(0); // Actualizează statusul, deltaTime poate fi calculat în funcție de implementarea ta
-//
-//    if () {
-//        std::cout << "Player is immobilized and cannot move.\n";
-//        return;
-//    }
-//
-//    auto [currentX, currentY] = player->GetPosition();
-//    std::cout << "Current position: (" << currentX << ", " << currentY << ")\n";
-//
-//    int newX = currentX;
-//    int newY = currentY;
-//
-//    switch (direction) {
-//    case Direction::UP:    newX--; break;
-//    case Direction::DOWN:  newX++; break;
-//    case Direction::LEFT:  newY--; break;
-//    case Direction::RIGHT: newY++; break;
-//    }
-//
-//    auto dimensions = map->getDimensions();
-//    std::cout << "Attempting to move to: (" << newX << ", " << newY << ")\n";
-//    std::cout << "Map dimensions: (" << dimensions.first << ", " << dimensions.second << ")\n";
-//
-//    if (newX < 0 || newX >= dimensions.first || newY < 0 || newY >= dimensions.second) {
-//        std::cout << "Out of bounds! Movement aborted.\n";
-//        player->SetFacingDirection(direction);
-//        return;
-//    }
-//
-//    if (std::holds_alternative<Wall>(map->getBoard()[newX][newY]))
-//    {
-//        std::cout << "Hit a wall at (" << newX << ", " << newY << "). Movement aborted.\n";
-//        player->SetFacingDirection(direction);
-//        return;
-//    }
-//
-//    for (const auto& p : m_players) {
-//        if (p.GetPosition().i == newX && p.GetPosition().j == newY) {
-//            std::cout << "Hit a player at (" << newX << ", " << newY << "). Movement aborted.\n";
-//            player->SetFacingDirection(direction);
-//            return;
-//        }
-//    }
-// 
-//    //// Adaugă metoda Immobilize în clasa Player
-//    //void Player::Immobilize(std::chrono::steady_clock::time_point startTime, std::chrono::duration<float> duration) {
-//    //    m_isImmobilized = true;
-//    //    m_immobilizedStartTime = startTime;
-//    //    m_immobilizedDuration = duration;
-//    //}
-//    // Verifică dacă jucătorul se mută pe un CellType StunTrap
-//    player->move(direction);
-//    std::cout << "Player moved successfully.\n";
-//    CellType cellType = map->getCellType(newX, newY);
-//    if (std::holds_alternative<StunTrap>(cellType)) {
-//        std::cout << "Player is immobilized at (" << newX << ", " << newY << ").\n";
-//        StunTrap trap(newX, newY, 5);
-//        trap.activateEffect(*player);
-//        //player->Immobilize(std::chrono::steady_clock::now(), std::chrono::seconds(5));
-//    }
-//    CellType cellType2 = map->getCellType(newX, newY);
-//    if (std::holds_alternative<DisableGunTrap>(cellType)) {
-//        std::cout << "Player is immobilized at (" << newX << ", " << newY << ").\n";
-//        DisableGunTrap trap(newX,newY,5);
-//        trap.activateEffect(*player);
-//    }
-//
-//    /*player->move(direction);
-//    std::cout << "Player moved successfully.\n";*/
-//}
 
 void GameLogic::movePlayer(Player* player, Direction direction)
 {

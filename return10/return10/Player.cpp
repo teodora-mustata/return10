@@ -49,39 +49,7 @@ void Player::move(Direction direction)
 	}
 }
 
-//// Asumăm că m_position este de tip struct { int i; int j; }
-//void move(Direction direction, int maxRows, int maxCols) {
-//	switch (direction)
-//	{
-//	case Direction::UP:
-//		if (m_position.i > 0) { // Verificăm limitele hărții
-//			m_position.i -= 1;
-//			m_facingDirection = Direction::UP;
-//		}
-//		break;
-//	case Direction::DOWN:
-//		if (m_position.i < maxRows - 1) { // Verificăm limitele hărții
-//			m_position.i += 1;
-//			m_facingDirection = Direction::DOWN;
-//		}
-//		break;
-//	case Direction::LEFT:
-//		if (m_position.j > 0) { // Verificăm limitele hărții
-//			m_position.j -= 1;
-//			m_facingDirection = Direction::LEFT;
-//		}
-//		break;
-//	case Direction::RIGHT:
-//		if (m_position.j < maxCols - 1) { // Verificăm limitele hărții
-//			m_position.j += 1;
-//			m_facingDirection = Direction::RIGHT;
-//		}
-//		break;
-//	default:
-//		// Gestionăm direcții invalide, dacă este necesar
-//		break;
-//	}
-//}
+
 
 void Player::printPosition() {
 	std::cout << m_position.i << " " << m_position.j << "\n";

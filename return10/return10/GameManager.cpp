@@ -56,27 +56,7 @@ void GameManager::removePlayerFromGame(int playerId)
     }
 }
 
-//void GameManager::createNewGame()
-//{
-//    if (m_lobbyPlayers.size() >= 2)
-//    {
-//        int lobbySize;
-//        if (m_lobbyPlayers.size() >= 4) lobbySize = 4;
-//            else lobbySize = m_lobbyPlayers.size();
-//        Map map;
-//        auto newGame = std::make_shared<GameLogic>(map);
-//        for (int i = 0; i < lobbySize; i++)
-//        {
-//            int id = m_lobbyPlayers[i];
-//            addPlayerToGame(id);
-//            removePlayerFromLobby(id);
-//            Player newPlayer = getPlayerFromID(id);
-//            newGame->addPlayer(newPlayer);
-//        }
-//        newGame->startGame();
-//        m_activeGames.push_back(newGame);
-//    }
-//}
+
 
 void GameManager::createNewGame()
 {
@@ -145,19 +125,6 @@ void GameManager::endGames()
     }
 }
 
-//Player GameManager::getPlayerFromID(int id)
-//{
-//    PlayerDAO player_data = m_storage.GetPlayerByID(id);
-//    GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
-//
-//    Gun player_gun;
-//    player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-//    player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
-//
-//    Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun);
-//    return new_player;
-//}
-
 std::unique_ptr<Player> GameManager::getPlayerFromID(int id)
 {
     PlayerDAO player_data = m_storage.GetPlayerByID(id);
@@ -186,10 +153,6 @@ std::vector<std::shared_ptr<GameLogic>> GameManager::getActiveGames()
     return m_activeGames;
 }
 
-//void GameManager::startGame(int gameId)
-//{
-//    m_activeGames[gameId]->startGame();
-//}
 
 
 std::shared_ptr<GameLogic> GameManager::getGameByPlayerId(int playerId)

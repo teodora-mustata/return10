@@ -40,7 +40,7 @@ public:
     void moveBullet(Map& map, Player& target, Gun* bullets);
     void movePlayer(Player *player, Direction direction);
 
-    //void startGame();
+    
     bool isRunning() const;
     bool checkIfRunning();
 
@@ -53,7 +53,6 @@ public:
     Coordinate getNextPosition(const Coordinate& currentPosition, Direction direction);
 
 private:
-    //Map& map;
     std::shared_ptr<Map> map;
     std::vector<Player> m_players;
     std::vector<Player*> m_playersInDeathOrder;
