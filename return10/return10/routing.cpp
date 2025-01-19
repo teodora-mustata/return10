@@ -668,7 +668,7 @@ void Routing::updateMap() {
             });
 }
 
-void Routing::checkWinCondition()
+void Routing::checkWinCondition() //isGameRunning
 {
     CROW_ROUTE(m_app, "/check_win_condition")
         .methods("GET"_method)([&](const crow::request& req, crow::response& res) {
@@ -694,6 +694,15 @@ void Routing::checkWinCondition()
 
             int winCondition = game->checkIfRunning();
             std::cout << "Win condition: " << winCondition << std::endl;
+                
+            if (winCondition == 0) //if game is over
+            {
+                game->giveCrowns();
+                for (auto player : game->getPlayers())
+                {
+                    m_games.updatePlayerScore(player);
+                }
+            }
 
             crow::json::wvalue response;
             response["win_condition"] = winCondition;

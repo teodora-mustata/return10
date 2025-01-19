@@ -44,6 +44,8 @@ public:
     bool isRunning() const;
     bool checkIfRunning();
 
+    void giveCrowns();
+
     void processInput(int playerId, const std::string& command);
     void setState(GameState state);
     GameState getState() const;

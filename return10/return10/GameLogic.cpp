@@ -148,6 +148,7 @@ bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bull
             target.resetPosition();
             target.loseLife();
             owner.addScore(100);
+            std::cout << "Player lives > 1, added 100 score! \n";
             bullet.deactivate();
             return true;
         }
@@ -155,6 +156,7 @@ bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bull
         {
             m_playersInDeathOrder.push_back(std::make_shared<Player>(target));
             owner.addScore(100);
+            std::cout << "Player lives = 1, added 100 score! \n";
             target.loseLife();
             bullet.deactivate();
             return true;
@@ -545,4 +547,18 @@ bool GameLogic::checkIfRunning()
     }
 
     return false; // Jocul nu mai continuă
+}
+
+void GameLogic::giveCrowns()
+{
+    if (m_playersInDeathOrder.size() == m_players.size())
+    {
+        m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addCrowns(2);
+        m_playersInDeathOrder[m_playersInDeathOrder.size() - 1]->addScore(200);
+        if (m_playersInDeathOrder.size() >= 2)
+        {
+            m_playersInDeathOrder[m_playersInDeathOrder.size() - 2]->addCrowns(1);
+        }
+        gameRunning = false; // jocul e gata
+    }
 }

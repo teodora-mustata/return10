@@ -15,7 +15,6 @@ void GameManager::updatePlayerScore(Player player) {
     playerDAO.SetScore(newScore);
     playerDAO.SetCrowns(newCrownsAmount);
     m_storage.UpdatePlayerDAO(playerDAO);
-
 }
 
 void GameManager::sortLobbyPlayers()

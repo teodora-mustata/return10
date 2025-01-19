@@ -177,7 +177,7 @@ void GameInterface::startGame() {
     std::cout << "\033[2J\033[1;1H";
 #endif
     bool isGameRunning = true;
-    while (isGameRunning) {// checkWinCondition() = true daca jocul e terminat, false daca jocul continua
+    while (isGameRunning) {
         // checkWinCondition() = true daca jocul continua, false daca jocul se opreste
         std::cout << "\033[H";
 
@@ -202,7 +202,7 @@ void GameInterface::startGame() {
                 renderGame(gameData, playerId);
                 handleInput();
                 //updateMap();
-                //isGameRunning = checkWinCondition();
+                isGameRunning = checkWinCondition();
             }
             else {
                 std::cerr << "Game data is missing necessary fields or 'map' is not a list!" << std::endl;
@@ -215,8 +215,17 @@ void GameInterface::startGame() {
         }
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-        //std::cout << "\033[2J\033[1;1H"; 
+    }
+    if (isGameRunning == false)
+    {
+        std::cout << "Game is over! \n";
+        std::cout << "Exiting";
+        for (int i = 0; i < 3; i++)
+        {
+            std::cout << "." << std::flush;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+        return;
     }
 }
 
