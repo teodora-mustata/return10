@@ -154,7 +154,7 @@ bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bull
         }
         else if (target.GetLives() == 1)
         {
-            m_playersInDeathOrder.push_back(std::make_shared<Player>(target));
+            m_playersInDeathOrder.push_back(&target);
             owner.addScore(100);
             std::cout << "Player lives = 1, added 100 score! \n";
             target.loseLife();
@@ -528,16 +528,16 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 bool GameLogic::checkIfRunning()
 {
     int aliveCount = 0;
-    std::shared_ptr<Player> lastPlayer = nullptr;
+    Player* lastPlayer = nullptr;
 
     for (auto& player : m_players) {
         if (player.IsAlive()) {
             aliveCount++;
-            lastPlayer = std::make_shared<Player>(player);
+            lastPlayer = &player;
         }
     }
 
-    if (aliveCount > 1) { // Mai mult de 1 player în viață
+    if (aliveCount > 1) {
         return true; // Jocul continuă
     }
 

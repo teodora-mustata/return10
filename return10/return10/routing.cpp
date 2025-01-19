@@ -324,9 +324,9 @@ void Routing::sendMap(crow::response& res, int playerId)
         std::vector<std::string> map = game->convertMapToString();
 
         // Debugging the map structure
-        for (const auto& line : map) {
-            CROW_LOG_INFO << "Map line: " << line;
-        }
+        //for (const auto& line : map) {
+        //    CROW_LOG_INFO << "Map line: " << line;
+        //}
 
         crow::json::wvalue mapJson;
         crow::json::wvalue::list mapArray;

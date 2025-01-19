@@ -56,7 +56,7 @@ private:
     //Map& map;
     std::shared_ptr<Map> map;
     std::vector<Player> m_players;
-    std::vector<std::shared_ptr<Player>> m_playersInDeathOrder;
+    std::vector<Player*> m_playersInDeathOrder;
     std::chrono::steady_clock::time_point startTime;
     bool gameRunning = true;
     GameState m_gameState;
