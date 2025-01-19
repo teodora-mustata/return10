@@ -6,7 +6,7 @@ void ShopMenu::display() {
     while (true) {
         std::cout << "==== Shop Menu ====\n";
         std::cout << "1. Buy reload speed upgrade\n";
-        std::cout << "2. Sell bullet speed upgrade\n";
+        std::cout << "2. Buy bullet speed upgrade\n";
         std::cout << "3. Exit to Main Menu\n";
         std::cout << "Please select an option: ";
         std::cin >> choice;
@@ -15,7 +15,7 @@ void ShopMenu::display() {
             buyReloadSpeedUpgrade();
         }
         else if (choice == 2) {
-            buyReloadSpeedUpgrade();
+            buyBulletSpeedUpgrade();
         }
         else if (choice == 3) {
             std::cout << "Returning to Main Menu...\n";
@@ -29,7 +29,7 @@ void ShopMenu::display() {
 void ShopMenu::buyReloadSpeedUpgrade() {
     int userId = UserSession::getInstance().getUserId();
 
-    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/upgrade/reload_speed/" + std::to_string(userId) });
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/upgrade/reload_speed/" + std::to_string(userId) });
 
     if (response.status_code == 200) {
         auto responseJson = crow::json::load(response.text);
@@ -58,7 +58,7 @@ void ShopMenu::buyReloadSpeedUpgrade() {
 void ShopMenu::buyBulletSpeedUpgrade() {
     int userId = UserSession::getInstance().getUserId();
 
-    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/upgrade/bullet_speed/" + std::to_string(userId) });
+    auto response = cpr::Get(cpr::Url{ "http://localhost:18080/upgrade/bullet_speed/" + std::to_string(userId) });
 
     if (response.status_code == 200) {
         auto responseJson = crow::json::load(response.text);
