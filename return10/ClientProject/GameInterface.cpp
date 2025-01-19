@@ -218,6 +218,15 @@ void GameInterface::startGame() {
     }
     if (isGameRunning == false)
     {
+#ifdef _WIN32
+        enableANSIInWindows();
+#endif
+
+#ifdef _WIN32
+        system("cls");
+#else
+        std::cout << "\033[2J\033[1;1H";
+#endif
         std::cout << "Game is over! \n";
         std::cout << "Exiting";
         for (int i = 0; i < 3; i++)
@@ -225,7 +234,7 @@ void GameInterface::startGame() {
             std::cout << "." << std::flush;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
-        return;
+        exit(0);
     }
 }
 

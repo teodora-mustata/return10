@@ -354,7 +354,7 @@ void GameLogic::updateBullets() {
             if (!bullet.isActive()) continue; 
 
             //moveBullet(GetMap(), player, &player.getGun());
-            bullet.move();
+            bullet.move(); 
 
             if (checkWallCollision(bullet)) {
                 break;
