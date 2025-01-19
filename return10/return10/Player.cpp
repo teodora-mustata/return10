@@ -165,7 +165,7 @@ bool Player::operator==(const Player& other) const
 
 Player& Player::operator=(const Player& other)
 {
-	if (this != &other) { // Protecție împotriva auto-atribuției
+	if (this != &other) {
 		m_id = other.m_id;
 		m_score = other.m_score;
 		m_lives = other.m_lives;
@@ -173,7 +173,7 @@ Player& Player::operator=(const Player& other)
 		m_name = other.m_name;
 		m_position = other.m_position;
 		m_initial_position = other.m_initial_position;
-		m_gun = other.m_gun; // Dacă `Gun` are un operator `=` definit.
+		m_gun = other.m_gun;
 		m_isImmobilized = other.m_isImmobilized;
 		m_immobilizedStartTime = other.m_immobilizedStartTime;
 		m_immobilizedDuration = other.m_immobilizedDuration;

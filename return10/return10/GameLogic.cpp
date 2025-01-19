@@ -32,14 +32,12 @@ void GameLogic::checkForTraps(Player& player) {
     Coordinate pos = player.GetPosition();
     auto& cell = map->getCellType(pos.i, pos.j);
 
-    // Use std::visit to handle the cell type
     std::visit(
         [&player, this, &pos](auto&& cellType) {
             using T = std::decay_t<decltype(cellType)>;
             if constexpr (std::is_base_of_v<Trap, T>) {
-                // If the cell is a Trap or derived from Trap, activate it
                 cellType.activateEffect(player);
-                map->setCellType(pos.i, pos.j, std::monostate{}); // Remove trap after activation
+                map->setCellType(pos.i, pos.j, std::monostate{}); 
             }
             
         },
@@ -47,7 +45,7 @@ void GameLogic::checkForTraps(Player& player) {
     );
 }
 
-void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
+void GameLogic::initializePlayers()
 {
     auto spawnPoints = map->getSpawnPoints();
     int numPlayers = m_players.size();
@@ -55,8 +53,6 @@ void GameLogic::initializePlayers() // setez spawnpointurile pentru playeri
     for (int i = 0; i < numPlayers; ++i) {
         const auto& spawnPoint = spawnPoints[i];
         Coordinate coords(spawnPoint.first, spawnPoint.second);
-        /*coords.i= spawnPoint.first;
-        coords.j = spawnPoint.second;*/
         m_players[i].setInitialPosition(coords);
         m_players[i].setPosition(coords);
         std::cout << "Player " << i + 1 << " initialized at ("
@@ -119,8 +115,6 @@ void GameLogic::addPlayer(Player player)
 {
     m_players.push_back(player);
 }
-
-//Bullet
 
 bool GameLogic::checkPlayerCollision(Player& owner, Player& target, Bullet& bullet) {
     int targetX = target.GetPosition().i;
@@ -216,10 +210,8 @@ std::vector<std::string> GameLogic::convertMapToString() const
 
                 if (cellOverridden==false)
                 {
-                    //std::cout << "Fired bullets for player " << player.GetId() << ": " << std::endl;
                     for (const auto& bullet : player.getGun().getFiredBullets())
                     {
-                        //std::cout << "CONVERT MAP TO STRING: Bullet at position (" << bullet.getX() << ", " << bullet.getY() << ")" << std::endl;
                         if (bullet.getX() == rowIndex && bullet.getY() == colIndex && bullet.isActive()==true) {
                             rowStr.push_back('*');
                             cellOverridden = true;
@@ -234,7 +226,7 @@ std::vector<std::string> GameLogic::convertMapToString() const
             if (cellOverridden==false) {
                 auto trapInfo = map->getTrapInfo(rowIndex, colIndex);
                 
-                if (trapInfo.has_value() && trapInfo->second) { // Trap exists and is active
+                if (trapInfo.has_value() && trapInfo->second) {
                     if (trapInfo->first == 'T') {
                         rowStr.push_back('T');
                     }
@@ -358,19 +350,14 @@ bool GameLogic::isRunning() const
 
 void GameLogic::moveBullet(Map& map, Player& target, Gun* bullets)
 {
-    auto firedBullets = bullets->getFiredBullets(); // Reference to the vector of bullets
+    auto firedBullets = bullets->getFiredBullets();
     for (auto currentBullet = firedBullets.begin(); currentBullet != firedBullets.end(); ) {
-        currentBullet->move(); // Update the position of the current bullet
-
-        //checkPlayerCollision(target, *currentBullet); // Check for collisions with the player
-        //checkWallCollision(map, *currentBullet);      // Check for collisions with walls
+        currentBullet->move(); 
 
         if (!currentBullet->isActive()) {
-            // Remove inactive bullets and update iterator
             currentBullet = firedBullets.erase(currentBullet);
         }
         else {
-            // Move to the next bullet if no erase
             ++currentBullet;
         }
     }
@@ -429,15 +416,11 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         }
     }
 
-    // Mută jucătorul
     player->move(direction);
     std::cout << "Player moved successfully.\n";
-
-    // Verifică dacă jucătorul se mută pe un CellType care este o capcană și activează efectul acesteia
     CellType cellType = map->getCellType(newX, newY);
 
     if (std::holds_alternative<StunTrap>(cellType)) {
-        //StunTrap trap(newX,newY,5);
         StunTrap& trap = std::get<StunTrap>(cellType);
         if (trap.IsActive()) {
             trap.activateEffect(*player);
@@ -448,7 +431,6 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 
     if (std::holds_alternative<DisableGunTrap>(cellType)) {
         DisableGunTrap& trap = std::get<DisableGunTrap>(cellType);
-        //DisableGunTrap trap(newX,newY,5);
         if (trap.IsActive()) {
             trap.activateEffect(*player);
             trap.SetState(false);
@@ -458,7 +440,6 @@ void GameLogic::movePlayer(Player* player, Direction direction)
 
     if (std::holds_alternative<TeleportTrap>(cellType)) {
         TeleportTrap& trap = std::get<TeleportTrap>(cellType);
-        //DisableGunTrap trap(newX,newY,5);
         if (trap.IsActive()) {
             trap.activateEffect(*player);
             trap.SetState(false);
@@ -466,8 +447,6 @@ void GameLogic::movePlayer(Player* player, Direction direction)
         }
     }
 
-
-    // Actualizează starea armei
     player->getGun().updateJammed();
 }
 

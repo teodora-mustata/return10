@@ -1,6 +1,6 @@
 #include "Map.h"
 
-Map::Map() : m_height(40), m_width(40), m_difficulty(0) //default dimensions
+Map::Map() : m_height(40), m_width(40), m_difficulty(0)
 {
 	resizeMap();
 	generateSpawnPoints();
@@ -17,7 +17,7 @@ void Map::resizeMap()
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<> dist(20,30); // map dimensions will be between 20 and 30
+	std::uniform_int_distribution<> dist(40,40);
 
 	m_height = dist(gen);
 	m_width = dist(gen);
@@ -41,7 +41,6 @@ void Map::generateSpawnPoints()
 
 	for (const auto& point : temp) {
 		m_spawnPoints.push_back(point);
-		//std::cout << point.first << " " << point.second << "\n";
 	}
 }
 
@@ -61,18 +60,17 @@ void Map::generateWalls()
 
 			float random_value = dist(gen);
 			if (random_value < destructible_wall_chance) {
-				m_board[i][j] = Wall(i, j, true);//destructible
+				m_board[i][j] = Wall(i, j, true);
 			}
 			else if (random_value < destructible_wall_chance + indestructible_wall_chance) 
 			{
-				//no destructible walls on the side
 				if (i == 0 || i == m_height - 1 || j == 0 || j == m_width - 1) 
 				{
-					m_board[i][j].emplace<Wall>(i, j, true);// destructible	
+					m_board[i][j].emplace<Wall>(i, j, true);
 				}
 				else 
 				{
-					m_board[i][j].emplace<Wall>(i, j, false);	//indestructible
+					m_board[i][j].emplace<Wall>(i, j, false);
 				}
 			}
 
@@ -103,7 +101,7 @@ void Map::setBombs()
 		int y = destructibleWalls[k].second;
 		if (auto wallPtr = std::get_if<Wall>(&m_board[x][y])) {
 			auto bomb = std::make_unique<Bomb>(x, y); 
-			wallPtr->setContainedBomb(std::move(bomb)); // Transfer ownership
+			wallPtr->setContainedBomb(std::move(bomb));
 			m_bombs.emplace_back(x, y);
 		}
 	}
@@ -111,30 +109,24 @@ void Map::setBombs()
 
 std::optional<std::pair<char, bool>> Map::getTrapInfo(int row, int col) const {
 	if (row < 0 || row >= m_height || col < 0 || col >= m_width) {
-		//std::cout << "Invalid indices (" << row << ", " << col << ")\n";
 		return std::nullopt;
 	}
 
 	const auto& cell = m_board[row][col];
-	//std::cout << "Checking cell at (" << row << ", " << col << ")\n";
 
 	if (std::holds_alternative<TeleportTrap>(cell)) {
 		const TeleportTrap& trap = std::get<TeleportTrap>(cell);
-		//std::cout << "Found TeleportTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('T', trap.IsActive());
 	}
 	else if (std::holds_alternative<DisableGunTrap>(cell)) {
 		const DisableGunTrap& trap = std::get<DisableGunTrap>(cell);
-		//std::cout << "Found DisableGunTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('G', trap.IsActive());
 	}
 	else if (std::holds_alternative<StunTrap>(cell)) {
 		const StunTrap& trap = std::get<StunTrap>(cell);
-		//std::cout << "Found StunTrap, active: " << trap.IsActive() << '\n';
 		return std::make_pair('S', trap.IsActive());
 	}
 
-	//std::cout << "No trap found at (" << row << ", " << col << ")\n";
 	return std::nullopt;
 }
 
@@ -156,7 +148,7 @@ void Map::generateRandomTrap() {
 
 	std::shuffle(validCells.begin(), validCells.end(), gen);
 
-	int cellsWithTraps = validCells.size()/6; // 1/6 din toate celulele libere vor avea trape
+	int cellsWithTraps = validCells.size()/6;
 
 	int teleportTraps = 0, disableGunTraps = 0, stunTraps = 0;
 
@@ -196,7 +188,6 @@ void Map::generateRandomTrap() {
 void Map::initialize()
 {
 	if (m_difficulty != 0) generateRandomTrap();
-	// to do: make sure there are no traps on spawnpoints
 	else std::cout << "Difficulty is 0! \n";
 }
 
@@ -239,7 +230,6 @@ void Map::breakWall(int x, int y)
 {
 	if (std::holds_alternative<Wall>(m_board[x][y]))
 	{
-		// if it contains a bomb -> explode it
 		m_board[x][y] = std::monostate{};
 		std::cout << "Wall destroyed at (" << x << ", " << y << ")." << std::endl;
 	}
@@ -277,9 +267,8 @@ std::ostream& operator<<(std::ostream& os, const Map& map) {
 
 	for (int i = 0; i < board.size(); ++i) {
 		for (int j = 0; j < board[i].size(); ++j) {
-			// Check if the current cell is a spawn point
 			if (std::find(spawnPoints.begin(), spawnPoints.end(), std::make_pair(i, j)) != spawnPoints.end()) {
-				os << "\033[32mS \033[0m"; // Spawn point = green
+				os << "\033[32mS \033[0m"; 
 			}
 			else {
 				// Process the cell type

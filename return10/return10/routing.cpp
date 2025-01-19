@@ -1,12 +1,6 @@
 ﻿#include "routing.h"
 #include "Map.h"
 
-
-
-//Routing::Routing(GameStorage& storage, GameLogic& gameLogic) :m_storage(storage), m_gameLogic(gameLogic)
-//{
-//}
-
 std::string ConvertCellToString(const CellType& cell) {
     return std::visit([](auto&& arg) -> std::string {
         using T = std::decay_t<decltype(arg)>;
@@ -30,10 +24,6 @@ std::string ConvertCellToString(const CellType& cell) {
         }, cell);
 }
 
-//Routing::Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic) :m_app(app), m_storage(storage), m_gameLogic(gameLogic)
-//{
-//}
-
 Routing::Routing(GameStorage& storage, GameManager& gameLogic):m_storage(storage),m_games(gameLogic)
 {
 }
@@ -48,7 +38,6 @@ void Routing::Run() {
     SetupGameRoute();
     getActivePlayers();
     SetDifficulty();
-    //AddPlayerToGame();
     AddPlayerToLobby();
     CreateGame();
     HandlePlayerCommand();
@@ -184,7 +173,6 @@ void Routing::GetTheBestPlayersByCrowns() {
 
 void Routing::SetupLoginRoutes()
 {
-    // Route pentru login
     CROW_ROUTE(m_app, "/login").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
         if (!body) {
@@ -196,14 +184,11 @@ void Routing::SetupLoginRoutes()
 
         try {
             auto players = m_storage.GetPlayersDAO();
-
-            // Caută utilizatorul în lista de jucători
             auto it = std::find_if(players.begin(), players.end(), [&](const PlayerDAO& player) {
                 return player.GetName() == username && player.GetPassword() == password;
                 });
 
             if (it == players.end()) {
-                // Utilizatorul nu a fost găsit
                 return crow::response(401, "Invalid username or password!");
             }
 
@@ -211,31 +196,26 @@ void Routing::SetupLoginRoutes()
 
             crow::json::wvalue gunDetails;
             if (user.GetGunId() != -1) {
-                // Obține arma utilizatorului din baza de date
                 auto gun = m_storage.GetGunById(user.GetGunId());
                 gunDetails["fireRate"] = gun.GetFireRate();
                 gunDetails["bulletSpeed"] = gun.GetBulletSpeed();
             }
             else {
-                gunDetails = crow::json::wvalue(); // obiect gol
+                gunDetails = crow::json::wvalue();
             }
 
-            // Construiește răspunsul JSON
             crow::json::wvalue res;
             res["message"] = "Welcome " + user.GetName() + "!";
             res["score"] = user.GetScore();
             res["crowns"] = user.GetCrowns();
             res["gunDetails"] = std::move(gunDetails);
             res["userId"] = user.GetId();
-            //CROW_LOG_INFO << "Response JSON: " << res.dump();
             return crow::response(200, res);
         }
         catch (const std::exception& e) {
             return crow::response(500, std::string("Database error: ") + e.what());
         }
         });
-
-    // Route pentru signup
 
     CROW_ROUTE(m_app, "/signup").methods("POST"_method)([this](const crow::request& req) {
         auto body = crow::json::load(req.body);
@@ -244,40 +224,34 @@ void Routing::SetupLoginRoutes()
             return crow::response(400, "Invalid JSON format");
         }
 
-        // Obține numele utilizatorului și parola
         std::string username = body["username"].s();
         std::string password = body["password"].s();
 
-        // Verificăm dacă parola îndeplinește criteriile regex
         std::regex passwordRegex("^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$");
         if (!std::regex_match(password, passwordRegex)) {
             return crow::response(400, "Password does not meet complexity requirements");
         }
 
-        // Verificăm dacă utilizatorul există deja în baza de date
         auto players = m_storage.GetPlayersDAO();
         for (const auto& player : players) {
             if (player.GetName() == username) {
                 return crow::response(409, "Username already exists");
             }
         }
-        // Creăm un obiect GunDAO pentru a adăuga o armă asociată player-ului
-        GunDAO newGun;
-        newGun.SetFireRate(4);  // fire rate implicit
-        newGun.SetBulletSpeed(0.25);  // bullet speed implicit
 
-        // Inserăm arma în baza de date și obținem gunId
+        GunDAO newGun;
+        newGun.SetFireRate(4);
+        newGun.SetBulletSpeed(0.25);
+
         int gunId = m_storage.AddGunDAO(newGun);
 
-        // Creăm un obiect PlayerDAO
         PlayerDAO newPlayer;
         newPlayer.SetName(username);
         newPlayer.SetPassword(password);
-        newPlayer.SetCrowns(0);  // Scor implicit: 0
-        newPlayer.SetScore(0); // Puncte implicite: 0
-        newPlayer.SetGunId(gunId);  // Asociere implicită cu un GunId, poți schimba această logică
+        newPlayer.SetCrowns(0); 
+        newPlayer.SetScore(0);
+        newPlayer.SetGunId(gunId);
 
-        // Adăugăm player-ul în baza de date
         m_storage.AddPlayerDAO(newPlayer);
 
         return crow::response(201, "Account created successfully!");
@@ -292,7 +266,7 @@ void Routing::sendMap(crow::response& res, int playerId)
 
         if (!game) {
             CROW_LOG_INFO << "Game not found for player ID: " << playerId;
-            res.code = 404; // Not Found
+            res.code = 404;
             res.write("Game not found for the player.");
             res.end();
             return;
@@ -344,7 +318,6 @@ void Routing::BuyReloadSpeedUpgrade() {
     CROW_ROUTE(m_app, "/upgrade/reload_speed/<int>")
         ([this](int userId) {
         try {
-            //PlayerDAO player = getPlayerById(userId);
             PlayerDAO player = m_storage.GetPlayerByID(userId);
 
             if (player.GetId() == 0) {
@@ -353,7 +326,6 @@ void Routing::BuyReloadSpeedUpgrade() {
                 return crow::response(404, res);
             }
 
-            //GunDAO gun = getGunById(player.GetGunId());
             GunDAO gun = m_storage.GetGunById(player.GetGunId());
             if (gun.GetId() == 0) {
                 crow::json::wvalue res;
@@ -365,10 +337,6 @@ void Routing::BuyReloadSpeedUpgrade() {
 
             const int upgradeCost = 500;
             const double minReloadSpeed = 0.25;
-
-            //if (gun.GetFireRate() <= minReloadSpeed) {
-            //    return crow::response(400, "Reload speed is already at minimum value");
-            //}
 
             if (gun.GetFireRate() <= minReloadSpeed) {
                 crow::json::wvalue res;
@@ -457,83 +425,7 @@ void Routing::BuyBulletSpeedUpgrade() {
         }
             });
 }
-//void Routing::AddPlayerToGame()
-//{
-//    CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
-//
-//        try {
-//            auto jsonBody = crow::json::load(req.body);
-//            if (!jsonBody || !jsonBody.has("player_id")) {
-//                res.code = 400;
-//                res.body = "Invalid request! Missing or incorrect 'player_id'.";
-//                res.end();
-//                return;
-//            }
-//
-//            int player_id = jsonBody["player_id"].i();
-//
-//            PlayerDAO player_data = m_storage.GetPlayerByID(player_id);
-//
-//            if (player_data.GetId() == 0) {
-//                res.code = 404;
-//                res.body = "Player not found!";
-//                res.end();
-//                return;
-//            }
-//
-//            m_loggedInPlayers.push_back(player_id);
-//
-//
-//            auto& players = m_gameLogic.getPlayers();
-//
-//            if (players.size() < 4) {
-//
-//                if (player_data.GetId() == 0) {
-//                    res.code = 404;
-//                    res.body = "Player not found!";
-//                    return;
-//                }
-//
-//                GunDAO gun_data = m_storage.GetGunById(player_data.GetGunId());
-//
-//                if (gun_data.GetId() == 0) {
-//                    res.code = 404;
-//                    res.body = "Gun not found!";
-//                    return;
-//                }
-//
-//                Gun player_gun;
-//                player_gun.setFiringRate(std::chrono::seconds(static_cast<int>(gun_data.GetFireRate())));
-//                player_gun.setBulletSpeed(gun_data.GetBulletSpeed());
-//
-//                Coordinate spawnpoint;
-//                spawnpoint.i = m_gameLogic.GetMap().getRandomSpawnPoint().first;
-//                spawnpoint.j = m_gameLogic.GetMap().getRandomSpawnPoint().second;
-//
-//                Player new_player(player_data.GetId(), player_data.GetName(), player_data.GetScore(), player_data.GetCrowns(), player_gun, spawnpoint);
-//
-//                m_gameLogic.addPlayer(new_player);
-//
-//                //if (m_gameLogic.GetPlayers().size() >= 2) m_gameLogic.startGame();
-//
-//                /*crow::json::wvalue response;
-//                response["current_players"] = players.size();
-//                res.body = response.dump();*/
-//                res.code = 200;
-//            }
-//            else {
-//                res.code = 400;
-//                res.body = "Lobby is full!"; // Dacă sunt deja 4 jucători
-//            }
-//        }
-//        catch (const std::exception& e) {
-//            res.code = 500;
-//            res.body = std::string("Internal server error: ") + e.what();
-//        }
-//
-//        res.end();
-//        });
-//}
+
 void Routing::AddPlayerToLobby()
 {
     CROW_ROUTE(m_app, "/add_player").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
@@ -560,8 +452,6 @@ void Routing::AddPlayerToLobby()
 
             CROW_LOG_INFO << "Adding player " << player_id << " to lobby.";
             m_games.addPlayerToLobby(player_id);
-            //m_games.createNewGame();
-            //m_games.endGames();
 
             res.code = 200;
         }
@@ -623,7 +513,7 @@ void Routing::updateMap() {
             });
 }
 
-void Routing::checkWinCondition() //isGameRunning
+void Routing::checkWinCondition()
 {
     CROW_ROUTE(m_app, "/check_win_condition")
         .methods("GET"_method)([&](const crow::request& req, crow::response& res) {
@@ -650,7 +540,7 @@ void Routing::checkWinCondition() //isGameRunning
             int winCondition = game->checkIfRunning();
             std::cout << "Win condition: " << winCondition << std::endl;
                 
-            if (winCondition == 0) //if game is over
+            if (winCondition == 0)
             {
                 game->giveCrowns();
                 for (auto player : game->getPlayers())
@@ -693,13 +583,11 @@ http://localhost:18080/send_difficulty
         auto game = m_games.getGameByPlayerId(playerId);
 
         if (!game) {
-            res.code = 404; // Not Found
+            res.code = 404;
             res.write("Game not found for the player.");
             res.end();
             return;
         }
-
-        //int currentDifficulty = game->GetMap().getDifficulty();
 
         auto& mapRef = game->GetMap();
         int currentDifficulty = mapRef.getDifficulty();
@@ -708,7 +596,7 @@ http://localhost:18080/send_difficulty
         CROW_LOG_INFO << "Difficulty to set: " << requestedDifficulty;
 
         if (currentDifficulty != 0) {
-            res.code = 403; // Forbidden
+            res.code = 403;
             res.write("Difficulty already set by another client.");
             res.end();
             return;
@@ -736,7 +624,7 @@ http://localhost:18080/send_difficulty
         auto game = m_games.getGameByPlayerId(playerId);
 
         if (!game) {
-            res.code = 404; // Not Found
+            res.code = 404;
             res.write("Game not found for the player.");
             res.end();
             return;
@@ -839,39 +727,4 @@ void Routing::CreateGame()
                 return crow::response(200);
             });
 }
-
-//int GameInterface::getActivePlayers()
-//{
-//    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/get_active_players" });
-//
-//    if (response.status_code == 200) {
-//        auto jsonResponse = crow::json::load(response.text);
-//        if (jsonResponse) {
-//            return jsonResponse["active_players"].i();
-//        }
-//    }
-//    return -1;
-//}
-//
-//CROW_ROUTE(m_app, "/get_difficulty").methods(crow::HTTPMethod::GET)
-//([&](const crow::request& req, crow::response& res) {
-//    int currentDifficulty = m_gameLogic.GetMap().getDifficulty();
-//    crow::json::wvalue jsonResponse;
-//    jsonResponse["difficulty"] = currentDifficulty;
-//
-//    res.code = 200;
-//    res.write(jsonResponse.dump());
-//    res.end();
-//    });
-//
-//void Routing::getActivePlayers()
-//{
-//    CROW_ROUTE(m_app, "/get_active_players").methods("GET"_method)([this](const crow::request& req)
-//        {
-//            int players = m_gameLogic.getPlayers().size();
-//            crow::json::wvalue jsonResponse;
-//            jsonResponse["active_players"] = players;
-//            return crow::response{ jsonResponse };
-//        });
-//}
 

@@ -186,7 +186,6 @@ void GameInterface::startGame() {
                 updateMap();
                 renderGame(gameData, playerId);
                 handleInput();
-                //updateMap();
                 isGameRunning = checkWinCondition();
             }
             else {

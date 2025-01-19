@@ -56,8 +56,6 @@ void GameManager::removePlayerFromGame(int playerId)
     }
 }
 
-
-
 void GameManager::createNewGame()
 {
     if (m_lobbyPlayers.size() < 2)
@@ -73,7 +71,7 @@ void GameManager::createNewGame()
         auto map = std::make_shared<Map>();
         auto newGame = std::make_shared<GameLogic>(map);
 
-        for (int i = lobbySize - 1; i >= 0; i--) // pe ruta de login de la player
+        for (int i = lobbySize - 1; i >= 0; i--) 
         {
             int id = m_lobbyPlayers[i];
             addPlayerToGame(id);
@@ -88,7 +86,6 @@ void GameManager::createNewGame()
         }
         newGame->initializePlayers();
         newGame->initializeScores();
-        //newGame->startGame();
         if (newGame) {
             m_activeGames.push_back(newGame);
             CROW_LOG_INFO << "Created a new game!";
@@ -101,7 +98,7 @@ void GameManager::createNewGame()
 
 void GameManager::endGame(int gameId)
 {
-    if (m_activeGames[gameId]->isRunning() == false) //game is over
+    if (m_activeGames[gameId]->isRunning() == false)
     {
         for (auto player : m_activeGames[gameId]->getPlayers())
         {
