@@ -8,6 +8,16 @@ GameManager& GameManager::getInstance(GameStorage& storage)
 
 GameManager::GameManager(GameStorage& storage) : m_storage(storage) {}
 
+void GameManager::updatePlayerScore(Player player) {
+    PlayerDAO playerDAO = m_storage.GetPlayerByID(player.GetId());
+    int newScore = playerDAO.GetScore() + player.GetScore();
+    int newCrownsAmount = playerDAO.GetCrowns() + player.GetCrowns();
+    playerDAO.SetScore(newScore);
+    playerDAO.SetCrowns(newCrownsAmount);
+    m_storage.UpdatePlayerDAO(playerDAO);
+
+}
+
 void GameManager::sortLobbyPlayers()
 {
     std::sort(m_lobbyPlayers.begin(), m_lobbyPlayers.end(),
