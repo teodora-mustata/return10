@@ -16,14 +16,12 @@ inline auto CreateStorage(const std::string& filename)
 		filename,
 		sql::make_table(
 			"Gun",
-			//&UsersEntity::SetUsername, &UsersEntity::GetUsername
 			sql::make_column("id", &GunDAO::SetId, &GunDAO::GetId, sql::primary_key().autoincrement()),
 			sql::make_column("fireRate", &GunDAO::SetFireRate, &GunDAO::GetFireRate),
 			sql::make_column("bulletSpeed", &GunDAO::SetBulletSpeed, &GunDAO::GetBulletSpeed)
 		),
 		sql::make_table(
 			"Player",
-			//&UsersEntity::SetUsername, &UsersEntity::GetUsername
 			sql::make_column("id", &PlayerDAO::SetId, &PlayerDAO::GetId, sql::primary_key().autoincrement()),
 			sql::make_column("name", &PlayerDAO::SetName, &PlayerDAO::GetName),
 			sql::make_column("score", &PlayerDAO::SetScore, &PlayerDAO::GetScore),
@@ -41,7 +39,7 @@ class GameStorage
 {
 public:
 	bool Initialize();
-	void AddPlayer(const Player& player); // to remove (?)
+	void AddPlayer(const Player& player);
 	void AddPlayerDAO(const PlayerDAO& playerDAO);
 	int AddGunDAO(const GunDAO& gun);
 	std::vector<PlayerDAO> GetPlayersDAO();

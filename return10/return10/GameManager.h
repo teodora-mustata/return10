@@ -26,8 +26,8 @@ public:
 private:
 	GameManager(GameStorage& storage);
 private:
-	std::vector<int> m_lobbyPlayers; // players waiting to join a game
-	std::vector<int> m_inGamePlayers; // players currently playing a game
+	std::vector<int> m_lobbyPlayers; 
+	std::vector<int> m_inGamePlayers;
 	std::vector<std::shared_ptr<GameLogic>> m_activeGames;
 	GameStorage& m_storage;
 };

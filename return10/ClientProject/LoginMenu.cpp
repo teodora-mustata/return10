@@ -34,7 +34,7 @@ void LoginMenu::display()
             std::cin >> password;
             std::cout << "Reenter your password: ";
             std::cin >> passwordVerify;
-            //Validator validator;
+
             Verifier verifier;
             if (!verifier.AreEmpty(username,password,passwordVerify))
             {
@@ -67,28 +67,23 @@ void LoginMenu::display()
 bool LoginMenu::passwordValidation(const std::string& password)
 {
     std::regex passwordRegex(R"(^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*]).{8,}$)");
-    // cel putin o litera mare, cel putin o cifra, cel putin un caracter special, 8+ caractere total
     return std::regex_match(password, passwordRegex);
 }
 
 bool LoginMenu::handleLogin(const std::string& username, const std::string& password) {
-    // Creează un obiect JSON cu datele utilizatorului
     crow::json::wvalue jsonData;
     jsonData["username"] = username;
     jsonData["password"] = password;
 
-    // Trimite un POST request către server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/login" },
         cpr::Header{ {"Content-Type", "application/json"} },
         cpr::Body{ jsonData.dump() }
     );
 
-    // Verifică răspunsul serverului
     if (response.status_code == 200) {
         auto responseJson = crow::json::load(response.text);
 
-        // Verificăm existența cheii "message"
         if (responseJson.has("message")) {
             std::string welcomeMessage = responseJson["message"].s();
             std::cout << welcomeMessage << std::endl;
@@ -130,16 +125,14 @@ bool LoginMenu::handleSignUp(const std::string& username, const std::string& pas
     jsonData["username"] = username;
     jsonData["password"] = password;
 
-    // Trimite un POST request către server
     auto response = cpr::Post(
         cpr::Url{ "http://localhost:18080/signup" },
-        cpr::Header{ {"Content-Type", "application/json"} },  // Setează tipul de conținut ca JSON
-        cpr::Body{ jsonData.dump() }  // Corpul cererii ca JSON (folosind `dump()` pentru a obține un string JSON)
+        cpr::Header{ {"Content-Type", "application/json"} },
+        cpr::Body{ jsonData.dump() }
     );
 
-    // Verifică răspunsul serverului
     if (response.status_code == 201) {
-        return true;  // Înregistrare reușită
+        return true;
     }
     else if (response.status_code == 409) {
         showErrorMessage("Username already exists. Please choose another.");
@@ -148,7 +141,7 @@ bool LoginMenu::handleSignUp(const std::string& username, const std::string& pas
         showErrorMessage("Server error. Please try again later.");
     }
 
-    return false;  // Înregistrare eșuată
+    return false;
 }
 
 void LoginMenu::showErrorMessage(const std::string& message) {

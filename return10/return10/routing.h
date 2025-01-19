@@ -9,10 +9,7 @@
 class Routing
 {
 public:
-	//Routing(crow::SimpleApp& app, GameStorage& storage, GameLogic& gameLogic);
 	Routing( GameStorage& storage, GameManager& gameLogic);
-	//Routing( GameManager& game);
-
 	void Run();
 	void SetupLoginRoutes();
 	void GetTheBestPlayersByCrowns();
@@ -23,7 +20,6 @@ public:
 	void SetupGameRoute();
 	void BuyReloadSpeedUpgrade();
 	void BuyBulletSpeedUpgrade();
-	//void AddPlayerToGame();
 	void AddPlayerToLobby();
 	void SetDifficulty();
 	void HandlePlayerCommand();
@@ -34,9 +30,6 @@ public:
 private:
 	crow::SimpleApp m_app;
 	GameStorage& m_storage;
-
 	GameManager m_games;
-	//GameLogic& m_gameLogic;
-	//std::vector<int> m_loggedInPlayers;
 };
 

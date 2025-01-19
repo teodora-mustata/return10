@@ -25,7 +25,6 @@ void GameInterface::handleInput()
         std::cout << "W/A/S/D to move, F to shoot: ";
         char input = _getch();
         input = toupper(input);
-        //if (Validator::ValidateUserInput(input)) {
         if (Validator::ValidateUserInput(std::string_view(&input, 1))) {
             std::string command;
             switch (input) {
@@ -43,9 +42,6 @@ void GameInterface::handleInput()
         else {
             return;
         }
-        //validator.ValidateUserInput(input);
-        // Traducem input-ul într-o comandă pentru server
-        
     }
 }
 
@@ -104,10 +100,8 @@ void GameInterface::updateMap() {
     );
 
     if (response.status_code == 200) {
-        //std::cout << "Map updated successfully!" << std::endl;
     }
     else {
-        //std::cout << "Failed to update map. Status code: " << response.status_code << std::endl;
     }
 }
 
@@ -122,21 +116,7 @@ bool GameInterface::sendCommandToServer(const std::string& command) {
             cpr::Header{ {"Content-Type", "application/json"} },
             cpr::Body{ jsonData.dump() }
         );
-        //std::cout << "Sending JSON: " << jsonData.dump() << std::endl;
-
-        /*if (response.status_code == 200) {
-            auto responseJson = crow::json::load(response.text);
-
-            if (responseJson.has("status") && responseJson["status"].s() == "success") {
-                std::cout << "Command executed successfully: " << responseJson["message"].s() << std::endl;
-                return true;
-            }
-            else if (responseJson.has("error")) {
-                std::cerr << "Server error: " << responseJson["error"].s() << std::endl;
-            }
-        }*/
         if (response.status_code == 200) {
-            //std::cout << "Server response: " << response.text << std::endl;
             return true;
         }
         else {
@@ -185,7 +165,6 @@ void GameInterface::startGame() {
 #endif
     bool isGameRunning = true;
     while (isGameRunning) {
-        // checkWinCondition() = true daca jocul continua, false daca jocul se opreste
         std::cout << "\033[H";
 
         
@@ -203,7 +182,6 @@ void GameInterface::startGame() {
 
         if (r.status_code == 200) {
             crow::json::rvalue gameData = crow::json::load(r.text);
-            //CROW_LOG_INFO << "Received response: " << r.text;
             if (gameData.has("map") && gameData["map"].t() == crow::json::type::List) {
                 updateMap();
                 renderGame(gameData, playerId);
@@ -281,63 +259,6 @@ bool GameInterface::checkWinCondition()
     }
     return false;
 }
-
-//void GameInterface::startGame() {
-//#ifdef _WIN32
-//    enableANSIInWindows();
-//#endif
-//
-//    int playerId = UserSession::getInstance().getUserId();
-//
-//    bool isRunning = true;
-//    std::thread inputThread([&]() {
-//        while (isRunning) {
-//            handleInput();
-//            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-//        }
-//        });
-//
-//
-//    while (isRunning) {
-//#ifdef _WIN32
-//        system("cls");
-//#else
-//        std::cout << "\033[2J\033[1;1H";
-//#endif
-//
-//        cpr::Response r = cpr::Post(cpr::Url{ "http://localhost:18080/map" });
-//
-//        if (r.status_code == 200) {
-//            crow::json::rvalue gameData = crow::json::load(r.text);
-//
-//            if (gameData.has("map")) {
-//                renderGame(gameData, playerId); 
-//            }
-//            else {
-//                std::cerr << "Game data is missing necessary fields!" << std::endl;
-//                isRunning = false;
-//            }
-//        }
-//        else {
-//            std::cerr << "Failed to get game state from server. Status code: " << r.status_code << std::endl;
-//            isRunning = false;
-//        }
-//
-//        //std::this_thread::sleep_for(std::chrono::milliseconds(50));
-//    }
-//
-//    isRunning = false;
-//    inputThread.join();
-//}
-
-//void GameInterface::displayStatus() {
-//    
-//    std::cout << m_user.GetName() << ": Lives=" << m_user.GetLives()
-//        << ", Score=" << m_user.GetScore()
-//        << ", Position=(" << m_user.GetPosition().i
-//        << ", " << m_user.GetPosition().j << ")\n";
-//  
-//}
 
 
 

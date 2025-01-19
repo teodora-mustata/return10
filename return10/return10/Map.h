@@ -28,10 +28,10 @@ public:
 
 	int getHeight();
 	int getWidth();
-	std::vector<std::vector<CellType>>& getBoard(); // here put & jerry it solved the debug assertion failre for playerMove
+	std::vector<std::vector<CellType>>& getBoard();
 	std::vector<std::pair<int, int>> getSpawnPoints();
-	CellType& getCellType(int x, int y); // pentru a modifica celula
-	const CellType& getCellType(int x, int y) const; // read only
+	CellType& getCellType(int x, int y);
+	const CellType& getCellType(int x, int y) const;
 	std::pair<int, int> getDimensions();
 	int getDifficulty();
 	std::pair<int, int> getRandomSpawnPoint();
@@ -40,15 +40,12 @@ public:
 	void setDifficulty(int difficulty);
 
 private:
-	// dimensions
 	int m_height, m_width;
 
-	// game board
 	std::vector<std::vector<CellType>> m_board;
 	std::vector<Bomb> m_bombs;
 	std::vector<std::pair<int, int>> m_spawnPoints;
 
-	// game config
 	static const int max_players = 4;
 	const float destructible_wall_chance = 0.4f;
 	const float indestructible_wall_chance = 0.1f;

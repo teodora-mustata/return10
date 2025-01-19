@@ -8,7 +8,7 @@ Wall::Wall(int x, int y, bool destructible)
 Wall::Wall(const Wall& other)
     : m_posX(other.m_posX), m_posY(other.m_posY), m_destructible(other.m_destructible) {
     if (other.m_containedBomb) {
-        m_containedBomb = std::make_unique<Bomb>(*other.m_containedBomb); // clone the bomb
+        m_containedBomb = std::make_unique<Bomb>(*other.m_containedBomb);
     }
 }
 
@@ -35,7 +35,7 @@ int Wall::getY() { return m_posY; }
 bool Wall::isDestructible() const { return m_destructible; }
 
 void Wall::setContainedBomb(std::shared_ptr<Bomb> bomb) {
-    m_containedBomb = std::move(bomb); // Transfer ownership
+    m_containedBomb = std::move(bomb);
 }
 
 std::shared_ptr<Bomb> Wall::getContainedBomb() const { return m_containedBomb; }

@@ -26,10 +26,8 @@ int main()
 	
 	storage.DisplayDatabaseContents();
 	Map map;
-	//GameLogic game(map);
 	GameManager& gameManager = GameManager::getInstance(storage);
 	Routing routing( storage,gameManager);
-	//Routing routing( gameManager);
 	routing.Run();
 
 }

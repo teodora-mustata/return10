@@ -38,7 +38,6 @@ bool Gun::fire(int playerX, int playerY, Direction playerDirection) {
 
     m_firedBullets.push_back(newBullet);
     std::cout << "bullet fired at position (" << bulletX << ", " << bulletY << ")" << std::endl;
-    //m_lastFiredTime = std::chrono::steady_clock::now();
 
     return true;
 }
@@ -83,6 +82,6 @@ void Gun::setBulletSpeed(float newBulletSpeed)
 
 float Gun::GetFiringRate() const
 {
-    return m_firingRate.count();  // Returneaz numarul de secunde ca float
+    return m_firingRate.count();
 }
 

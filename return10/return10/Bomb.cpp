@@ -23,7 +23,7 @@ std::list<std::pair<int, int>> Bomb::calculateEffectArea()
     std::list<std::pair<int, int>> area_of_effect;
     for (int x = m_posX - m_radius; x <= m_posX + m_radius; ++x)
         for (int y = m_posY - m_radius; y <= m_posY + m_radius; ++y)
-            if(x>=0 && y>=0) area_of_effect.emplace_back(std::make_pair(x, y)); // TO DO: x < map.height; y < map.width
+            if(x>=0 && y>=0) area_of_effect.emplace_back(std::make_pair(x, y));
     return area_of_effect;
 }
 

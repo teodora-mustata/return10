@@ -5,7 +5,6 @@ Bullet::Bullet(int startX, int startY, Direction dir, float bulletSpeed)
 {
 }
 
-
 void Bullet::move() {
     switch (m_direction) {
     case Direction::UP:
@@ -27,23 +26,6 @@ void Bullet::deactivate() {
     m_active = false;
 }
 
-//void Bullet::duplicateBulletSpeed()
-//{
-//    this->m_speed = m_speed * 2;
-//}
-
-//void Bullet::givePoints(Player& player)
-//{
-//    //to do daca a si castigat meciul ar trebui sa primeasca inca 200
-//    player.addPoints(100);
-//}
-
-//void Bullet::removePlayer(Player& player)
-//{
-//    //to do
-//}
-
-
 int Bullet::getX() const
 {
     return m_x;
@@ -55,7 +37,7 @@ int Bullet::getY() const
 Direction Bullet::getDirection() const {
     return m_direction;
 }
-//float Bullet::getSpeed() const { return m_speed; }
+
 bool Bullet::isActive() const { 
     return m_active; 
 }

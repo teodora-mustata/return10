@@ -19,7 +19,6 @@ public:
 	bool operator==(const Player& other);
 	void shoot(Direction direction);
 
-	//Getters
 	std::string GetName() const;
 	int GetScore() const;
 	int GetCrowns() const;
@@ -31,7 +30,6 @@ public:
 	Direction GetFacingDirection();
 	Coordinate getInitialPosition() const;
 
-	//Updates for player
 	void addScore(int acumulated_points);
 	void addCrowns(int acumulated_points);
 	void setInitialScore();
