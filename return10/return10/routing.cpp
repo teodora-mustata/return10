@@ -310,45 +310,59 @@ void Routing::SetupLoginRoutes()
 
 void Routing::sendMap(crow::response& res, int playerId)
 {
-    auto game = m_games.getGameByPlayerId(playerId);
-    CROW_LOG_INFO << "Game found: " << game.get();
-    if (!game.get()) {
-        res.code = 404; // Not Found
-        res.write("Game not found for the player.");
-        res.end();
-        return;
-    }
+    try {
+        auto game = m_games.getGameByPlayerId(playerId);
 
-    std::vector<std::string> map = game->convertMapToString();
+        if (!game) {
+            CROW_LOG_INFO << "Game not found for player ID: " << playerId;
+            res.code = 404; // Not Found
+            res.write("Game not found for the player.");
+            res.end();
+            return;
+        }
 
-    crow::json::wvalue mapJson;
-    crow::json::wvalue::list mapArray;
-    for (const auto& line : map) {
-        mapArray.push_back(line);
+        std::vector<std::string> map = game->convertMapToString();
+
+        // Debugging the map structure
+        for (const auto& line : map) {
+            CROW_LOG_INFO << "Map line: " << line;
+        }
+
+        crow::json::wvalue mapJson;
+        crow::json::wvalue::list mapArray;
+        for (const auto& line : map) {
+            mapArray.push_back(line);
+        }
+
+        mapJson["map"] = std::move(mapArray);
+        res.set_header("Content-Type", "application/json");
+        res.write(mapJson.dump());
+        res.code = 200;
     }
-    mapJson["map"] = std::move(mapArray);
-    //CROW_LOG_INFO << "Sending map data: " << mapJson.dump();
-    res.set_header("Content-Type", "application/json");
-    res.write(mapJson.dump());
+    catch (const std::exception& e) {
+        CROW_LOG_ERROR << "Error in sendMap: " << e.what();
+        res.code = 500;
+        res.write(std::string("Internal server error: ") + e.what());
+    }
     res.end();
 }
 
 void Routing::SetupGameRoute()
 {
-    // Rută pentru a trimite harta
-    CROW_ROUTE(m_app, "/map")
-        .methods(crow::HTTPMethod::POST)([this](const crow::request& req, crow::response& res) {
+    CROW_ROUTE(m_app, "/map").methods(crow::HTTPMethod::POST)([this](const crow::request& req, crow::response& res) {
         auto jsonData = crow::json::load(req.body);
-        if (!jsonData) {
+        if (!jsonData || !jsonData.has("playerId")) {
             res.code = 400;
             res.write("Invalid JSON data.");
             res.end();
             return;
         }
+
         int playerId = jsonData["playerId"].i();
-        sendMap(res,playerId);
-        res.end();
-            });
+        CROW_LOG_INFO << "Fetching map for player ID: " << playerId;
+
+        sendMap(res, playerId);
+        });
 
 }
 
@@ -872,70 +886,79 @@ http://localhost:18080/send_difficulty
 
 void Routing::HandlePlayerCommand()
 {
-    CROW_ROUTE(m_app, "/command")
-        .methods("POST"_method)([this](const crow::request& req) {
+    CROW_ROUTE(m_app, "/command").methods("POST"_method)([this](const crow::request& req, crow::response& res) {
+        try {
+            auto commandData = crow::json::load(req.body);
+            if (!commandData || !commandData.has("command") || !commandData.has("id")) {
+                res.code = 400;
+                res.write("Invalid input");
+                res.end();
+                return;
+            }
 
-        auto commandData = crow::json::load(req.body);
-        if (!commandData) {
-            return crow::response(400, "Invalid input");
-        }
-        std::cout << "Received JSON: " << req.body << std::endl;
+            std::string command = commandData["command"].s();
+            int playerId = commandData["id"].i();
 
-        std::string command = commandData["command"].s();
-        CROW_LOG_INFO <<"Command received:"<< command;
-        int id = commandData["id"].i();
+            auto game = m_games.getGameByPlayerId(playerId);
+            if (!game) {
+                res.code = 404;
+                res.write("Game not found for the player");
+                res.end();
+                return;
+            }
 
+            auto it = std::find_if(
+                game->getPlayers().begin(),
+                game->getPlayers().end(),
+                [playerId](const Player& player) { return player.GetId() == playerId; });
 
-        auto game = m_games.getGameByPlayerId(id);
-        if (!game) {
-            return crow::response(404, "Game not found for the player");
-        }
+            if (it == game->getPlayers().end()) {
+                res.code = 404;
+                res.write("Player not found in this game");
+                res.end();
+                return;
+            }
 
-        auto it = std::find_if(
-            game->getPlayers().begin(),
-            game->getPlayers().end(),
-            [id](const Player& player) { return player.GetId() == id; }
-        );
+            Player& currentPlayer = *it;
+            Direction dir;
 
-        if (it == game->getPlayers().end()) {
-            return crow::response(404, "Player not found in this game");
-        }
-
-        Player& currentPlayer = *it;
-
-        if (command == "MOVE_UP") {
-            game->movePlayer(&currentPlayer, Direction::UP);
-        }
-        else if (command == "MOVE_LEFT") {
-            game->movePlayer(&currentPlayer, Direction::LEFT);
-        }
-        else if (command == "MOVE_DOWN") {
-            game->movePlayer(&currentPlayer, Direction::DOWN);
-        }
-        else if (command == "MOVE_RIGHT") {
-            game->movePlayer(&currentPlayer, Direction::RIGHT);
-            
-        }
-        /*else if (command == "SHOOT") {
-            Direction dir = currentPlayer.GetFacingDirection();
-            currentPlayer.shoot(dir);
-        }*/
-        else if (command == "SHOOT") {
-            Direction dir = currentPlayer.GetFacingDirection();
-            Coordinate nextPosition = game->getNextPosition(currentPlayer.GetPosition(), dir);
-            if (game->isInsideMap(nextPosition)) {
+            if (command == "MOVE_UP") dir = Direction::UP;
+            else if (command == "MOVE_LEFT") dir = Direction::LEFT;
+            else if (command == "MOVE_DOWN") dir = Direction::DOWN;
+            else if (command == "MOVE_RIGHT") dir = Direction::RIGHT;
+            else if (command == "SHOOT") {
+                dir = currentPlayer.GetFacingDirection();
+                Coordinate nextPosition = game->getNextPosition(currentPlayer.GetPosition(), dir);
+                if (!game->isInsideMap(nextPosition)) {
+                    res.code = 400;
+                    res.write("Cannot shoot outside the map");
+                    res.end();
+                    return;
+                }
                 currentPlayer.shoot(dir);
+                res.code = 200;
+                res.write("Command processed successfully");
+                res.end();
+                return;
             }
             else {
-                return crow::response(400, "Cannot shoot outside the map");
+                res.code = 400;
+                res.write("Invalid command");
+                res.end();
+                return;
             }
-        }
-        else {
-            return crow::response(400, "Invalid command");
-        }
 
-        return crow::response(200, "Command processed successfully");
-            });
+            game->movePlayer(&currentPlayer, dir);
+            res.code = 200;
+            res.write("Command processed successfully");
+        }
+        catch (const std::exception& e) {
+            CROW_LOG_ERROR << "Error in HandlePlayerCommand: " << e.what();
+            res.code = 500;
+            res.write(std::string("Internal server error: ") + e.what());
+        }
+        res.end();
+        });
 }
 
 void Routing::CreateGame()

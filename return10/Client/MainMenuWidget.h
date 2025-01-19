@@ -38,7 +38,6 @@ private:
     ChooseGameDificulty* chooseGameDificultyPage;
     ShopWidget* shopPage;
     LeaderboardWidget* leaderboardPage;
-    StartGameWidget* startGameWidget;
 
     void setupUI();
 };

@@ -1,6 +1,7 @@
-﻿#include "ChooseGameDificulty.h"
+﻿
+#include "ChooseGameDificulty.h"
 #include "MainMenuWidget.h"
-#include "StartGameWidget.h"
+//#include "StartGameWidget.h"
 #include "UserSession.h"
 
 ChooseGameDificulty::ChooseGameDificulty(QWidget* parent, MainMenuWidget* mainMenu)
@@ -44,6 +45,9 @@ void ChooseGameDificulty::setupUI() {
     chooseGameDificultyWidget->setLayout(chooseGameDificultyLayout);
     stackedWidget->addWidget(chooseGameDificultyWidget);
 
+   /* startGameWidgetPage = new StartGameWidget(nullptr, this);
+    stackedWidget->addWidget(startGameWidgetPage);*/
+
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(stackedWidget);
     setLayout(mainLayout);
@@ -51,19 +55,16 @@ void ChooseGameDificulty::setupUI() {
 
 void ChooseGameDificulty::on_easyModeButton_clicked() {
     selectedDifficulty = 1;
-    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Easy mode selected.");
 }
 
 void ChooseGameDificulty::on_mediumModeButton_clicked() {
     selectedDifficulty = 2;
-    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Medium mode selected.");
 }
 
 void ChooseGameDificulty::on_hardModeButton_clicked() {
     selectedDifficulty = 3;
-    sendDifficultyToServer(selectedDifficulty);
     QMessageBox::information(this, "Difficulty", "Hard mode selected.");
 }
 
@@ -76,15 +77,53 @@ void ChooseGameDificulty::on_goBackButton_clicked() {
 void ChooseGameDificulty::on_readyToPlayButton_clicked() {
     if (selectedDifficulty == 0) {
         QMessageBox::information(this, "Game", "First you have to choose difficulty.");
+        return;
+    }
+
+  /*  int currentId = UserSession::getInstance().getUserId();
+    StartGameWidget* gameInterface = new StartGameWidget(nullptr, this);
+    gameInterface->addPlayerToGame(currentId);
+
+    if (sendDifficultyToServer(selectedDifficulty)) {
+        QMessageBox::information(this, "Game", "Game starting now!");
+        stackedWidget->setCurrentWidget(startGameWidgetPage);
     }
     else {
-        emit readyToPlay(); // Emit signal to start the game
+        QMessageBox::critical(this, "Error", "Could not set difficulty. Please try again.");
+    }*/
+}
+
+void ChooseGameDificulty::createGame() {
+    try {
+        auto response = cpr::Post(
+            cpr::Url{ "http://localhost:18080/start_game" }
+        );
+
+        if (response.status_code == 200) {
+            std::cout << "Game started!\n";
+        }
+        else {
+            std::cout << "Failed to contact server. Status code: " << response.status_code << std::endl;
+        }
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
     }
 }
 
-bool ChooseGameDificulty::createGame() {
-    auto response = cpr::Post(cpr::Url{ "http://localhost:18080/start_game" });
-    return response.status_code == 200;
+void ChooseGameDificulty::checkCurrentDifficulty() {
+    auto response = cpr::Get(
+        cpr::Url{ "http://localhost:18080/get_difficulty" }
+    );
+
+    if (response.status_code == 200) {
+        auto responseJson = crow::json::load(response.text);
+        int currentDifficulty = responseJson["difficulty"].i();
+        std::cout << "Current difficulty: " << currentDifficulty << "\n";
+    }
+    else {
+        std::cout << "Couldn't retrieve current difficulty.\n";
+    }
 }
 
 bool ChooseGameDificulty::sendDifficultyToServer(int difficulty) {

@@ -40,9 +40,6 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameInterface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LoginWidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -72,7 +69,7 @@
     <ClInclude Include="UserSession.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameInterface.h">
+    <ClInclude Include="StartGameWidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -96,9 +93,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ChooseGameDificulty.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="StartGameWidget.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

@@ -8,8 +8,12 @@
 #include <crow/json.h>
 #include <cpr/cpr.h>
 #include <QMessageBox>
+#include <QTimer>
+#include <thread>
+#include <chrono>
+#include <iostream>
 
-class StartGameWidget;
+//class StartGameWidget;
 class MainMenuWidget;
 
 class ChooseGameDificulty : public QWidget {
@@ -18,11 +22,10 @@ class ChooseGameDificulty : public QWidget {
 public:
     explicit ChooseGameDificulty(QWidget* parent = nullptr, MainMenuWidget* mainMenu = nullptr);
     ~ChooseGameDificulty();
-    QStackedWidget* stackedWidget;
-    bool createGame();
 
-signals:
-    void readyToPlay(); // Signal to notify when ready to play
+    void createGame();
+    void checkCurrentDifficulty();
+    bool sendDifficultyToServer(int difficulty);
 
 private slots:
     void on_easyModeButton_clicked();
@@ -34,17 +37,16 @@ private slots:
 private:
     QLabel* titleLabel;
     QVBoxLayout* layout;
-
     QPushButton* easyModeButton;
     QPushButton* mediumModeButton;
     QPushButton* hardModeButton;
     QPushButton* goBackButton;
     QPushButton* readyToPlayButton;
+    QStackedWidget* stackedWidget;
 
     MainMenuWidget* mainMenuWidget;
-    StartGameWidget* startGameWidgetPage;
+    //StartGameWidget* startGameWidgetPage;
     int selectedDifficulty;
 
-    bool sendDifficultyToServer(int difficulty);
     void setupUI();
 };

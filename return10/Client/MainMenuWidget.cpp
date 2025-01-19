@@ -2,18 +2,18 @@
 #include "ShopWidget.h"
 #include "LeaderboardWidget.h"
 #include "ChooseGameDificulty.h"
-#include "StartGameWidget.h"
+
 #include <QApplication>
 #include <QMessageBox>
 
 MainMenuWidget::MainMenuWidget(QWidget* parent)
-    : QWidget(parent), startGameWidget(nullptr) {
+    : QWidget(parent) {
     setupUI();
     this->setWindowTitle("Battle City");
 }
 
 MainMenuWidget::~MainMenuWidget() {
-    delete startGameWidget;
+   
 }
 
 void MainMenuWidget::setupUI() {
@@ -60,20 +60,7 @@ void MainMenuWidget::setupUI() {
 }
 
 void MainMenuWidget::on_chooseGameDificultyButton_clicked() {
-    if (chooseGameDificultyPage->createGame()) {
-        stackedWidget->setCurrentWidget(chooseGameDificultyPage);
-        connect(chooseGameDificultyPage, &ChooseGameDificulty::readyToPlay, this, [=]() {
-            if (!startGameWidget) {
-                startGameWidget = new StartGameWidget(this, chooseGameDificultyPage);
-                stackedWidget->addWidget(startGameWidget);
-            }
-            stackedWidget->setCurrentWidget(startGameWidget);
-            startGameWidget->startGame();
-            });
-    }
-    else {
-        QMessageBox::critical(this, "Error", "Failed to create the game. Please try again.");
-    }
+    stackedWidget->setCurrentWidget(chooseGameDificultyPage);
 }
 
 void MainMenuWidget::on_shopButton_clicked() {

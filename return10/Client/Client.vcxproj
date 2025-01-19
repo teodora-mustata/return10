@@ -115,7 +115,6 @@
     <QtUic Include="Client.ui" />
     <QtMoc Include="Client.h" />
     <ClCompile Include="Client.cpp" />
-    <ClCompile Include="GameInterface.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="LeaderboardWidget.ui" />
     <QtUic Include="LoginRegisterManager.ui" />
@@ -132,14 +131,13 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="ChooseGameDificulty.h" />
-    <ClInclude Include="GameInterface.h" />
     <QtMoc Include="LeaderboardWidget.h" />
     <QtMoc Include="LoginWidget.h" />
     <QtMoc Include="LoginRegisterManager.h" />
     <QtMoc Include="MainMenuWidget.h" />
     <QtMoc Include="RegisterWidget.h" />
     <QtMoc Include="ShopWidget.h" />
-    <QtMoc Include="StartGameWidget.h" />
+    <ClInclude Include="StartGameWidget.h" />
     <ClInclude Include="UserSession.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

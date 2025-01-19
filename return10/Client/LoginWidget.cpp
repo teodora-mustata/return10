@@ -31,8 +31,8 @@ LoginWidget::LoginWidget(QWidget* parent) : QWidget(parent) {
 }
 
 void LoginWidget::handleLogin() {
-    QString username = QString("teo")/*usernameEdit->text()*/;
-    QString password = QString("#Test1234")/*passwordEdit->text()*/;
+    QString username = usernameEdit->text();
+    QString password = passwordEdit->text();
 
     if (username.isEmpty() || password.isEmpty()) {
         QMessageBox::warning(this, "Login Failed", "Please fill in all fields.");
